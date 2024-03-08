@@ -45,6 +45,9 @@
   },
   "type": "module",
   "dependencies": {
-    "@floating-ui/dom": "1.6.3"
+    "@auth/sveltekit": "^0.14.0",
+    "@floating-ui/dom": "1.6.3",
+    "@googlemaps/js-api-loader": "^1.16.6",
+    "@googlemaps/markerclusterer": "^2.5.3"
   }
 }
