@@ -8,6 +8,7 @@
     import { computePosition, autoUpdate, offset, shift, flip, arrow } from "@floating-ui/dom";
 
     import { storePopup } from "@skeletonlabs/skeleton";
+    import { goto } from "$app/navigation";
     storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
     export let data;
@@ -39,15 +40,15 @@
                 </a>
 
                 {#if !data.loggedIn}
-                    <button class="variant-ghost-tertiary btn btn-sm" on:click={() => signIn("a0")}
-                        >Sign In with Auth0</button
+                    <button class="variant-ghost-tertiary btn btn-sm" on:click={() => goto("./login")}
+                        >Sign In</button
                     >
                 {:else}
                     //
                 {/if}
 
                 {#if data.avatar}
-                    <button class="btn btn-icon" use:popup={popupFeatured}>
+                    <button class="btn btn-icon" use:popup={popupFeatured} on:click={()=> signOut()}>
                         <Avatar src={data.avatar} width="w-12" rounded="rounded-full" />
                     </button>
                 {/if}
