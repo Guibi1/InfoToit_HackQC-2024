@@ -8,11 +8,13 @@ export default {
     theme: {
         extend: {
             colors: {
-                foreground: "#323232",
-                pale: "#e8e8e8",
-                dark: "#212121",
-                muted: "#d3d3d3",
-                shadow: "#d3d3d3",
+                "background": "#ffffff",
+                "foreground": "#323232",
+                "muted-foreground": "#666666",
+                "pale": "#e8e8e8",
+                "dark": "#212121",
+                "muted": "#d3d3d3",
+                "shadow": "#d3d3d3",
             },
             boxShadow: ({ theme }) => ({
                 square: `4px 4px ${theme("colors").foreground}`,

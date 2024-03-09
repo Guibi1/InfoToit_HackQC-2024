@@ -5,31 +5,31 @@
 
 @layer base {
     :root {
-        @apply text-foreground bg-pale font-sans;
+        @apply bg-pale font-sans text-foreground;
     }
 
     .h1 {
-        @apply mb-4 text-xl font-bold;
+        @apply mb-4 text-2xl font-bold;
     }
 
     .border-cool {
-        @apply border-dark shadow-square border-2;
+        @apply border-2 border-dark shadow-square;
     }
 
     .card {
         @apply flex flex-col items-start justify-center;
-        @apply border-cool bg-muted rounded;
+        @apply border-cool rounded bg-muted;
     }
 
     .btn {
         @apply relative flex items-center justify-center gap-2;
         @apply z-10 h-10 w-64 rounded px-4;
-        @apply border-cool bg-white;
+        @apply border-cool cursor-pointer bg-white;
         @apply font-semibold transition-all duration-300;
         @apply hover:text-pale;
 
         &::before {
-            @apply bg-dark absolute inset-0 -z-10 w-0 transition-[width] content-[""];
+            @apply absolute inset-0 -z-10 w-0 bg-dark transition-[width] content-[""];
             @apply hover:w-full;
         }
 
