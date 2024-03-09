@@ -14,7 +14,6 @@
     let defaultCoords8 = new LngLat(-66.709274, 45.531926);
     let defaultCoords9 = new LngLat(-65.709274, 45.531926);
     let defaultCoords0 = new LngLat(-64.709274, 45.531926);
-    
 </script>
 
 <div>

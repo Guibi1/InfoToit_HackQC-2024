@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
     export interface MapContext {
         getMap: () => mapboxgl.Map | null;
-        getLoaded: () => boolean;
+        getLoaded: () => Writable<boolean>;
     }
 
     import mapboxgl from "mapbox-gl";
@@ -12,12 +12,13 @@
 <script lang="ts">
     import { createEventDispatcher, onMount, setContext } from "svelte";
     import { getMapEventHandlers } from "./get-map-event-handlers";
+    import { writable, type Writable } from "svelte/store";
 
     export let options: Omit<mapboxgl.MapboxOptions, "container"> = {};
 
     let container: HTMLDivElement;
     let map: mapboxgl.Map;
-    let loaded = false;
+    let loaded = writable(false);
 
     setContext<MapContext>("map", {
         getMap: () => map,
@@ -31,19 +32,17 @@
             ...options,
         });
 
-        const handleLoad = () => (loaded = true);
+        map.once("idle", () => ($loaded = true));
 
         const eventHandlers = getMapEventHandlers();
         for (const [event, handler] of Object.entries(eventHandlers)) {
             map.on(event, handler);
         }
-        map.on("styledata", handleLoad);
 
         return () => {
             for (const [event, handler] of Object.entries(eventHandlers)) {
                 map.off(event, handler);
             }
-            map.off("styledata", handleLoad);
             map.remove();
         };
     });
