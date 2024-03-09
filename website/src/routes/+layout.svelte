@@ -18,12 +18,11 @@
         placement: "bottom",
     };
 </script>
-  
-  <AppShell>
+
+<AppShell>
     <svelte:fragment slot="header">
         <AppBar border="border-b border-primary-300-600-token">
             <a slot="lead" class="flex items-center gap-2" href="/">
-                
                 <strong class="text-xl uppercase"
                     >Pulse Interview<small class="text-sm">.tech</small></strong
                 >
@@ -32,7 +31,7 @@
             <svelte:fragment slot="trail">
                 <a
                     class="btn btn-sm variant-ghost-secondary hidden md:block"
-                    href="https://github.com/Guibi1/PulseInterviewTech_ConUHacks-2024"
+                    href="https://github.com/Guibi1/InfoToit_HackQC-2024"
                     target="_blank"
                     rel="noreferrer"
                 >
@@ -44,12 +43,7 @@
                         >Sign In with Auth0</button
                     >
                 {:else}
-                    <a class="btn btn-sm variant-ghost-primary" href="/upload-cv">
-                        Take the interview
-                    </a>
-                    <a class="btn btn-sm variant-ghost-primary" href="/generate-cv">
-                        Generate a CV
-                    </a>
+                    //
                 {/if}
 
                 {#if data.avatar}
