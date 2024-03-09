@@ -13,7 +13,7 @@
         if (map && loaded) map.addSource(id, data);
     });
 
-    onDestroy(() => map?.removeSource(id));
+    onDestroy(() => map?.getStyle() && map.removeSource(id));
 </script>
 
 <slot />

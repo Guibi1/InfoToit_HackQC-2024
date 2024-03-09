@@ -23,7 +23,7 @@
 
     .btn {
         @apply relative flex items-center justify-center gap-2;
-        @apply z-10 h-10 w-64 rounded px-4;
+        @apply z-10 mb-1 h-10 w-64 rounded px-2;
         @apply border-cool cursor-pointer bg-white;
         @apply font-semibold transition-all duration-300;
         @apply hover:text-pale;
@@ -35,6 +35,11 @@
 
         &.btn-sm {
             @apply h-8 w-auto text-sm;
+        }
+
+        &.btn-flat {
+            @apply mb-0 shadow-none transition-shadow before:content-none;
+            @apply hover:text-dark hover:shadow-square;
         }
     }
 

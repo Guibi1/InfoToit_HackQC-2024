@@ -12,16 +12,14 @@
     };
 </script>
 
-<div
-    class="sticky z-50 m-2 flex justify-between rounded-lg border-2 border-dark bg-pale px-4 pb-3 pt-2"
->
+<div class="sticky z-50 m-2 flex justify-between rounded-lg border-2 border-dark bg-pale px-4 py-2">
     <a class="flex items-center gap-2" href="/">
         <strong class="text-xl uppercase">
             Info Toit<small class="text-sm">.ca</small>
         </strong>
     </a>
 
-    <div class="flex gap-2">
+    <div class="flex items-center gap-4">
         <a
             class="btn btn-sm"
             href="https://github.com/Guibi1/InfoToit_HackQC-2024"
@@ -33,12 +31,10 @@
 
         {#if !data.loggedIn}
             <a class="btn btn-sm" href="/login">Sign In</a>
-        {:else}
-            <a class="btn btn-sm" href="/login">Sign Out</a>
         {/if}
 
         {#if data.avatar}
-            <button class="btn btn-icon h-12 w-12 rounded" on:click={() => signOut()}>
+            <button class="btn btn-flat h-10 w-10 p-0" on:click={() => signOut()}>
                 <img src={data.avatar} class="object-cover" alt="your user avatar" />
             </button>
         {/if}

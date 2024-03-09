@@ -14,7 +14,6 @@ export default {
                 "pale": "#e8e8e8",
                 "dark": "#212121",
                 "muted": "#d3d3d3",
-                "shadow": "#d3d3d3",
             },
             boxShadow: ({ theme }) => ({
                 square: `4px 4px ${theme("colors").foreground}`,
