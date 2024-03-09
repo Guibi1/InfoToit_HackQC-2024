@@ -1,0 +1,183 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    10,
+                    20
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                    [
+                        0,
+                        0
+                    ],
+                    [
+                        10,
+                        10
+                    ],
+                    [
+                        20,
+                        20
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            0,
+                            0
+                        ],
+                        [
+                            0,
+                            10
+                        ],
+                        [
+                            10,
+                            10
+                        ],
+                        [
+                            10,
+                            0
+                        ],
+                        [
+                            0,
+                            0
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+                "type": "MultiPoint",
+                "coordinates": [
+                    [
+                        10,
+                        20
+                    ],
+                    [
+                        30,
+                        40
+                    ],
+                    [
+                        50,
+                        60
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+                "type": "MultiLineString",
+                "coordinates": [
+                    [
+                        [
+                            0,
+                            0
+                        ],
+                        [
+                            10,
+                            10
+                        ],
+                        [
+                            20,
+                            20
+                        ]
+                    ],
+                    [
+                        [
+                            10,
+                            10
+                        ],
+                        [
+                            20,
+                            20
+                        ],
+                        [
+                            30,
+                            30
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+                "type": "MultiPolygon",
+                "coordinates": [
+                    [
+                        [
+                            [
+                                0,
+                                0
+                            ],
+                            [
+                                0,
+                                10
+                            ],
+                            [
+                                10,
+                                10
+                            ],
+                            [
+                                10,
+                                0
+                            ],
+                            [
+                                0,
+                                0
+                            ]
+                        ]
+                    ],
+                    [
+                        [
+                            [
+                                20,
+                                20
+                            ],
+                            [
+                                20,
+                                30
+                            ],
+                            [
+                                30,
+                                30
+                            ],
+                            [
+                                30,
+                                20
+                            ],
+                            [
+                                20,
+                                20
+                            ]
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
+}
