@@ -1,6 +1,6 @@
 import { redirect, type Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
-import { handle as authenticationHandle } from "./auth";
+import { handle as authenticationHandle } from "./lib/auth";
 
 const authorizationHandle = (async ({ event, resolve }) => {
     // Protect any routes under /authenticated

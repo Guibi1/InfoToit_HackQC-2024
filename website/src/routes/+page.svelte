@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Map from "$lib/Map/Map.svelte";
-    import Marker from "$lib/Marker/Marker.svelte";
+    import Map from "$lib/MapBox/Map.svelte";
+    import Marker from "$lib/MapBox/Marker.svelte";
     import mapboxgl from "mapbox-gl";
     const { LngLat } = mapboxgl;
 
@@ -18,10 +18,7 @@
 </script>
 
 <div>
-    <Map
-        accessToken="pk.eyJ1IjoiYmFiYWJvdWlsbGUiLCJhIjoiY2x0ajlpMnU5MHBmNDJpdDl5d3pwYmpoeSJ9.4zGTlsBnc_Nx6MFJjcYSxg"
-        options={{ center: defaultCoords, zoom: 10 }}
-    >
+    <Map options={{ center: defaultCoords, zoom: 10 }}>
         <Marker coordinates={defaultCoords} />
         <Marker coordinates={defaultCoords2} />
         <Marker coordinates={defaultCoords3} />

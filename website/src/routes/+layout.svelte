@@ -30,7 +30,7 @@
 
             <svelte:fragment slot="trail">
                 <a
-                    class="btn btn-sm variant-ghost-secondary hidden md:block"
+                    class="variant-ghost-secondary btn btn-sm hidden md:block"
                     href="https://github.com/Guibi1/InfoToit_HackQC-2024"
                     target="_blank"
                     rel="noreferrer"
@@ -39,7 +39,7 @@
                 </a>
 
                 {#if !data.loggedIn}
-                    <button class="btn btn-sm variant-ghost-tertiary" on:click={() => signIn("a0")}
+                    <button class="variant-ghost-tertiary btn btn-sm" on:click={() => signIn("a0")}
                         >Sign In with Auth0</button
                     >
                 {:else}
