@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://Wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}
