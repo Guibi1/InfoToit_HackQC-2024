@@ -32,6 +32,7 @@
             ...options,
         });
 
+        
         map.once("idle", () => ($loaded = true));
 
         const eventHandlers = getMapEventHandlers();
