@@ -134,53 +134,7 @@ def extract_data(geojson_file):
             coordinates = feature['geometry']['coordinates']
             multi_polygons.append(coordinates)
         else: 
-            print("RIP I SUCK AT CODING")
+            print("I SUCK AT THIS")
         
 
     return points, polygons, lines, multi_points, multi_lines, multi_polygons
-
-
-
-if __name__ == "__main__":
-    points = extract_points('data/point.geojson')
-    polygons = extract_polygons('data/polygon.geojson')
-    lines = extract_lines('data/line.geojson')
-    multi_points = extract_multi_points('data/multi_point.geojson')
-    multi_lines = extract_multi_lines('data/multi_line.geojson')
-    multi_polygons = extract_multi_polygons('data/multi_polygon.geojson')
-
-    print("Extracted points:")
-    for point in points:
-        print(point)
-
-    print("\nExtracted polygons:")
-    for polygon in polygons:
-        print(polygon)
-
-    print("\nExtracted lines:")
-    for line in lines:
-        print(line)
-
-    print("\nExtracted multi points:")
-    for mp in multi_points:
-        print(mp)
-
-    print("\nExtracted multi lines:")
-    for ml in multi_lines:
-        print(ml)
-
-    print("\nExtracted multi polygons:")
-    for mpoly in multi_polygons:
-        print(mpoly)
-
-    # Example usage
-    geometries = [
-        ("Point", [10, 20]),
-        ("LineString", [[0, 0], [10, 10], [20, 20]]),
-        ("Polygon", [[[0, 0], [0, 10], [10, 10], [10, 0], [0, 0]]]),
-        ("MultiPoint", [[10, 20], [30, 40], [50, 60]]),
-        ("MultiLineString", [[[0, 0], [10, 10], [20, 20]], [[10, 10], [20, 20], [30, 30]]]),
-        ("MultiPolygon", [[[[0, 0], [0, 10], [10, 10], [10, 0], [0, 0]]], [[[20, 20], [20, 30], [30, 30], [30, 20], [20, 20]]]])
-        # Add more geometries as needed
-    ]
-    save_geometries(geometries, "data/multiple_geometries.geojson")
