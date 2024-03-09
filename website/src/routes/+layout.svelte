@@ -1,60 +1,46 @@
 <script lang="ts">
     import "../app.postcss";
-    import { AppShell, AppBar } from "@skeletonlabs/skeleton";
     import { signIn, signOut } from "@auth/sveltekit/client";
-    import { Avatar } from "@skeletonlabs/skeleton";
-    import { popup } from "@skeletonlabs/skeleton";
-    import type { PopupSettings } from "@skeletonlabs/skeleton";
     import { computePosition, autoUpdate, offset, shift, flip, arrow } from "@floating-ui/dom";
-
-    import { storePopup } from "@skeletonlabs/skeleton";
-    import { goto } from "$app/navigation";
-    storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
     export let data;
 
-    const popupFeatured: PopupSettings = {
+    const popupFeatured = {
         event: "click",
         target: "popupFeatured",
         placement: "bottom",
     };
 </script>
 
-<AppShell>
-    <svelte:fragment slot="header">
-        <AppBar border="border-b border-primary-300-600-token">
-            <a slot="lead" class="flex items-center gap-2" href="/">
-                <strong class="text-xl uppercase"
-                    >Pulse Interview<small class="text-sm">.tech</small></strong
-                >
-            </a>
+<div class="sticky z-50 flex justify-between px-4 py-2">
+    <a class="flex items-center gap-2" href="/">
+        <strong class="text-xl uppercase">
+            Info Toit<small class="text-sm">.ca</small>
+        </strong>
+    </a>
 
-            <svelte:fragment slot="trail">
-                <a
-                    class="variant-ghost-secondary btn btn-sm hidden md:block"
-                    href="https://github.com/Guibi1/InfoToit_HackQC-2024"
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    GitHub
-                </a>
+    <div class="flex gap-2">
+        <a
+            class="btn btn-sm"
+            href="https://github.com/Guibi1/InfoToit_HackQC-2024"
+            target="_blank"
+            rel="noreferrer"
+        >
+            GitHub
+        </a>
 
-                {#if !data.loggedIn}
-                    <button class="variant-ghost-tertiary btn btn-sm" on:click={() => goto("./login")}
-                        >Sign In</button
-                    >
-                {:else}
-                    //
-                {/if}
+        {#if !data.loggedIn}
+            <a class="btn btn-sm" href="/login">Sign In</a>
+        {:else}
+            <a class="btn btn-sm" href="/login">Sign Out</a>
+        {/if}
 
-                {#if data.avatar}
-                    <button class="btn btn-icon" use:popup={popupFeatured} on:click={()=> signOut()}>
-                        <Avatar src={data.avatar} width="w-12" rounded="rounded-full" />
-                    </button>
-                {/if}
-            </svelte:fragment>
-        </AppBar>
-    </svelte:fragment>
+        {#if data.avatar}
+            <button class="btn btn-icon h-12 w-12 rounded" on:click={() => signOut()}>
+                <img src={data.avatar} class="object-cover" alt="your user avatar" />
+            </button>
+        {/if}
+    </div>
+</div>
 
-    <slot />
-</AppShell>
+<slot />

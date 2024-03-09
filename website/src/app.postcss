@@ -2,3 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 @tailwind variants;
+
+@layer base {
+    :root {
+        @apply text-foreground bg-pale font-sans;
+    }
+
+    .h1 {
+        @apply mb-4 text-xl font-bold;
+    }
+
+    .border-cool {
+        @apply border-dark shadow-square border-2;
+    }
+
+    .card {
+        @apply flex flex-col items-start justify-center;
+        @apply border-cool bg-muted rounded;
+    }
+
+    .btn {
+        @apply relative flex items-center justify-center gap-2;
+        @apply z-10 h-10 w-64 rounded px-4;
+        @apply border-cool bg-white;
+        @apply font-semibold transition-all duration-300;
+        @apply hover:text-pale;
+
+        &::before {
+            @apply bg-dark absolute inset-0 -z-10 w-0 transition-[width] content-[""];
+            @apply hover:w-full;
+        }
+
+        &.btn-sm {
+            @apply h-8 w-auto text-sm;
+        }
+    }
+
+    .input {
+        @apply border-cool w-80 rounded;
+    }
+}
