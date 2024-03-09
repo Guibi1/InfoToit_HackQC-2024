@@ -37,13 +37,13 @@
         for (const [event, handler] of Object.entries(eventHandlers)) {
             map.on(event, handler);
         }
-        map.on("load", handleLoad);
+        map.on("styledata", handleLoad);
 
         return () => {
             for (const [event, handler] of Object.entries(eventHandlers)) {
                 map.off(event, handler);
             }
-            map.off("load", handleLoad);
+            map.off("styledata", handleLoad);
             map.remove();
         };
     });
