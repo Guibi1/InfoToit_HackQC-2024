@@ -14,7 +14,7 @@ def get_color(score,midpoint,colorinverse=False):
     min_score, max_score = 0, 10
     if colorinverse:
         score=max_score-score
-    midpoint = max_score-midpoint
+        midpoint = max_score-midpoint
     # Calculate the proportion of the score in relation to the midpoint
     if score > midpoint:
         # For scores above the midpoint, we transition from yellow to green
