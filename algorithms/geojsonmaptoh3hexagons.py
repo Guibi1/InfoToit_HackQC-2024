@@ -14,12 +14,12 @@ def h3_to_geojson_polygon(h3_index):
     return polygon
 
 # Load the Montreal GeoJSON to create the boundary shape for the H3 polyfill function
-file_path = 'zonage.json'  # replace with your file path
+file_path = 'montrealmap.geojson'  # replace with your file path
 with open(file_path, 'r') as file:
     montreal_geojson = json.load(file)
 
 # Define the resolution for the H3 indexing
-resolution = 7  # You can adjust this resolution as needed
+resolution = 9  # You can adjust this resolution as needed
 
 # Initialize an empty set to store unique H3 indexes for all polygons
 all_h3_indexes = set()
