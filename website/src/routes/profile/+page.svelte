@@ -1,6 +1,9 @@
 <script lang="ts">
+    import { PUBLIC_GOOGLE_MAPS_KEY } from "$env/static/public";
     export let data;
 
+    
+    
     let loading = false;
     let bool = false;
 </script>
@@ -30,7 +33,11 @@
             {#each data.savedHomes as home}
                 <div class="card">
                     <h4 class="h1">{home.address}</h4>
-                    <img alt="" src={home.img} />
+                    <img
+                        alt=""
+                        src={`https://maps.googleapis.com/maps/api/streetview?size=400x400&location=${home.lat},${home.lon}&fov=50&pitch=0&key=${PUBLIC_GOOGLE_MAPS_KEY}`}
+
+                    />
                 </div>
             {:else}
                 <h1 class="h1">Aucun résultat</h1>
@@ -39,11 +46,11 @@
     {:else}
         <h2 class="h1 ml-2 mt-4">Pleintes</h2>
 
-        {#each data.pleintes as pleinte}
+        {#each data.messages as pleinte}
             <div class="m-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <div class="card">
                     <h1 class="h1">{pleinte.title}</h1>
-                    <p>{pleinte.description}</p>
+                    <p>{pleinte.message}</p>
                     <h1 class="h1">Status:</h1>
                     <div class="card">{pleinte.status}</div>
                 </div>
