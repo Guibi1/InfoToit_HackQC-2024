@@ -1,0 +1,13 @@
+{
+  "id": "mig_cnmd3mcftgm5g25gd96g",
+  "parentID": "mig_cnmd3kkftgm5g25gd95g",
+  "checksum": "1:50e215faab63ef7663bb23bb1aeae5acc09a5bcd8a681416ffb3ba90960d539f",
+  "operations": [
+    {
+      "removeColumn": {
+        "column": "test",
+        "table": "Conversations"
+      }
+    }
+  ]
+}

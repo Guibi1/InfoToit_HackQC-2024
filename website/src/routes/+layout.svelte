@@ -14,8 +14,8 @@
 
 <div class="sticky z-50 m-2 flex justify-between rounded-lg border-2 border-dark bg-pale px-4 py-2">
     <a class="flex items-center gap-2" href="/">
-        <strong class="text-xl uppercase">
-            Info Toit<small class="text-sm">.ca</small>
+        <strong class="text-xl ">
+            InfoToit<small class="text-sm">.ca</small>
         </strong>
     </a>
 

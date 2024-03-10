@@ -1,0 +1,13 @@
+{
+  "id": "mig_cnmerusftgm5g25gda90",
+  "parentID": "mig_cnmeitkftgm5g25gda40",
+  "checksum": "1:6fc47c888933bcfe6726f2e3e3c53b39fa302ba0b0fe02d913bc15d176653dca",
+  "operations": [
+    {
+      "renameTable": {
+        "newName": "GridH3",
+        "oldName": "H3"
+      }
+    }
+  ]
+}

@@ -7,11 +7,11 @@
 </script>
 
 <script lang="ts">
+    import { popup, type PopupOptions } from "$lib/popup";
     const mapBoxSearch = import("@mapbox/search-js-core");
 
-    const popupSettings = {
-        event: "focus-click",
-        target: "popupAutocomplete",
+    const popupSettings: PopupOptions = {
+        popupId: "popupAutocomplete",
         placement: "bottom",
     };
 
@@ -19,6 +19,7 @@
     let address: string = "";
 
     const onSelect = (option: AutocompleteOption) => {
+        console.log("🚀 ~ onSelect ~ option:", option);
         address = option.name + ", " + option.description;
     };
 
@@ -53,21 +54,23 @@
             bind:value={address}
             placeholder="Search..."
             on:change={onChange}
+            use:popup={popupSettings}
         />
-        <!-- use:popup={popupSettings} -->
 
         <button class="btn mx-auto"> Explorer </button>
 
-        <div data-popup={popupSettings.target}>
+        <div class="popup" id={popupSettings.popupId}>
+            <div class="popup-arrow" id="arrow" />
+
             <ul
-                class="border-dark flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 bg-white py-2"
+                class="flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 border-dark bg-white py-2"
                 tabindex="-1"
             >
                 {#each flavorOptions as address}
                     <li class="contents">
                         <button
                             on:click={() => onSelect(address)}
-                            class="hover:bg-pale flex flex-col items-start px-4 py-1 transition-colors"
+                            class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
                             type="button"
                         >
                             {address.name}
@@ -77,7 +80,7 @@
                         </button>
                     </li>
                 {:else}
-                    <li class="autocomplete-item p-2">Aucun résultats</li>
+                    <li class="autocomplete-item p-2">Aucun résultat</li>
                 {/each}
             </ul>
         </div>

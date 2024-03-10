@@ -1,0 +1,13 @@
+{
+  "id": "mig_cnmd2ckftgm5g25gd930",
+  "parentID": "mig_cnmd29ib1a23a5t9flt0",
+  "checksum": "1:7c12673d7b7c037cc2bbdb083c24939437a7f6b6dc89c90b831f7151b4c784a7",
+  "operations": [
+    {
+      "renameTable": {
+        "newName": "Users",
+        "oldName": "Profile"
+      }
+    }
+  ]
+}

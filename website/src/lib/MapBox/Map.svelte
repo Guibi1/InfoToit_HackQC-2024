@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-    import { createEventDispatcher, onMount, setContext } from "svelte";
+    import { onMount, setContext } from "svelte";
     import { getMapEventHandlers } from "./get-map-event-handlers";
     import { writable, type Writable } from "svelte/store";
 
@@ -54,7 +54,7 @@
 
 <div class="relative" bind:this={container}>
     {#if !loaded}
-        <div class="absolute inset-0 z-10 bg-primary-400">loading {loaded}</div>
+        <div class="bg-primary-400 absolute inset-0 z-10">loading {loaded}</div>
     {/if}
 
     {#if map}
