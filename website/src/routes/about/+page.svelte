@@ -1,8 +1,8 @@
 <script lang="ts">
-    import oli from "$lib/assets/oli.jpg";
-    import gab from "$lib/assets/gab.jpg";
-    import phil from "$lib/assets/phil.jpg";
-    import laurent from "$lib/assets/laurent.jpg";
+    import oli from "$lib/assets/oli.webp";
+    import gab from "$lib/assets/gab.webp";
+    import phil from "$lib/assets/phil.webp";
+    import laurent from "$lib/assets/laurent.webp";
     import Devpost from "$lib/assets/simple-icons--devpost.svg";
     import { IconFlag, IconBrandInstagram, IconBrandLinkedin } from "@tabler/icons-svelte";
 </script>
@@ -66,7 +66,7 @@
 
         <div class="text">
             <span class="heading">Gabriel</span>
-            <p class="info">Handyman</p>
+            <p class="info">Handsome Handyman</p>
             <div class="country">
                 <IconFlag></IconFlag>
                 <span>Montreal</span>
