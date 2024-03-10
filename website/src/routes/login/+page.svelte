@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { SignIn, SignOut } from "@auth/sveltekit/components";
-    import { page } from "$app/stores";
     import LoginBackground from "$lib/assets/loginbackground.webp";
+    import { SignIn } from "@auth/sveltekit/components";
     import { IconBrandDiscord, IconBrandGithub, IconBrandLinkedin } from "@tabler/icons-svelte";
 </script>
 

@@ -50,7 +50,7 @@
             {#if data.savedHomes.length}
                 <div class="m-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {#each data.savedHomes as home}
-                        <a class="card p-2" href={`/house/${home.lon},${home.lat}`}>
+                        <a class="card p-2" href={`/house/${home.address}`}>
                             <img
                                 class="h-24 w-24 rounded"
                                 src={`https://maps.googleapis.com/maps/api/streetview?size=400x400&location=${home.lat},${home.lon}&fov=50&pitch=0&key=${PUBLIC_GOOGLE_MAPS_KEY}`}

@@ -13,6 +13,7 @@
     import Marker from "$lib/MapBox/Marker.svelte";
     import { popup, type PopupOptions } from "$lib/popup";
     import { writable } from "svelte/store";
+    import { PUBLIC_MAPBOX_KEY } from "$env/static/public";
     const mapBoxSearch = import("@mapbox/search-js-core");
 
     const popupSettings: PopupOptions = {
@@ -47,10 +48,7 @@
         }
 
         const { AddressAutofillCore, SessionToken } = await mapBoxSearch;
-        const autofill = new AddressAutofillCore({
-            accessToken:
-                "pk.eyJ1IjoiYmFiYWJvdWlsbGUiLCJhIjoiY2x0ajlpMnU5MHBmNDJpdDl5d3pwYmpoeSJ9.4zGTlsBnc_Nx6MFJjcYSxg",
-        });
+        const autofill = new AddressAutofillCore({ accessToken: PUBLIC_MAPBOX_KEY });
 
         const result = await autofill.suggest(address, { sessionToken: new SessionToken() });
         suggestions = result.suggestions
@@ -64,10 +62,7 @@
 
     async function moveToMap(selectedAddress: AddressAutofillSuggestion) {
         const { AddressAutofillCore, SessionToken } = await mapBoxSearch;
-        const autofill = new AddressAutofillCore({
-            accessToken:
-                "pk.eyJ1IjoiYmFiYWJvdWlsbGUiLCJhIjoiY2x0ajlpMnU5MHBmNDJpdDl5d3pwYmpoeSJ9.4zGTlsBnc_Nx6MFJjcYSxg",
-        });
+        const autofill = new AddressAutofillCore({ accessToken: PUBLIC_MAPBOX_KEY });
 
         const result = await autofill.retrieve(selectedAddress, {
             sessionToken: new SessionToken(),
@@ -77,7 +72,7 @@
 
     async function submit() {
         if (coordinates && selectedAddress) {
-            goto(`/house/${coordinates?.[0]},${coordinates?.[1]}`);
+            goto(`/house/${selectedAddress.full_address}`);
         }
     }
 </script>
