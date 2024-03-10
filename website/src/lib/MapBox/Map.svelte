@@ -5,14 +5,14 @@
     }
 
     import mapboxgl from "mapbox-gl";
-    mapboxgl.accessToken =
-        "pk.eyJ1IjoiYmFiYWJvdWlsbGUiLCJhIjoiY2x0ajlpMnU5MHBmNDJpdDl5d3pwYmpoeSJ9.4zGTlsBnc_Nx6MFJjcYSxg";
+    mapboxgl.accessToken = PUBLIC_MAPBOX_KEY;
 </script>
 
 <script lang="ts">
     import { onMount, setContext } from "svelte";
     import { getMapEventHandlers } from "./get-map-event-handlers";
     import { writable, type Writable } from "svelte/store";
+    import { PUBLIC_MAPBOX_KEY } from "$env/static/public";
 
     export let options: Omit<mapboxgl.MapboxOptions, "container"> = {};
 
