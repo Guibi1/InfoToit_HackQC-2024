@@ -8,6 +8,9 @@ const config = {
     vitePlugin: {},
     kit: {
         adapter: adapter(),
+        alias: {
+            $xata: "src/xata.ts",
+        },
     },
 };
 export default config;

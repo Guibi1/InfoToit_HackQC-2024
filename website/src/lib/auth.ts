@@ -1,9 +1,9 @@
 import { DISCORD_ID, DISCORD_SECRET, GITHUB_ID, GITHUB_SECRET, SECRET } from "$env/static/private";
+import { getXataClient } from "$xata";
 import { SvelteKitAuth } from "@auth/sveltekit";
 import Discord from "@auth/sveltekit/providers/discord";
 import GitHub from "@auth/sveltekit/providers/github";
 import LinkedIn from "@auth/sveltekit/providers/linkedin";
-import { getXataClient } from "../xata";
 
 export const { handle, signIn, signOut } = SvelteKitAuth({
     providers: [

@@ -26,7 +26,7 @@
         @apply z-10 mb-1 h-10 w-64 rounded px-2;
         @apply border-cool cursor-pointer bg-white;
         @apply font-semibold transition-all duration-300;
-        @apply hover:text-pale;
+        @apply hover:text-pale disabled:pointer-events-none disabled:bg-pale disabled:opacity-90;
 
         &::before {
             @apply absolute inset-0 -z-10 w-0 bg-dark transition-[width] content-[""];

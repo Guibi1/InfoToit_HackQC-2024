@@ -1,0 +1,14 @@
+{
+  "id": "mig_cnmhvl4ftgm5g25gdb90",
+  "parentID": "mig_cnmhoo4ftgm5g25gdb60",
+  "checksum": "1:9b8ee6858f9e151b78a5fa848fd4bda9d619bda387462b377773a5d424fba207",
+  "operations": [
+    {
+      "renameColumn": {
+        "newName": "user",
+        "oldName": "createdBy",
+        "table": "Messages"
+      }
+    }
+  ]
+}

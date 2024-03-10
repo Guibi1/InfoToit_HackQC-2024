@@ -1,19 +1,22 @@
+import { getXataClient } from "$xata";
 import { redirect } from "@sveltejs/kit";
 
 export const load = async ({ locals }) => {
     const session = await locals.auth();
-    if (!session) redirect(302, "/");
+    if (!session?.user?.email) redirect(302, "/");
+
+    const savedHomes = await getXataClient()
+        .db.SavedHouses.select(["address", "lon", "lat"])
+        .filter({ "user.email": session.user?.email })
+        .getAll();
+
+    const messages = await getXataClient()
+        .db.Messages.select(["title", "message", "status"])
+        .filter({ "user.email": session.user?.email })
+        .getAll();
 
     return {
-        savedHomes: [
-            {
-                id: "2657769493634526",
-                address: "1 Boulevard Gouin Est, Montreal, Quebec H3L 1A6, Canada",
-            },
-            {
-                id: "8996322444307904",
-                address: "1 Rue Saint-Zotique Est, Montreal, Quebec H2S 3C5, Canada",
-            },
-        ],
+        savedHomes: savedHomes.map((h) => h.toSerializable()),
+        messages: messages.map((m) => m.toSerializable()),
     };
 };

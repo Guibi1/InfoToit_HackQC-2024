@@ -1,0 +1,19 @@
+{
+  "id": "mig_cnmhcmcftgm5g25gdb10",
+  "parentID": "mig_cnmhcd4ftgm5g25gdb00",
+  "checksum": "1:f23c8a89b88f47a2fca2b643844651559f85db87b1dd59913c8a75b57045f97d",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "user",
+          "type": "link",
+          "link": {
+            "table": "Users"
+          }
+        },
+        "table": "SavedHouses"
+      }
+    }
+  ]
+}
