@@ -1,0 +1,18 @@
+{
+  "id": "mig_cnmi0i2b1a23a5t9fnig",
+  "parentID": "mig_cnmhvo4ftgm5g25gdba0",
+  "checksum": "1:5e0df1e4a0962ed7f915eaaa7b2a49f11fa8f18ebd375aebcf73812e6890df62",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "status",
+          "type": "string",
+          "notNull": true,
+          "defaultValue": "open"
+        },
+        "table": "Messages"
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "mig_cnmholib1a23a5t9fng0",
+  "parentID": "mig_cnmhe1auns06l108o37g",
+  "checksum": "1:4a8d4d53d49eb34635b939240c7aa9b96ac754ed46526ac8d5d2e0ea70902ca2",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "lon",
+          "type": "float",
+          "notNull": true,
+          "defaultValue": "0"
+        },
+        "table": "SavedHouses"
+      }
+    }
+  ]
+}

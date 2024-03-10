@@ -1,0 +1,18 @@
+{
+  "id": "mig_cnmhe1auns06l108o37g",
+  "parentID": "mig_cnmhcmcftgm5g25gdb10",
+  "checksum": "1:52ee7543f1fa5216baccda97921b243c60e0c3ab0ec40e2092b8afbbb6e6a707",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "address",
+          "type": "string",
+          "notNull": true,
+          "defaultValue": "Address"
+        },
+        "table": "SavedHouses"
+      }
+    }
+  ]
+}

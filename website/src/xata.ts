@@ -14,18 +14,37 @@ const tables = [
       { name: "name", type: "string", notNull: true, defaultValue: "user" },
       { name: "avatar", type: "string" },
     ],
-    revLinks: [{ column: "createdBy", table: "Messages" }],
+    revLinks: [
+      { column: "user", table: "Messages" },
+      { column: "user", table: "SavedHouses" },
+    ],
   },
   {
     name: "Messages",
     columns: [
-      { name: "createdBy", type: "link", link: { table: "Users" } },
+      { name: "user", type: "link", link: { table: "Users" } },
       { name: "message", type: "text" },
+      { name: "title", type: "string" },
+      { name: "status", type: "string", notNull: true, defaultValue: "open" },
     ],
   },
   {
     name: "GridH3",
     columns: [{ name: "indexH3", type: "string", unique: true }],
+  },
+  {
+    name: "SavedHouses",
+    columns: [
+      { name: "user", type: "link", link: { table: "Users" } },
+      {
+        name: "address",
+        type: "string",
+        notNull: true,
+        defaultValue: "Address",
+      },
+      { name: "lon", type: "float", notNull: true, defaultValue: "0" },
+      { name: "lat", type: "float", notNull: true, defaultValue: "0" },
+    ],
   },
 ] as const;
 
@@ -41,10 +60,14 @@ export type MessagesRecord = Messages & XataRecord;
 export type GridH3 = InferredTypes["GridH3"];
 export type GridH3Record = GridH3 & XataRecord;
 
+export type SavedHouses = InferredTypes["SavedHouses"];
+export type SavedHousesRecord = SavedHouses & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
   GridH3: GridH3Record;
+  SavedHouses: SavedHousesRecord;
 };
 
 const DatabaseClient = buildClient();

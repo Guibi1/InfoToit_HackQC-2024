@@ -1,0 +1,12 @@
+{
+  "id": "mig_cnmhcd4ftgm5g25gdb00",
+  "parentID": "mig_cnmfa8kftgm5g25gdal0",
+  "checksum": "1:641ef6a99465e57b70e39cfd77214734800330146f7e0f14ff1dd23714bef4f0",
+  "operations": [
+    {
+      "addTable": {
+        "table": "SavedHouses"
+      }
+    }
+  ]
+}
