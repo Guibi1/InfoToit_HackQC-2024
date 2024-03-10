@@ -8,8 +8,11 @@
 </script>
 
 <script lang="ts">
-    import { writable } from "svelte/store";
+    import { goto } from "$app/navigation";
+    import Map from "$lib/MapBox/Map.svelte";
+    import Marker from "$lib/MapBox/Marker.svelte";
     import { popup, type PopupOptions } from "$lib/popup";
+    import { writable } from "svelte/store";
     const mapBoxSearch = import("@mapbox/search-js-core");
 
     const popupSettings: PopupOptions = {
@@ -20,23 +23,26 @@
     let suggestions: AutocompleteOption[] = [];
     let address = writable("");
     let selectedAddress: AddressAutofillSuggestion | null = null;
+    let coordinates: [number, number] | undefined;
 
     const onSelect = (option: AutocompleteOption) => {
         selectedAddress = option.mapbox;
         $address = `${selectedAddress.feature_name}, ${selectedAddress.description}`;
+        moveToMap(option.mapbox);
     };
 
     address.subscribe(async (address) => {
+        if (!address) {
+            selectedAddress = null;
+            suggestions = [];
+            return;
+        }
+
         if (
             selectedAddress &&
             $address != `${selectedAddress.feature_name}, ${selectedAddress.description}`
         ) {
             selectedAddress = null;
-            return;
-        }
-
-        if (!address) {
-            suggestions = [];
             return;
         }
 
@@ -56,12 +62,7 @@
             }));
     });
 
-    async function submit() {
-        if (!selectedAddress) {
-            console.error("Bad address");
-            return;
-        }
-
+    async function moveToMap(selectedAddress: AddressAutofillSuggestion) {
         const { AddressAutofillCore, SessionToken } = await mapBoxSearch;
         const autofill = new AddressAutofillCore({
             accessToken:
@@ -71,13 +72,24 @@
         const result = await autofill.retrieve(selectedAddress, {
             sessionToken: new SessionToken(),
         });
-        console.log("🚀 ~ onChange ~ result:", result, result.features[0].geometry.coordinates[0]);
+        coordinates = result.features[0]?.geometry?.coordinates as [number, number];
+    }
+
+    async function submit() {
+        if (coordinates && selectedAddress) {
+            goto(`/house/${coordinates?.[0]},${coordinates?.[1]}`);
+        }
     }
 </script>
 
-<main class="container flex flex-1 items-center justify-center">
-    <div class="card gap-2 p-4">
-        <h1 class="h1">Bienvenue</h1>
+<main
+    class="container mx-auto flex h-full flex-col justify-center gap-8 py-2 md:flex-row md:gap-16"
+>
+    <div class="flex flex-col items-center gap-4 p-4 text-center md:items-start md:text-start">
+        <div>
+            <h1 class="h1 mb-0">Bienvenue</h1>
+            <span class="text-muted-foreground">Entrez une adresse pour commencer</span>
+        </div>
 
         <input
             class="input"
@@ -87,9 +99,23 @@
             use:popup={popupSettings}
         />
 
-        <button on:click={submit} class="btn mx-auto" disabled={!selectedAddress}>
-            Explorer
-        </button>
+        <button on:click={submit} class="btn" disabled={!selectedAddress}> Explorer </button>
+    </div>
+
+    <div class="card m-2 flex-1">
+        <Map
+            options={{
+                center: [-73.6128865, 45.5308667],
+                interactive: false,
+                zoom: 10,
+            }}
+        >
+            {#if coordinates}
+                {#key coordinates}
+                    <Marker {coordinates} zoomOnAdd={15} />
+                {/key}
+            {/if}
+        </Map>
     </div>
 </main>
 

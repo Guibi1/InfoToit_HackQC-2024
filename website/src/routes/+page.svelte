@@ -9,21 +9,7 @@
     let defaultCoords = new LngLat(-73.709274, 45.531926);
 </script>
 
-<main class="container mx-auto h-full py-4">
-    <div class="card h-4/6 overflow-hidden rounded-lg">
-        <Map options={{ center: defaultCoords, zoom: 10 }}>
-            <Marker coordinates={defaultCoords} />
-            <Source data={{ type: "geojson", data: ""}}>
-                <Layer
-                    layer={{
-                        type: "fill",
-                        paint: {
-                            "fill-color": "#FF0000",
-                            "fill-opacity": 0.5,
-                        },
-                    }}
-                />
-            </Source>
-        </Map>
-    </div>
+<main class="container mx-auto flex-1 py-4">
+    <a href="/search" class="btn">Goto search</a>
+    <a href="/profile" class="btn">Goto profile</a>
 </main>
