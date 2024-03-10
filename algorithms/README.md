@@ -34,13 +34,15 @@ The script is run from the command line, with parameters to specify the input fi
 Basic usage:
 
 \```bash
-python density_visualization.py --densityfile=path/to/your/data.csv --mapfile=path/to/your/area.geojson --resolution=8
+python density_visualization.py --densityfile=path/to/your/data.csv --mapfile=path/to/your/area.geojson --resolution=8 --colorinverse=true
 \```
 
 Parameters:
 - `--densityfile`: **Required**. Path to your CSV file containing location data with columns `LAT` and `LONG`.
 - `--mapfile`: Optional. Path to a GeoJSON file defining the area of interest.
 - `--resolution`: Optional. H3 resolution for analysis, ranging from 0 (lowest) to 15 (highest). Default is 8.
+- `--colorinverse`: Optional. Color from green to red instead of red to green.
+
 
 ## Output
 
@@ -52,4 +54,3 @@ The script outputs a GeoJSON file named after the densityfile, suffixed with `_h
 - Check that the CSV file is properly formatted, with `LAT` and `LONG` columns.
 - If errors occur, verify that all required Python packages are installed.
 
-For further assistance, consult the documentation for pandas, h3, numpy, or reach out to the community forums.

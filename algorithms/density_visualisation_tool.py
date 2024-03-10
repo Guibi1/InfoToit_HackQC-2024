@@ -7,10 +7,14 @@ import sys
 import getopt
 import argparse
 
-def get_color(score,midpoint):
+def get_color(score,midpoint,colorinverse=False):
 
+    
     # Define the range and midpoint
     min_score, max_score = 0, 10
+    if colorinverse:
+        score=max_score-score
+    midpoint = max_score-midpoint
     # Calculate the proportion of the score in relation to the midpoint
     if score > midpoint:
         # For scores above the midpoint, we transition from yellow to green
@@ -77,7 +81,7 @@ def h3_index_set_to_file(filename,indexset):
 
     print(f"Created GeoJSON file at {output_geojson_path}")
 
-def density_visualization(densityfile,mapfile=None,resolution=8):
+def density_visualization(densityfile,mapfile=None,resolution=8,colorinverse=False):
     try: 
         
         if not os.path.isfile(densityfile):
@@ -100,10 +104,12 @@ def density_visualization(densityfile,mapfile=None,resolution=8):
             h3indexhashmap[element] = {"adjacentindexes": [], "elementcount": 0, "score": 0, "color": ""}
 
         for index, row in df.iterrows():
-            h3index = h3.geo_to_h3(row["LAT"], row["LONG"],resolution)
-            if h3index not in h3indexhashmap:
-                h3indexhashmap[h3index] = {"adjacentindexes": [], "elementcount": 0}
-            h3indexhashmap[h3index]["elementcount"] = h3indexhashmap[h3index]["elementcount"] + 1
+            if not(pd.isnull(row["LAT"])) and not(pd.isnull(row["LONG"])):
+
+                h3index = h3.geo_to_h3(row["LAT"], row["LONG"],resolution)
+                if h3index not in h3indexhashmap:
+                    h3indexhashmap[h3index] = {"adjacentindexes": [], "elementcount": 0}
+                h3indexhashmap[h3index]["elementcount"] = h3indexhashmap[h3index]["elementcount"] + 1
 
         elementtotal = []
         for elements in h3indexhashmap:
@@ -111,7 +117,6 @@ def density_visualization(densityfile,mapfile=None,resolution=8):
             adjacentindex = list(h3.k_ring(elements,1))
             adjacentindex.remove(elements)
             h3indexhashmap[elements]["adjacentindexes"] = adjacentindex
-
 
         maxcount = np.max(elementtotal)
         nonzerocount = np.count_nonzero(elementtotal)
@@ -122,7 +127,7 @@ def density_visualization(densityfile,mapfile=None,resolution=8):
         for elements in h3indexhashmap:
             score = (h3indexhashmap[elements]["elementcount"] / maxcount) * 10
             h3indexhashmap[elements]["score"] = score
-            colorchosen = get_color(score,midpoint)
+            colorchosen = get_color(score,midpoint,colorinverse)
             h3indexhashmap[elements]["color"] = colorchosen
             
 
@@ -136,7 +141,8 @@ def density_visualization(densityfile,mapfile=None,resolution=8):
                 "stroke": h3indexhashmap[index]["color"],
                 "stroke-width": 2,
                 "stroke-opacity": 1,
-                "fill-opacity": 0.5
+                "fill-opacity": 0.5,
+                "elementcount": h3indexhashmap[index]["elementcount"]
             }
             geojson_polygons.append(currentdict)
 
@@ -162,10 +168,10 @@ if __name__ == "__main__":
     parser.add_argument('--densityfile', required=True, help='Path to the CSV file containing locations.')
     parser.add_argument('--mapfile', default=None, help='Optional path to the GeoJSON file defining the area of interest.')
     parser.add_argument('--resolution', type=int, default=8, help='H3 resolution for the analysis (0 to 15).')
-    
+    parser.add_argument('--colorinverse', default='false', choices=['true', 'false'], help='Inverse colors from green to red')    
     args = parser.parse_args()
-    
-    density_visualization(densityfile=args.densityfile, mapfile=args.mapfile, resolution=args.resolution)
+    incolorinverse = True if args.colorinverse == 'true' else False
+    density_visualization(densityfile=args.densityfile, mapfile=args.mapfile, resolution=args.resolution, colorinverse=incolorinverse)
 
 
 
