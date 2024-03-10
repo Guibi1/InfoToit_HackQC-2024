@@ -1,12 +1,14 @@
 <script context="module" lang="ts">
+    import type { AddressAutofillSuggestion } from "@mapbox/search-js-core";
     type AutocompleteOption = {
-        id: string;
-        name: string;
+        address: string;
         description: string;
+        mapbox: AddressAutofillSuggestion;
     };
 </script>
 
 <script lang="ts">
+    import { writable } from "svelte/store";
     import { popup, type PopupOptions } from "$lib/popup";
     const mapBoxSearch = import("@mapbox/search-js-core");
 
@@ -15,16 +17,28 @@
         placement: "bottom",
     };
 
-    let flavorOptions: AutocompleteOption[] = [];
-    let address: string = "";
+    let suggestions: AutocompleteOption[] = [];
+    let address = writable("");
+    let selectedAddress: AddressAutofillSuggestion | null = null;
 
     const onSelect = (option: AutocompleteOption) => {
-        console.log("🚀 ~ onSelect ~ option:", option);
-        address = option.name + ", " + option.description;
+        selectedAddress = option.mapbox;
+        $address = `${selectedAddress.feature_name}, ${selectedAddress.description}`;
     };
 
-    async function onChange() {
-        if (!address) flavorOptions = [];
+    address.subscribe(async (address) => {
+        if (
+            selectedAddress &&
+            $address != `${selectedAddress.feature_name}, ${selectedAddress.description}`
+        ) {
+            selectedAddress = null;
+            return;
+        }
+
+        if (!address) {
+            suggestions = [];
+            return;
+        }
 
         const { AddressAutofillCore, SessionToken } = await mapBoxSearch;
         const autofill = new AddressAutofillCore({
@@ -32,14 +46,32 @@
                 "pk.eyJ1IjoiYmFiYWJvdWlsbGUiLCJhIjoiY2x0ajlpMnU5MHBmNDJpdDl5d3pwYmpoeSJ9.4zGTlsBnc_Nx6MFJjcYSxg",
         });
 
-        const sessionToken = new SessionToken();
-        const result = await autofill.suggest(address, { sessionToken });
-        console.log("🚀 ~ onChange ~ result:", result);
-        flavorOptions = result.suggestions.map((v) => ({
-            id: (v as any).id,
-            name: v.feature_name,
-            description: v.description,
-        }));
+        const result = await autofill.suggest(address, { sessionToken: new SessionToken() });
+        suggestions = result.suggestions
+            .filter((v) => v.accuracy !== "street")
+            .map((v) => ({
+                address: v.feature_name,
+                description: v.description,
+                mapbox: v,
+            }));
+    });
+
+    async function submit() {
+        if (!selectedAddress) {
+            console.error("Bad address");
+            return;
+        }
+
+        const { AddressAutofillCore, SessionToken } = await mapBoxSearch;
+        const autofill = new AddressAutofillCore({
+            accessToken:
+                "pk.eyJ1IjoiYmFiYWJvdWlsbGUiLCJhIjoiY2x0ajlpMnU5MHBmNDJpdDl5d3pwYmpoeSJ9.4zGTlsBnc_Nx6MFJjcYSxg",
+        });
+
+        const result = await autofill.retrieve(selectedAddress, {
+            sessionToken: new SessionToken(),
+        });
+        console.log("🚀 ~ onChange ~ result:", result, result.features[0].geometry.coordinates[0]);
     }
 </script>
 
@@ -50,39 +82,39 @@
         <input
             class="input"
             type="search"
-            name="autocomplete-search"
-            bind:value={address}
-            placeholder="Search..."
-            on:change={onChange}
+            name="address"
+            bind:value={$address}
             use:popup={popupSettings}
         />
 
-        <button class="btn mx-auto"> Explorer </button>
-
-        <div class="popup" id={popupSettings.popupId}>
-            <div class="popup-arrow" id="arrow" />
-
-            <ul
-                class="flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 border-dark bg-white py-2"
-                tabindex="-1"
-            >
-                {#each flavorOptions as address}
-                    <li class="contents">
-                        <button
-                            on:click={() => onSelect(address)}
-                            class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
-                            type="button"
-                        >
-                            {address.name}
-                            <span class="text-sm opacity-60">
-                                {address.description}
-                            </span>
-                        </button>
-                    </li>
-                {:else}
-                    <li class="autocomplete-item p-2">Aucun résultat</li>
-                {/each}
-            </ul>
-        </div>
+        <button on:click={submit} class="btn mx-auto" disabled={!selectedAddress}>
+            Explorer
+        </button>
     </div>
 </main>
+
+<div class="popup" id={popupSettings.popupId}>
+    <div class="popup-arrow" id="arrow" />
+
+    <ul
+        class="flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 border-dark bg-white py-2"
+        tabindex="-1"
+    >
+        {#each suggestions as suggestion}
+            <li class="contents">
+                <button
+                    on:click={() => onSelect(suggestion)}
+                    class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
+                    type="button"
+                >
+                    {suggestion.address}
+                    <span class="text-sm opacity-60">
+                        {suggestion.description}
+                    </span>
+                </button>
+            </li>
+        {:else}
+            <li class="autocomplete-item p-2">Aucun résultat</li>
+        {/each}
+    </ul>
+</div>
