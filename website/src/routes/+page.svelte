@@ -4,7 +4,6 @@
     import Marker from "$lib/MapBox/Marker.svelte";
     import Source from "$lib/MapBox/Source.svelte";
     import mapboxgl from "mapbox-gl";
-    import montreal from "./alpha.geojson.json";
     const { LngLat } = mapboxgl;
 
     let defaultCoords = new LngLat(-73.709274, 45.531926);
@@ -14,7 +13,7 @@
     <div class="card h-4/6 overflow-hidden rounded-lg">
         <Map options={{ center: defaultCoords, zoom: 10 }}>
             <Marker coordinates={defaultCoords} />
-            <Source data={{ type: "geojson", data: montreal }}>
+            <!-- <Source data={{ type: "geojson", data: montreal }}>
                 <Layer
                     layer={{
                         type: "fill",
@@ -24,7 +23,7 @@
                         },
                     }}
                 />
-            </Source>
+            </Source> -->
         </Map>
     </div>
 </main>
