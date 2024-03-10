@@ -1,14 +1,17 @@
 <script lang="ts">
     export let data;
-    data.name = "Gabriel Mikus";
-
+    data.name="Gabriel Mikus"
+    
     let loading = false;
     let bool = false;
 </script>
 
-<main>
+<main class="container mx-auto py-4">
     <div class="card">
-        <img src={data.avatar} alt="" />
+        <div class="h-24 w-24 rounded border-2 border-dark">
+            <img src={data.avatar} alt="votre avatar" />
+        </div>
+
         <h1 class="h1">{data.name}</h1>
         <button
             class="btn"
