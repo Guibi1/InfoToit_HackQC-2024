@@ -5,7 +5,7 @@
     import { IconBrandDiscord, IconBrandGithub, IconBrandLinkedin } from "@tabler/icons-svelte";
 </script>
 
-<div class="flex h-full items-center justify-center overflow-hidden">
+<div class="flex flex-1 items-center justify-center overflow-hidden">
     <div class="absolute inset-0 -z-20 overflow-hidden">
         <img
             alt="Un marché ouvert"

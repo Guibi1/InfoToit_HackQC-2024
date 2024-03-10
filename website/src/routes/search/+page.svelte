@@ -83,7 +83,7 @@
 </script>
 
 <main
-    class="container mx-auto flex h-full flex-col justify-center gap-8 py-2 md:flex-row md:gap-16"
+    class="container mx-auto flex flex-1 flex-col justify-center gap-8 py-2 md:flex-row md:gap-16"
 >
     <div class="flex flex-col items-center gap-4 p-4 text-center md:items-start md:text-start">
         <div>
