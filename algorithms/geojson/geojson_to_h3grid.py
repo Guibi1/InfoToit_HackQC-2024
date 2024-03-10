@@ -66,8 +66,5 @@ def geojson_file_to_h3_geojson(filename,resolution):
     indexset = geojson_to_h3_index_set(filename,resolution)
     h3_index_set_to_file(output_geojson_path,indexset)
     
-    
-
-
 
 geojson_file_to_h3_geojson('..\..\data\montreal\\arrondissements.geojson',9)
