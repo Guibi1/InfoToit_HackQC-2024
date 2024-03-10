@@ -13,6 +13,7 @@ const tables = [
       { name: "email", type: "email", unique: true },
       { name: "name", type: "string", notNull: true, defaultValue: "user" },
       { name: "avatar", type: "string" },
+      { name: "isGov", type: "bool", notNull: true, defaultValue: "false" },
     ],
     revLinks: [
       { column: "user", table: "Messages" },

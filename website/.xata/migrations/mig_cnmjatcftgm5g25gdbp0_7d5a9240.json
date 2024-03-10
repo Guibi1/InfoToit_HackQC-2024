@@ -1,0 +1,18 @@
+{
+  "id": "mig_cnmjatcftgm5g25gdbp0",
+  "parentID": "mig_cnmi0i2b1a23a5t9fnig",
+  "checksum": "1:7d5a92400ee923825cde389053e793652048d0e42aa45ef09babe24660c8b588",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "isGov",
+          "type": "bool",
+          "notNull": true,
+          "defaultValue": "false"
+        },
+        "table": "Users"
+      }
+    }
+  ]
+}

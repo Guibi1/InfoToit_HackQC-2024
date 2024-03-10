@@ -3,6 +3,7 @@
     import { getContext, onMount, setContext } from "svelte";
     import type { MapContext } from "./Map.svelte";
 
+    export let zoomOnAdd: number | undefined = undefined;
     export let coordinates: LngLatLike;
 
     setContext("marker", {
@@ -18,6 +19,7 @@
 
     onMount(() => {
         if (map) marker.addTo(map);
+        if (zoomOnAdd) map?.easeTo({ center: coordinates, zoom: zoomOnAdd });
         return () => marker.remove();
     });
 </script>
