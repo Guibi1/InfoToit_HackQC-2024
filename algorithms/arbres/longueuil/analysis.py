@@ -25,11 +25,11 @@ points = extract_data("data/longueuil/arbres.json")
 
 hm = {}
 for point in points:
-    index = get_h3_index(point, 7)
+    index = get_h3_index(point, 9)
     if index in hm:
         hm[index] += 1
     else: 
         hm[index] = 1
 
-print(hm)
+print(len(hm))
 

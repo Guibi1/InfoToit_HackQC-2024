@@ -11,10 +11,10 @@ def get_color(score,midpoint,colorinverse=False):
 
     
     # Define the range and midpoint
-    min_score, max_score = 0, 10
+    max_score = 10
     if colorinverse:
         score=max_score-score
-    midpoint = max_score-midpoint
+        midpoint = max_score-midpoint
     # Calculate the proportion of the score in relation to the midpoint
     if score > midpoint:
         # For scores above the midpoint, we transition from yellow to green
@@ -123,6 +123,7 @@ def density_visualization(densityfile,mapfile=None,resolution=8,colorinverse=Fal
         sum = np.sum(elementtotal)
         average = sum/nonzerocount
         midpoint = (average / maxcount) * 10
+        print(average)
 
         for elements in h3indexhashmap:
             score = (h3indexhashmap[elements]["elementcount"] / maxcount) * 10
