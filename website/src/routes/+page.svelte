@@ -13,7 +13,7 @@
     <div class="card h-4/6 overflow-hidden rounded-lg">
         <Map options={{ center: defaultCoords, zoom: 10 }}>
             <Marker coordinates={defaultCoords} />
-            <Source data={{ type: "geojson", data: montreal }}>
+            <Source data={{ type: "geojson", data: ""}}>
                 <Layer
                     layer={{
                         type: "fill",
