@@ -1,0 +1,19 @@
+{
+  "id": "mig_cnmd3rsftgm5g25gd98g",
+  "parentID": "mig_cnmd3nsftgm5g25gd97g",
+  "checksum": "1:7104afafa9f54b144ff54b89a72389432ce91053c370321d5126ad30e7b38aa8",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "createdBy",
+          "type": "link",
+          "link": {
+            "table": "Users"
+          }
+        },
+        "table": "Messages"
+      }
+    }
+  ]
+}

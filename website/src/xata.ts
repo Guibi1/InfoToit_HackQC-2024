@@ -6,12 +6,46 @@ import type {
   XataRecord,
 } from "@xata.io/client";
 
-const tables = [] as const;
+const tables = [
+  {
+    name: "Users",
+    columns: [
+      { name: "email", type: "email", unique: true },
+      { name: "name", type: "string", notNull: true, defaultValue: "user" },
+      { name: "avatar", type: "string" },
+    ],
+    revLinks: [{ column: "createdBy", table: "Messages" }],
+  },
+  {
+    name: "Messages",
+    columns: [
+      { name: "createdBy", type: "link", link: { table: "Users" } },
+      { name: "message", type: "text" },
+    ],
+  },
+  {
+    name: "GridH3",
+    columns: [{ name: "indexH3", type: "string", unique: true }],
+  },
+] as const;
 
 export type SchemaTables = typeof tables;
 export type InferredTypes = SchemaInference<SchemaTables>;
 
-export type DatabaseSchema = {};
+export type Users = InferredTypes["Users"];
+export type UsersRecord = Users & XataRecord;
+
+export type Messages = InferredTypes["Messages"];
+export type MessagesRecord = Messages & XataRecord;
+
+export type GridH3 = InferredTypes["GridH3"];
+export type GridH3Record = GridH3 & XataRecord;
+
+export type DatabaseSchema = {
+  Users: UsersRecord;
+  Messages: MessagesRecord;
+  GridH3: GridH3Record;
+};
 
 const DatabaseClient = buildClient();
 

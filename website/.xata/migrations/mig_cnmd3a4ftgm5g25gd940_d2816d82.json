@@ -1,0 +1,16 @@
+{
+  "id": "mig_cnmd3a4ftgm5g25gd940",
+  "parentID": "mig_cnmd2ckftgm5g25gd930",
+  "checksum": "1:d2816d827958164ddb81c4f25a9656bc2496587aee6ed1042d0453988aee2c73",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "test",
+          "type": "multiple"
+        },
+        "table": "Conversations"
+      }
+    }
+  ]
+}

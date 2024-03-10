@@ -1,0 +1,16 @@
+{
+  "id": "mig_cnmd26ab1a23a5t9flrg",
+  "parentID": "mig_cnmd1mcftgm5g25gd920",
+  "checksum": "1:636ebea37404b7b99260f6d6dded8fee6e7698b5f7167fea6bd12840949f2966",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "avatar",
+          "type": "string"
+        },
+        "table": "Profile"
+      }
+    }
+  ]
+}

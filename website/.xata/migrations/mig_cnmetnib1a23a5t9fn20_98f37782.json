@@ -1,0 +1,17 @@
+{
+  "id": "mig_cnmetnib1a23a5t9fn20",
+  "parentID": "mig_cnmetgkftgm5g25gdad0",
+  "checksum": "1:98f377829ab91b43ec184a07b7fda9019dbcb753f93db1870bb750a227680284",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "H3_index",
+          "type": "string",
+          "unique": true
+        },
+        "table": "GridH3"
+      }
+    }
+  ]
+}

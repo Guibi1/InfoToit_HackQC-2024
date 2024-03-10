@@ -1,0 +1,13 @@
+{
+  "id": "mig_cnmetgkftgm5g25gdad0",
+  "parentID": "mig_cnmes34ftgm5g25gdaa0",
+  "checksum": "1:a4bcc95fb406c88391f6b268ef989acd1102f06e2c1ee4646c007751b8fbb096",
+  "operations": [
+    {
+      "removeColumn": {
+        "column": "H3_index",
+        "table": "GridH3"
+      }
+    }
+  ]
+}
