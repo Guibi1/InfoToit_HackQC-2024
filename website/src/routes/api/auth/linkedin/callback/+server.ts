@@ -33,8 +33,6 @@ export const GET = async ({ locals, cookies, url, fetch }) => {
         }
     ).then((res) => res.json());
 
-    console.log("🚀 ~ GET ~ linkedinUserResult:", linkedinUserResult);
-
     if (locals.user) {
         // If the user is connected (he wants to add a connection method)
         await getXataClient().db.OAuth.create({

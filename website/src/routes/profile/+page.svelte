@@ -26,6 +26,7 @@
 
         <button class="btn mt-4" on:click={() => (showPlaints = false)}> Maisons </button>
         <button class="btn" on:click={() => (showPlaints = true)}> Pleintes </button>
+        <a class="btn" href="/settings"> Paramètres </a>
     </div>
 
     <div class="flex flex-1 flex-col">
