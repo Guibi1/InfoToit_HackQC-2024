@@ -124,4 +124,51 @@
         height: 0.5rem;
         padding: 0.5rem;
     }
+    .img-slider{
+        width: auto;
+		height: 450px;
+    }
+
+    :target {
+        -webkit-animation: target-fade 1s;
+        -moz-animation: target-fade 1s;
+        -o-animation: target-fade 1s;
+        animation: target-fade 1s;
+    }
+
+    @-webkit-keyframes target-fade {
+        from {
+            background-color: grey;
+        } /* [1] */
+        to {
+            background-color: transparent;
+        }
+    }
+
+    @-moz-keyframes target-fade {
+        from {
+            background-color: grey;
+        } /* [1] */
+        to {
+            background-color: transparent;
+        }
+    }
+
+    @-o-keyframes target-fade {
+        from {
+            background-color: grey;
+        } /* [1] */
+        to {
+            background-color: transparent;
+        }
+    }
+
+    @keyframes target-fade {
+        from {
+            background-color: grey;
+        } /* [1] */
+        to {
+            background-color: transparent;
+        }
+    }
 }

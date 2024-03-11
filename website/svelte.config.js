@@ -11,6 +11,8 @@ const config = {
         alias: {
             $xata: "src/xata.ts",
         },
+        
+        
     },
 };
 export default config;
