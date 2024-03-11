@@ -24,11 +24,14 @@ export const GET = async ({ locals, cookies, url, fetch }) => {
         redirect(302, `/sign-in?${tokens.description}`);
     }
 
-    const discordUserResult: DiscordUserResult = await fetch("https://discord.com/users/@me", {
-        headers: {
-            Authorization: `Bearer ${tokens.accessToken}`,
-        },
-    }).then((res) => res.json());
+    const discordUserResult: DiscordUserResult = await fetch(
+        "https://discord.com/api/v10/users/@me",
+        {
+            headers: {
+                Authorization: `Bearer ${tokens.accessToken}`,
+            },
+        }
+    ).then((res) => res.json());
 
     if (locals.user) {
         // If the user is connected (he wants to add a connection method)
