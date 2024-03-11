@@ -23,10 +23,13 @@
     "@types/node": "20.11.25",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
+    "@xata.io/client": "^0.29.3",
+    "arctic": "^1.2.1",
     "autoprefixer": "10.4.18",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.35.1",
+    "lucia": "^3.1.1",
     "postcss": "8.4.35",
     "prettier": "^3.1.1",
     "prettier-plugin-organize-imports": "^3.2.4",
@@ -41,11 +44,9 @@
     "vite-plugin-tailwind-purgecss": "0.2.0"
   },
   "dependencies": {
-    "@auth/sveltekit": "^0.14.0",
     "@floating-ui/dom": "1.6.3",
     "@mapbox/search-js-core": "^1.0.0-beta.18",
     "@tabler/icons-svelte": "^2.47.0",
-    "@xata.io/client": "^0.29.3",
     "mapbox-gl": "^3.2.0"
   }
 }

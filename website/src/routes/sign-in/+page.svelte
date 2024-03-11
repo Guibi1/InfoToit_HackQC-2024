@@ -1,6 +1,5 @@
 <script lang="ts">
     import LoginBackground from "$lib/assets/loginbackground.webp";
-    import { SignIn } from "@auth/sveltekit/components";
     import { IconBrandDiscord, IconBrandGithub, IconBrandLinkedin } from "@tabler/icons-svelte";
 </script>
 
@@ -20,23 +19,17 @@
         </div>
 
         <div class="grid gap-2">
-            <SignIn provider="github">
-                <div slot="submitButton" class="btn">
-                    <IconBrandGithub /> Continuer avec GitHub
-                </div>
-            </SignIn>
+            <a href="/api/auth/github" class="btn">
+                <IconBrandGithub /> Continuer avec GitHub
+            </a>
 
-            <SignIn provider="discord">
-                <div slot="submitButton" class="btn">
-                    <IconBrandDiscord /> Continuer avec Discord
-                </div>
-            </SignIn>
+            <a href="/api/auth/discord" class="btn">
+                <IconBrandDiscord /> Continuer avec Discord
+            </a>
 
-            <SignIn provider="linkedin">
-                <div slot="submitButton" class="btn">
-                    <IconBrandLinkedin /> Continuer avec LinkedIn
-                </div>
-            </SignIn>
+            <a href="/api/auth/linkedin" class="btn">
+                <IconBrandLinkedin /> Continuer avec LinkedIn
+            </a>
         </div>
     </main>
 </div>

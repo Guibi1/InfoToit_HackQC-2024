@@ -18,6 +18,8 @@ const tables = [
     revLinks: [
       { column: "user", table: "Messages" },
       { column: "user", table: "SavedHouses" },
+      { column: "user", table: "OAuth" },
+      { column: "user", table: "Sessions" },
     ],
   },
   {
@@ -31,7 +33,10 @@ const tables = [
   },
   {
     name: "GridH3",
-    columns: [{ name: "indexH3", type: "string", unique: true }],
+    columns: [
+      { name: "indexH3", type: "string", unique: true },
+      { name: "numberOfTrees", type: "int", notNull: true, defaultValue: "0" },
+    ],
   },
   {
     name: "SavedHouses",
@@ -45,6 +50,31 @@ const tables = [
       },
       { name: "lon", type: "float", notNull: true, defaultValue: "0" },
       { name: "lat", type: "float", notNull: true, defaultValue: "0" },
+    ],
+  },
+  {
+    name: "OAuth",
+    columns: [
+      {
+        name: "provider",
+        type: "string",
+        notNull: true,
+        defaultValue: "unknown",
+      },
+      { name: "user", type: "link", link: { table: "Users" } },
+      { name: "accountId", type: "string", unique: true },
+    ],
+  },
+  {
+    name: "Sessions",
+    columns: [
+      { name: "user", type: "link", link: { table: "Users" } },
+      {
+        name: "expiresAt",
+        type: "datetime",
+        notNull: true,
+        defaultValue: "now",
+      },
     ],
   },
 ] as const;
@@ -64,11 +94,19 @@ export type GridH3Record = GridH3 & XataRecord;
 export type SavedHouses = InferredTypes["SavedHouses"];
 export type SavedHousesRecord = SavedHouses & XataRecord;
 
+export type OAuth = InferredTypes["OAuth"];
+export type OAuthRecord = OAuth & XataRecord;
+
+export type Sessions = InferredTypes["Sessions"];
+export type SessionsRecord = Sessions & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
   GridH3: GridH3Record;
   SavedHouses: SavedHousesRecord;
+  OAuth: OAuthRecord;
+  Sessions: SessionsRecord;
 };
 
 const DatabaseClient = buildClient();

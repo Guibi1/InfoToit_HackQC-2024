@@ -1,7 +1,6 @@
 <script lang="ts">
+    import { invalidateAll } from "$app/navigation";
     import "../app.postcss";
-    import { signIn, signOut } from "@auth/sveltekit/client";
-    import { computePosition, autoUpdate, offset, shift, flip, arrow } from "@floating-ui/dom";
 
     export let data;
 
@@ -31,14 +30,17 @@
             GitHub
         </a>
 
-        {#if !data.loggedIn}
-            <a class="btn btn-sm" href="/login">Sign In</a>
-        {/if}
-
-        {#if data.avatar}
-            <button class="btn btn-flat h-10 w-10 p-0" on:click={() => signOut()}>
-                <img src={data.avatar} class="object-cover" alt="your user avatar" />
-            </button>
+        {#if !data.user}
+            <a class="btn btn-sm" href="/sign-in">Sign In</a>
+        {:else}
+            <a
+                class="btn btn-flat h-10 w-10 p-0"
+                href="/sign-out"
+                data-sveltekit-preload-data="off"
+                on:click={() => invalidateAll()}
+            >
+                <img src={data.user.avatar} class="object-cover" alt="your user avatar" />
+            </a>
         {/if}
     </div>
 </div>
