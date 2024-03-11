@@ -1,34 +1,21 @@
 <script lang="ts">
-    import Layer from "$lib/MapBox/Layer.svelte";
-    import Map from "$lib/MapBox/Map.svelte";
-    import Marker from "$lib/MapBox/Marker.svelte";
-    import Source from "$lib/MapBox/Source.svelte";
-    import mapboxgl from "mapbox-gl";
-    import "@splidejs/svelte-splide/css";
-    import { IconMathGreater } from "@tabler/icons-svelte";
-    //PARK https//source.unsplash.com/8oAZllGPRSo
-    //BIKE https//source.unsplash.com/V4Y1z8Eebq0
-    //RESTAURANT STREET SIDE https//source.unsplash.com/KMVypJ9_IM8
-    //NEIGBORHOOD https//source.unsplash.com/pjrPSQLElq8
-    //POLICE CARS https//source.unsplash.com/ckzGwPUgJrQ
-    //HOUSEFIRE https//source.unsplash.com/3GWLv30smng
-    //BUSINESS https//source.unsplash.com/1N49Cn7P0Fg
-    //SCHOOL https//source.unsplash.com/zFSo6bnZJTw
-
     import { Splide, SplideSlide, SplideTrack } from "@splidejs/svelte-splide";
+    import "@splidejs/svelte-splide/css";
+    import { IconChevronLeft, IconChevronRight } from "@tabler/icons-svelte";
+    import mapboxgl from "mapbox-gl";
 
     const { LngLat } = mapboxgl;
 
     let defaultCoords = new LngLat(-73.709274, 45.531926);
 </script>
 
-<main class="container mx-auto flex-1 py-4">
-    <h1 class="h1">Bienvenue sur InfoToit,</h1>
-    <h2 class="h2">
-        La platforme multi-fonctionelle qui promouvoit le développement d'une société consciente
-    </h2>
-    <a href="/search" class="btn">Goto search</a>
-    <a href="/profile" class="btn">Goto profile</a>
+<main class="container mx-auto grid gap-4 py-4">
+    <span>
+        <h1 class="h1 mb-0">Bienvenue sur InfoToit,</h1>
+        <h2 class="h2">
+            La platforme multi-fonctionelle qui promouvoit le développement d'une société consciente
+        </h2>
+    </span>
 
     <Splide
         hasTrack={false}
@@ -117,13 +104,13 @@
             </SplideSlide>
         </SplideTrack>
 
-        <div class="splide__progress h-4">
+        <div class="h-4">
             <div class="splide__progress__bar" />
         </div>
 
-        <div class="splide__arrows">
-            <button class="splide__arrow splide__arrow--prev"><IconMathGreater /></button>
-            <button class="splide__arrow splide__arrow--next"><IconMathGreater /></button>
+        <div class="">
+            <button class=""><IconChevronLeft /></button>
+            <button class=""><IconChevronRight /></button>
         </div>
     </Splide>
 
@@ -202,26 +189,3 @@
         </p>
     </div>
 </main>
-
-<footer class="justify-items-center">
-    <hr class="hr">
-
-    <div class="mx-auto grid grid-cols-2">
-        <div>
-            <h1 class="h1 underline">Nous Contacter</h1>
-
-            <p>
-                N'hésite pas à nous contacter sur <a
-                    href="https://www.linkedin.com/company/wolfgang-inc/about/"
-                    class="underline">LinkedIn</a
-                > si tu as des questions sur les fonctionnalités de InfoToit ou tout autre information!
-            </p>
-        </div>
-        <div>
-            <a href="/conditions" class="h1 underline">Conditions d'utilisation</a>
-        </div>
-    </div>
-    <div class="mx-auto">
-        <p>© InfoToit 2024.Tout droits réservés.</p>
-    </div>
-</footer>

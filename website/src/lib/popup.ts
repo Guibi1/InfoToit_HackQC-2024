@@ -32,7 +32,7 @@ export function popup(node: HTMLElement, { popupId, arrowId, placement }: PopupO
             middleware: [
                 offset(4),
                 flip(),
-                shift({ padding: 6 }),
+                shift({ padding: 12 }),
                 arrowEl ? arrow({ element: arrowEl }) : undefined,
             ],
         }).then(({ x, y, placement, middlewareData }) => {

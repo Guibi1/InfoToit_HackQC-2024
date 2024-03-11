@@ -19,15 +19,15 @@
         </div>
 
         <div class="grid gap-2">
-            <a href="/api/auth/github" class="btn">
+            <a href="/api/auth/github" class="btn" data-sveltekit-preload-data="off">
                 <IconBrandGithub /> Continuer avec GitHub
             </a>
 
-            <a href="/api/auth/discord" class="btn">
+            <a href="/api/auth/discord" class="btn" data-sveltekit-preload-data="off">
                 <IconBrandDiscord /> Continuer avec Discord
             </a>
 
-            <a href="/api/auth/linkedin" class="btn">
+            <a href="/api/auth/linkedin" class="btn" data-sveltekit-preload-data="off">
                 <IconBrandLinkedin /> Continuer avec LinkedIn
             </a>
         </div>
