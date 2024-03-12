@@ -3,8 +3,9 @@
     import gab from "$lib/assets/gab.webp";
     import phil from "$lib/assets/phil.webp";
     import laurent from "$lib/assets/laurent.webp";
-    import Devpost from "$lib/assets/simple-icons--devpost.svg";
+    import devpost from "$lib/assets/simple-icons--devpost.svg";
     import { IconFlag, IconBrandInstagram, IconBrandLinkedin } from "@tabler/icons-svelte";
+    import { describe } from "node:test";
 </script>
 
 <div class="container flex flex-col gap-6">
@@ -24,26 +25,27 @@
         <div class="grid grid-cols-5 gap-4 p-5">
             <div class="card bg-primary-foreground">
                 <h2 class="mt-4 p-2 text-center">Auth0</h2>
-                <img class="aspect-square w-full object-cover p-8" src={auth} alt="" />
+                <img class="aspect-square w-full object-cover p-8" src={devpost} alt="" />
             </div>
             <div class="bg-primary-foreground">
                 <h2 class="mt-4 p-2 text-center">SvelteKit</h2>
-                <img class="aspect-square w-full object-cover p-8" src={svelte} alt="" />
+                <img class="aspect-square w-full object-cover p-8" src={devpost} alt="" />
             </div>
             <div class="bg-primary-foreground">
                 <h2 class="mt-4 p-2 text-center">PlanetScale</h2>
-                <img class="aspect-square w-full object-cover p-8" src={planet} alt="" />
+                <img class="aspect-square w-full object-cover p-8" src={devpost} alt="" />
             </div>
             <div class="bg-primary-foreground">
                 <h2 class="mt-4 p-2 text-center">MediaPipe</h2>
-                <img class="aspect-square w-full object-cover p-8" src={mediapipe} alt="" />
+                <img class="aspect-square w-full object-cover p-8" src={devpost} alt="" />
             </div>
             <div class="bg-primary-foreground">
-                <h2 class="mt-4 p-2 text-center">Google Maps</h2>
-                <img class="aspect-square w-full object-cover p-8" src={google} alt="" />
+                <img class="aspect-square w-full object-cover p-8" src={devpost} alt="" />
             </div>
         </div>
     </div>
+    <h2 class="mt-10 text-center text-3xl">Rencontrez les Devs</h2>
+
     <div class="mx-auto grid grid-cols-4">
         <div class="card m-4 p-4">
             <img alt="" src={oli} />

@@ -17,11 +17,10 @@
         </h2>
     </span>
 
-    <Splide
+      <Splide
         hasTrack={false}
         aria-label="My Favorite Images"
         options={{
-            rewind: true,
             width: 800,
             gap: "1rem",
             type: "loop",
@@ -69,7 +68,7 @@
             <SplideSlide>
                 <a href="#target-5">
                     <img
-                        src="https://source.unsplash.com/3GWLv30smng"
+                        src="https://source.unsplash.com/YmaWL-z9mEU"
                         class="object-cover"
                         alt="House Fire"
                     />
@@ -108,12 +107,11 @@
             <div class="splide__progress__bar" />
         </div>
 
-        <div class="">
-            <button class=""><IconChevronLeft /></button>
-            <button class=""><IconChevronRight /></button>
-        </div>
+        
     </Splide>
 
+
+  
     <div>
         <h1 id="target-1" class="h1">Intertitre 1</h1>
         <p>

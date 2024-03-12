@@ -29,13 +29,9 @@ const tables = [
       { name: "message", type: "text" },
       { name: "title", type: "string" },
       { name: "status", type: "string", notNull: true, defaultValue: "open" },
-    ],
-  },
-  {
-    name: "GridH3",
-    columns: [
-      { name: "indexH3", type: "string", unique: true },
-      { name: "numberOfTrees", type: "int", notNull: true, defaultValue: "0" },
+      { name: "lon", type: "float", defaultValue: "0" },
+      { name: "lat", type: "float", defaultValue: "0" },
+      { name: "category", type: "string", defaultValue: "Aucune" },
     ],
   },
   {
@@ -77,6 +73,13 @@ const tables = [
       },
     ],
   },
+  {
+    name: "MapData",
+    columns: [
+      { name: "numberOfTrees", type: "int" },
+      { name: "numberOfAddresses", type: "int" },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -88,9 +91,6 @@ export type UsersRecord = Users & XataRecord;
 export type Messages = InferredTypes["Messages"];
 export type MessagesRecord = Messages & XataRecord;
 
-export type GridH3 = InferredTypes["GridH3"];
-export type GridH3Record = GridH3 & XataRecord;
-
 export type SavedHouses = InferredTypes["SavedHouses"];
 export type SavedHousesRecord = SavedHouses & XataRecord;
 
@@ -100,13 +100,16 @@ export type OAuthRecord = OAuth & XataRecord;
 export type Sessions = InferredTypes["Sessions"];
 export type SessionsRecord = Sessions & XataRecord;
 
+export type MapData = InferredTypes["MapData"];
+export type MapDataRecord = MapData & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
-  GridH3: GridH3Record;
   SavedHouses: SavedHousesRecord;
   OAuth: OAuthRecord;
   Sessions: SessionsRecord;
+  MapData: MapDataRecord;
 };
 
 const DatabaseClient = buildClient();

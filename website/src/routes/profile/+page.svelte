@@ -38,6 +38,9 @@
                     <div class="card">
                         <h1 class="h1">{pleinte.title}</h1>
                         <p>{pleinte.message}</p>
+                        <p>{pleinte.category}</p>
+                        <p>lon{pleinte.lon?.toString()}</p>
+                        <p>lat{pleinte.lat?.toString()}</p>
                         <h1 class="h1">Status:</h1>
                         <div class="card">{pleinte.status}</div>
                     </div>
