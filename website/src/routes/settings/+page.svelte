@@ -1,7 +1,25 @@
 <script lang="ts">
+    import { invalidateAll, invalidate } from "$app/navigation";
+    import { page } from "$app/stores";
     import { IconBrandDiscord, IconBrandGithub, IconBrandLinkedin } from "@tabler/icons-svelte";
+    import { popup, type PopupOptions } from "$lib/popup";
 
     export let data;
+
+    const popupSettings: PopupOptions = {
+        popupId: "popupDeleteAccount",
+        placement: "bottom",
+    };
+
+    async function disconnectProvider(provider: string) {
+        await fetch($page.url, { method: "PUT", body: provider });
+        invalidate("providers");
+    }
+
+    async function deleteAccount() {
+        await fetch($page.url, { method: "DELETE" });
+        invalidateAll();
+    }
 </script>
 
 <main class="container mx-auto p-4">
@@ -27,7 +45,7 @@
 
     <h2 class="h2">Connections</h2>
 
-    <div class="flex flex-col gap-2">
+    <div class="grid gap-4 px-2 lg:grid-cols-3">
         <div
             class="flex items-center justify-between rounded border-2 border-dark bg-muted p-2 px-4"
         >
@@ -36,9 +54,14 @@
             </span>
 
             {#if data.providers.includes("github")}
-                <button class="btn btn-sm"> Déconnecter </button>
+                <button
+                    class="btn btn-sm btn-flat btn-destructive"
+                    on:click={() => disconnectProvider("github")}
+                >
+                    Déconnecter
+                </button>
             {:else}
-                <a href="/api/auth/github" class="btn btn-sm"> Ajouter la connection </a>
+                <a href="/api/auth/github" class="btn btn-sm btn-flat"> Ajouter la connection </a>
             {/if}
         </div>
 
@@ -50,9 +73,14 @@
             </span>
 
             {#if data.providers.includes("discord")}
-                <button class="btn btn-sm"> Déconnecter </button>
+                <button
+                    class="btn btn-sm btn-flat btn-destructive"
+                    on:click={() => disconnectProvider("discord")}
+                >
+                    Déconnecter
+                </button>
             {:else}
-                <a href="/api/auth/discord" class="btn btn-sm"> Ajouter la connection </a>
+                <a href="/api/auth/discord" class="btn btn-sm btn-flat"> Ajouter la connection </a>
             {/if}
         </div>
 
@@ -64,9 +92,14 @@
             </span>
 
             {#if data.providers.includes("linkedin")}
-                <button class="btn btn-sm"> Déconnecter </button>
+                <button
+                    class="btn btn-sm btn-flat btn-destructive"
+                    on:click={() => disconnectProvider("linkedin")}
+                >
+                    Déconnecter
+                </button>
             {:else}
-                <a href="/api/auth/linkedin" class="btn btn-sm"> Ajouter la connection </a>
+                <a href="/api/auth/linkedin" class="btn btn-sm btn-flat"> Ajouter la connection </a>
             {/if}
         </div>
     </div>
@@ -75,5 +108,15 @@
 
     <h2 class="h2">Account</h2>
 
-    <button class="btn">Delete account</button>
+    <button class="btn btn-destructive" use:popup={popupSettings}>Delete your account</button>
 </main>
+
+<div class="popup" id={popupSettings.popupId}>
+    <div class="popup-arrow" id="arrow" />
+
+    <div class="card flex w-40 flex-col items-stretch gap-2 p-4">
+        <button class="btn btn-sm btn-flat">Cancel</button>
+        <button class="btn btn-sm btn-flat btn-destructive" on:click={deleteAccount}>Confirm</button
+        >
+    </div>
+</div>

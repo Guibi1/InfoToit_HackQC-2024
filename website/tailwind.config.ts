@@ -10,6 +10,7 @@ export default {
             colors: {
                 "background": "#ffffff",
                 "foreground": "#323232",
+                "destructive": "#dc2626",
                 "muted-foreground": "#666666",
                 "pale": "#e8e8e8",
                 "dark": "#212121",

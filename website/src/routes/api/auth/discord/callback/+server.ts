@@ -12,14 +12,14 @@ export const GET = async ({ locals, cookies, url, fetch }) => {
     const code = url.searchParams.get("code");
 
     if (!state || !stateCookie || !code || stateCookie !== state) {
-        throw error(400);
+        error(400);
     }
 
     const tokens = await discord(url)
         .validateAuthorizationCode(code)
         .catch((e) => (e instanceof OAuth2RequestError ? e : null));
     if (!tokens) {
-        throw error(400);
+        error(400);
     } else if (tokens instanceof OAuth2RequestError) {
         redirect(302, `/sign-in?${tokens.description}`);
     }
@@ -40,7 +40,7 @@ export const GET = async ({ locals, cookies, url, fetch }) => {
             provider,
             accountId: `${discordUserResult.id}`,
         });
-        redirect(302, "/profile/settings");
+        redirect(302, "/settings");
     }
 
     const oauthConnection = await getXataClient()
