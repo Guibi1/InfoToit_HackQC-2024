@@ -157,6 +157,27 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
         h3_index_data[elements]["area_score"] = score
         # colorchosen = get_color(score,midpoint)
         # h3_index_data[elements]["color"] = colorchosen
+    for elements in h3_index_data:
+        neighborhoodtotal = []
+        for adjacenttile in h3_index_data[elements]["adjacent_indexes"]:
+            if adjacenttile in set(h3_index_data):
+                neighborhoodtotal.append(h3_index_data[adjacenttile][f"{data_studied}_count"])
+        neighborhoodtotal.append(h3_index_data[elements][f"{data_studied}_count"])
+
+
+        neighborhoodmaxcount = np.max(neighborhoodtotal)
+        neighborhoodnonzerocount = np.count_nonzero(neighborhoodtotal)
+        neighborhoodsum = np.sum(neighborhoodtotal)
+        neighborhoodaverage = neighborhoodsum/neighborhoodnonzerocount
+        neighborhoodmidpoint = (neighborhoodaverage / neighborhoodmaxcount) * 10
+
+        neighborhoodscore = (h3_index_data[elements][f"{data_studied}_count"] / neighborhoodmaxcount) * 10
+        if is_higher_better == False:
+            neighborhoodscore = 10 - neighborhoodscore
+        h3_index_data[elements]["direct_neighborhood_score"] = neighborhoodscore
+        # colorchosen = get_color(score,midpoint)
+        # h3_index_data[elements]["color"] = colorchosen
+
 
     if analysis:
         for element in analysis:
@@ -213,7 +234,6 @@ csvelementsinfo = {
     "adresse": "ADRESSE"
 }
 csvinfotoanalyze = {
-    "type": ["entire_area_frequency"],
 }
 
 agregate_data(businessfile,csvelements,csvelementsinfo, csvinfotoanalyze)
