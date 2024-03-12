@@ -18,6 +18,8 @@ const tables = [
     revLinks: [
       { column: "user", table: "Messages" },
       { column: "user", table: "SavedHouses" },
+      { column: "user", table: "OAuth" },
+      { column: "user", table: "Sessions" },
     ],
   },
   {
@@ -27,25 +29,70 @@ const tables = [
       { name: "message", type: "text" },
       { name: "title", type: "string" },
       { name: "status", type: "string", notNull: true, defaultValue: "open" },
+      { name: "lon", type: "float", defaultValue: "0" },
+      { name: "lat", type: "float", defaultValue: "0" },
+      { name: "category", type: "string", defaultValue: "Aucune" },
     ],
-  },
-  {
-    name: "GridH3",
-    columns: [{ name: "indexH3", type: "string", unique: true }],
   },
   {
     name: "SavedHouses",
     columns: [
       { name: "user", type: "link", link: { table: "Users" } },
+      { name: "address", type: "link", link: { table: "Addresses" } },
+    ],
+  },
+  {
+    name: "OAuth",
+    columns: [
       {
-        name: "address",
+        name: "provider",
         type: "string",
         notNull: true,
-        defaultValue: "Address",
+        defaultValue: "unknown",
       },
-      { name: "lon", type: "float", notNull: true, defaultValue: "0" },
-      { name: "lat", type: "float", notNull: true, defaultValue: "0" },
+      { name: "user", type: "link", link: { table: "Users" } },
+      { name: "accountId", type: "string", unique: true },
     ],
+  },
+  {
+    name: "Sessions",
+    columns: [
+      { name: "user", type: "link", link: { table: "Users" } },
+      {
+        name: "expiresAt",
+        type: "datetime",
+        notNull: true,
+        defaultValue: "now",
+      },
+    ],
+  },
+  { name: "MapData", columns: [{ name: "numberOfTrees", type: "int" }] },
+  {
+    name: "Addresses",
+    columns: [
+      { name: "latitude", type: "float" },
+      { name: "longitude", type: "float" },
+      { name: "source_id", type: "int" },
+      { name: "group_id", type: "int" },
+      { name: "street_no", type: "string" },
+      { name: "street", type: "string" },
+      { name: "str_name", type: "string" },
+      { name: "str_type", type: "string" },
+      { name: "str_dir", type: "string" },
+      { name: "unit", type: "string" },
+      { name: "city", type: "string" },
+      { name: "postal_code", type: "string" },
+      { name: "full_addr", type: "string" },
+      { name: "city_pcs", type: "string" },
+      { name: "str_name_pcs", type: "string" },
+      { name: "str_type_pcs", type: "string" },
+      { name: "str_dir_pcs", type: "string" },
+      { name: "csduid", type: "int" },
+      { name: "csdname", type: "string" },
+      { name: "pruid", type: "int" },
+      { name: "provider", type: "string" },
+    ],
+    revLinks: [{ column: "address", table: "SavedHouses" }],
   },
 ] as const;
 
@@ -58,17 +105,29 @@ export type UsersRecord = Users & XataRecord;
 export type Messages = InferredTypes["Messages"];
 export type MessagesRecord = Messages & XataRecord;
 
-export type GridH3 = InferredTypes["GridH3"];
-export type GridH3Record = GridH3 & XataRecord;
-
 export type SavedHouses = InferredTypes["SavedHouses"];
 export type SavedHousesRecord = SavedHouses & XataRecord;
+
+export type OAuth = InferredTypes["OAuth"];
+export type OAuthRecord = OAuth & XataRecord;
+
+export type Sessions = InferredTypes["Sessions"];
+export type SessionsRecord = Sessions & XataRecord;
+
+export type MapData = InferredTypes["MapData"];
+export type MapDataRecord = MapData & XataRecord;
+
+export type Addresses = InferredTypes["Addresses"];
+export type AddressesRecord = Addresses & XataRecord;
 
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
-  GridH3: GridH3Record;
   SavedHouses: SavedHousesRecord;
+  OAuth: OAuthRecord;
+  Sessions: SessionsRecord;
+  MapData: MapDataRecord;
+  Addresses: AddressesRecord;
 };
 
 const DatabaseClient = buildClient();

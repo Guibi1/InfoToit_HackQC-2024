@@ -1,22 +1,32 @@
-import { redirect, type Handle } from "@sveltejs/kit";
-import { sequence } from "@sveltejs/kit/hooks";
-import { handle as authenticationHandle } from "./lib/auth";
+import { lucia } from "$lib/auth";
+import type { Handle } from "@sveltejs/kit";
 
-const authorizationHandle = (async ({ event, resolve }) => {
-    // Protect any routes under /authenticated
-    if (event.url.pathname.startsWith("/authenticated")) {
-        const session = await event.locals.auth();
-        if (!session) {
-            // Redirect to the signin page
-            throw redirect(303, "/auth/signin");
-        }
+export const handle: Handle = async ({ event, resolve }) => {
+    const sessionId = event.cookies.get(lucia.sessionCookieName);
+    if (!sessionId) {
+        event.locals.user = null;
+        event.locals.session = null;
+        return resolve(event);
     }
 
-    // If the request is still here, just proceed as normally
-    return resolve(event);
-}) satisfies Handle;
+    const { session, user } = await lucia.validateSession(sessionId);
+    if (session && session.fresh) {
+        const sessionCookie = lucia.createSessionCookie(session.id);
+        // sveltekit types deviates from the de-facto standard
+        // you can use 'as any' too
+        event.cookies.set(sessionCookie.name, sessionCookie.value, {
+            path: ".",
+            ...sessionCookie.attributes,
+        });
+    } else if (!session) {
+        const sessionCookie = lucia.createBlankSessionCookie();
+        event.cookies.set(sessionCookie.name, sessionCookie.value, {
+            path: ".",
+            ...sessionCookie.attributes,
+        });
+    }
 
-// First handle authentication, then authorization
-// Each function acts as a middleware, receiving the request handle
-// And returning a handle which gets passed to the next function
-export const handle: Handle = sequence(authenticationHandle, authorizationHandle);
+    event.locals.user = user;
+    event.locals.session = session;
+    return resolve(event);
+};

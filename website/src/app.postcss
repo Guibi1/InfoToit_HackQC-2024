@@ -12,6 +12,10 @@
         @apply mb-4 text-2xl font-bold;
     }
 
+    .h2 {
+        @apply mb-2 text-lg font-bold;
+    }
+
     .border-cool {
         @apply border-2 border-dark shadow-square;
     }
@@ -41,6 +45,19 @@
             @apply mb-0 shadow-none transition-shadow before:content-none;
             @apply hover:text-dark hover:shadow-square;
         }
+
+        &.btn-destructive {
+            @apply border-destructive before:bg-destructive;
+            @apply hover:text-dark;
+        }
+    }
+
+    .hr {
+        @apply h-0.5 rounded bg-dark;
+    }
+
+    .label {
+        @apply grid gap-1;
     }
 
     .input {
@@ -111,5 +128,23 @@
         width: 0.5rem;
         height: 0.5rem;
         padding: 0.5rem;
+    }
+
+    .img-slider {
+        width: auto;
+        height: 450px;
+    }
+
+    :target {
+        animation: target-fade 1s;
+    }
+
+    @keyframes target-fade {
+        from {
+            background-color: grey;
+        }
+        to {
+            background-color: transparent;
+        }
     }
 }

@@ -11,17 +11,22 @@
         <div class="mx-2 rounded border-2 border-dark p-4">
             <div class="flex items-center gap-4">
                 <div class="h-24 w-24 rounded border-2 border-dark">
-                    <img class="h-full w-full object-cover" src={data.avatar} alt="votre avatar" />
+                    <img
+                        class="h-full w-full object-cover"
+                        src={data.user.avatar}
+                        alt="votre avatar"
+                    />
                 </div>
                 <div>
-                    <p class="h1 mb-0">{data.name}</p>
-                    <p class="text-muted-foreground">{data.email}</p>
+                    <p class="h1 mb-0">{data.user.name}</p>
+                    <p class="text-muted-foreground">{data.user.email}</p>
                 </div>
             </div>
         </div>
 
         <button class="btn mt-4" on:click={() => (showPlaints = false)}> Maisons </button>
         <button class="btn" on:click={() => (showPlaints = true)}> Pleintes </button>
+        <a class="btn" href="/settings"> Paramètres </a>
     </div>
 
     <div class="flex flex-1 flex-col">
@@ -33,6 +38,9 @@
                     <div class="card">
                         <h1 class="h1">{pleinte.title}</h1>
                         <p>{pleinte.message}</p>
+                        <p>{pleinte.category}</p>
+                        <p>lon{pleinte.lon?.toString()}</p>
+                        <p>lat{pleinte.lat?.toString()}</p>
                         <h1 class="h1">Status:</h1>
                         <div class="card">{pleinte.status}</div>
                     </div>

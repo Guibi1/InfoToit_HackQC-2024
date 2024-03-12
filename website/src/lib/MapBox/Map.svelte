@@ -1,18 +1,19 @@
 <script context="module" lang="ts">
+    import { PUBLIC_MAPBOX_KEY } from "$env/static/public";
+    import mapboxgl from "mapbox-gl";
+    mapboxgl.accessToken = PUBLIC_MAPBOX_KEY;
+
     export interface MapContext {
         getMap: () => mapboxgl.Map | null;
         getLoaded: () => Writable<boolean>;
     }
 
-    import mapboxgl from "mapbox-gl";
-    mapboxgl.accessToken = PUBLIC_MAPBOX_KEY;
+    const events = ["click", "contextmenu", "mousemove", "mouseout"] as const;
 </script>
 
 <script lang="ts">
-    import { onMount, setContext } from "svelte";
-    import { getMapEventHandlers } from "./get-map-event-handlers";
+    import { createEventDispatcher, onMount, setContext } from "svelte";
     import { writable, type Writable } from "svelte/store";
-    import { PUBLIC_MAPBOX_KEY } from "$env/static/public";
 
     export let options: Omit<mapboxgl.MapboxOptions, "container"> = {};
 
@@ -20,6 +21,7 @@
     let map: mapboxgl.Map;
     let loaded = writable(false);
 
+    let dispatch = createEventDispatcher<Record<(typeof events)[number], mapboxgl.MapMouseEvent>>();
     setContext<MapContext>("map", {
         getMap: () => map,
         getLoaded: () => loaded,
@@ -34,13 +36,16 @@
 
         map.once("idle", () => ($loaded = true));
 
-        const eventHandlers = getMapEventHandlers();
-        for (const [event, handler] of Object.entries(eventHandlers)) {
+        const eventHandlers = events.map((name) => ({
+            event: name,
+            handler: (e: mapboxgl.MapMouseEvent) => dispatch(name, e),
+        }));
+        for (const { event, handler } of eventHandlers) {
             map.on(event, handler);
         }
 
         return () => {
-            for (const [event, handler] of Object.entries(eventHandlers)) {
+            for (const { event, handler } of eventHandlers) {
                 map.off(event, handler);
             }
             map.remove();
