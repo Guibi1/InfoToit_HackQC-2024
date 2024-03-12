@@ -10,9 +10,8 @@ const config = {
         adapter: adapter(),
         alias: {
             $xata: "src/xata.ts",
+            $api: "src/routes/api/*",
         },
-        
-        
     },
 };
 export default config;

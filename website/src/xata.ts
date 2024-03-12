@@ -38,14 +38,7 @@ const tables = [
     name: "SavedHouses",
     columns: [
       { name: "user", type: "link", link: { table: "Users" } },
-      {
-        name: "address",
-        type: "string",
-        notNull: true,
-        defaultValue: "Address",
-      },
-      { name: "lon", type: "float", notNull: true, defaultValue: "0" },
-      { name: "lat", type: "float", notNull: true, defaultValue: "0" },
+      { name: "address", type: "link", link: { table: "Addresses" } },
     ],
   },
   {
@@ -73,12 +66,33 @@ const tables = [
       },
     ],
   },
+  { name: "MapData", columns: [{ name: "numberOfTrees", type: "int" }] },
   {
-    name: "MapData",
+    name: "Addresses",
     columns: [
-      { name: "numberOfTrees", type: "int" },
-      { name: "numberOfAddresses", type: "int" },
+      { name: "latitude", type: "float" },
+      { name: "longitude", type: "float" },
+      { name: "source_id", type: "int" },
+      { name: "group_id", type: "int" },
+      { name: "street_no", type: "string" },
+      { name: "street", type: "string" },
+      { name: "str_name", type: "string" },
+      { name: "str_type", type: "string" },
+      { name: "str_dir", type: "string" },
+      { name: "unit", type: "string" },
+      { name: "city", type: "string" },
+      { name: "postal_code", type: "string" },
+      { name: "full_addr", type: "string" },
+      { name: "city_pcs", type: "string" },
+      { name: "str_name_pcs", type: "string" },
+      { name: "str_type_pcs", type: "string" },
+      { name: "str_dir_pcs", type: "string" },
+      { name: "csduid", type: "int" },
+      { name: "csdname", type: "string" },
+      { name: "pruid", type: "int" },
+      { name: "provider", type: "string" },
     ],
+    revLinks: [{ column: "address", table: "SavedHouses" }],
   },
 ] as const;
 
@@ -103,6 +117,9 @@ export type SessionsRecord = Sessions & XataRecord;
 export type MapData = InferredTypes["MapData"];
 export type MapDataRecord = MapData & XataRecord;
 
+export type Addresses = InferredTypes["Addresses"];
+export type AddressesRecord = Addresses & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
@@ -110,6 +127,7 @@ export type DatabaseSchema = {
   OAuth: OAuthRecord;
   Sessions: SessionsRecord;
   MapData: MapDataRecord;
+  Addresses: AddressesRecord;
 };
 
 const DatabaseClient = buildClient();
