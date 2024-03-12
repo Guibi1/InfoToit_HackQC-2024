@@ -3,7 +3,7 @@ import { getXataClient } from "$xata";
 import { error, json } from "@sveltejs/kit";
 
 export const POST = async ({ locals, params }) => {
-    if (!locals.user) throw error(401);
+    if (!locals.user) error(401);
 
     const coordinates = await fetch(
         `https://api.mapbox.com/search/geocode/v6/forward?q=${params.address}&access_token=${PUBLIC_MAPBOX_KEY}`
