@@ -4,11 +4,12 @@ import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { schema } from "./schema";
 
-export const load = async ({ locals }) => {
+export const load = async ({ locals, depends }) => {
     if (!locals.user) redirect(302, "/");
+    depends("plaints");
 
     const messages = await getXataClient()
-        .db.Messages.select(["title", "message", "status"])
+        .db.Messages.select(["title", "message", "category", "status", "lon", "lat"])
         .filter({ user: locals.user })
         .getAll();
 
@@ -19,34 +20,24 @@ export const load = async ({ locals }) => {
     };
 };
 export const actions = {
-    
-    default: async ({locals, request }) => {
+    default: async ({ locals, request }) => {
         if (!locals.user) throw error(401);
         const form = await superValidate(request, zod(schema));
 
-        console.log(form);
-
         if (!form.valid) {
-            // Again, return { form } and things will just work.
             return fail(400, { form });
         }
-        
-        // TODO: Do something with the validated form.data
-        
 
-        const res = await getXataClient().db.Messages.create({
+        await getXataClient().db.Messages.create({
             title: form.data.title,
             message: form.data.message,
-            category:form.data.category,
+            category: form.data.category,
+            lon: form.data.coordinate.lon,
+            lat: form.data.coordinate.lat,
             status: "En cours",
-            lon: form.data.coordinate_lon,
-            lat: form.data.coordinate_lat,
             user: locals.user,
         });
 
-        console.log(res)
-
-        // Yep, return { form } here too
         return { form };
     },
 };

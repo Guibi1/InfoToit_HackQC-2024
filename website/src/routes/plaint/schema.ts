@@ -19,9 +19,10 @@ export const categoriesDePlaintes = [
 
 export const schema = z.object({
     title: z.string().min(2),
-    coordinate_lon: z.number().min(-74.0).max(-73.3),
-    coordinate_lat: z.number().min(45.3308067).max(45.7556),
     category: z.enum(categoriesDePlaintes).default("Aucune"),
     message: z.string().min(6),
+    coordinate: z.object({
+        lon: z.number().min(-74.0).max(-73.3),
+        lat: z.number().min(45.3308067).max(45.7556),
+    }),
 });
-
