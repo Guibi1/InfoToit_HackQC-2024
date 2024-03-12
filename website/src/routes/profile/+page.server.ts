@@ -10,7 +10,7 @@ export const load = async ({ locals }) => {
         .getAll();
 
     const messages = await getXataClient()
-        .db.Messages.select(["title", "message", "status"])
+        .db.Messages.select(["title", "message", "category", "status", "lon", "lat"])
         .filter({ user: locals.user })
         .getAll();
 
