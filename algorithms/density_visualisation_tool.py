@@ -7,14 +7,11 @@ import sys
 import getopt
 import argparse
 
-def get_color(score,midpoint,colorinverse=False):
+def get_color(score,midpoint):
 
     
     # Define the range and midpoint
     max_score = 10
-    if colorinverse:
-        score=max_score-score
-        midpoint = max_score-midpoint
     # Calculate the proportion of the score in relation to the midpoint
     if score > midpoint:
         # For scores above the midpoint, we transition from yellow to green
@@ -123,11 +120,15 @@ def density_visualization(densityfile,mapfile=None,resolution=8,colorinverse=Fal
         sum = np.sum(elementtotal)
         average = sum/nonzerocount
         midpoint = (average / maxcount) * 10
-        print(average)
+        if colorinverse:
+            midpoint = 10 - midpoint
 
         for elements in h3indexhashmap:
             score = (h3indexhashmap[elements]["elementcount"] / maxcount) * 10
             h3indexhashmap[elements]["score"] = score
+            if colorinverse:
+                score = 10 - score
+                h3indexhashmap[elements]["score"] = 10 - h3indexhashmap[elements]["score"]
             colorchosen = get_color(score,midpoint,colorinverse)
             h3indexhashmap[elements]["color"] = colorchosen
             
