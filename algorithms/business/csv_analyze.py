@@ -61,7 +61,7 @@ def h3_index_set_to_file(filename,indexset):
 
     print(f"Created GeoJSON file at {output_geojson_path}")
 
-def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=None, resolution=8, is_higher_better=True):
+def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=None, resolution=8, is_higher_better=True,delete_infos=False):
     
 
     valid_analysis_types = {"frequency","cut_frequency","entire_area_frequency","contained_categories","missing_categories"}
@@ -186,16 +186,16 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
                     base_set = set(df[info_mapping[element]])
                     base_map = {elem: 0 for elem in base_set}
                     for h3_index in h3_index_data:
-                        h3_index_data[h3_index][f"{data_studied}{list_element}"] = copy.deepcopy(base_map)
+                        h3_index_data[h3_index][f"{data_studied}_{list_element}"] = copy.deepcopy(base_map)
                         for element_list in h3_index_data[h3_index][data_studied]:
-                            h3_index_data[h3_index][f"{data_studied}_{list_element}"][element_list[element]] = h3_index_data[h3_index][f"{data_studied}{list_element}"][element_list[element]] + 1
+                            h3_index_data[h3_index][f"{data_studied}_{list_element}"][element_list[element]] = h3_index_data[h3_index][f"{data_studied}_{list_element}"][element_list[element]] + 1
                 elif list_element == "cut_frequency":
                     for h3_index in h3_index_data:
-                        h3_index_data[h3_index][f"{data_studied}{list_element}"] = {}
+                        h3_index_data[h3_index][f"{data_studied}_{list_element}"] = {}
                         for element_list in h3_index_data[h3_index][data_studied]:
-                            if element_list[element] not in h3_index_data[h3_index][f"{data_studied}{list_element}"]:
-                                h3_index_data[h3_index][f"{data_studied}{list_element}"][element_list[element]] = 0
-                            h3_index_data[h3_index][f"{data_studied}_{list_element}"][element_list[element]] = h3_index_data[h3_index][f"{data_studied}{list_element}"][element_list[element]] + 1
+                            if element_list[element] not in h3_index_data[h3_index][f"{data_studied}_{list_element}"]:
+                                h3_index_data[h3_index][f"{data_studied}_{list_element}"][element_list[element]] = 0
+                            h3_index_data[h3_index][f"{data_studied}_{list_element}"][element_list[element]] = h3_index_data[h3_index][f"{data_studied}_{list_element}"][element_list[element]] + 1
                 elif list_element == "entire_area_frequency":
                     base_set = set(df[info_mapping[element]])
                     base_map = {elem: 0 for elem in base_set}
@@ -219,10 +219,18 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
                         base_set = set(df[info_mapping[element]])
                         subtractedset = base_set - tempset
                         h3_index_data[h3_index][f"{data_studied}_{list_element}"] = list(subtractedset)
+    
+    if delete_infos:
+        for h3index in h3_index_data:
+            if data_studied in h3_index_data[h3index]:
+                h3_index_data[h3index].pop(data_studied)
+
 
     with open("test.json", 'w') as f:
         json.dump(h3_index_data, f,indent=4)
 
+    
+valid_analysis_types_example = {"frequency","cut_frequency","entire_area_frequency","contained_categories","missing_categories"}
 
 geojsonfile = "../../data/montreal/montreal.geojson"
 businessfile = '../../data/montreal/businesses_cleaned.csv'
@@ -230,13 +238,15 @@ res = 8
 csvelements = "businesses"
 csvelementsinfo = {
     "name": "NOM_ETAB_2023",
-    "type": "USAGE2",
+    "type": "USAGE3",
     "adresse": "ADRESSE"
 }
 csvinfotoanalyze = {
+    "type": ["cut_frequency","entire_area_frequency"]
 }
+deleteinfos = True
 
-agregate_data(businessfile,csvelements,csvelementsinfo, csvinfotoanalyze)
+agregate_data(businessfile,csvelements,csvelementsinfo, csvinfotoanalyze,delete_infos=deleteinfos)
 
 
 
