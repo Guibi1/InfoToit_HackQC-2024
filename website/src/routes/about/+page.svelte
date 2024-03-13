@@ -4,8 +4,7 @@
     import phil from "$lib/assets/phil.webp";
     import laurent from "$lib/assets/laurent.webp";
     import devpost from "$lib/assets/simple-icons--devpost.svg";
-    import { IconFlag, IconBrandInstagram, IconBrandLinkedin } from "@tabler/icons-svelte";
-    import { describe } from "node:test";
+    import { IconFlag, IconBrandLinkedin } from "@tabler/icons-svelte";
 </script>
 
 <div class="container flex flex-col gap-6">

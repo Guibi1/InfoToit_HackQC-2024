@@ -21,10 +21,12 @@
         $formData.coordinate.lon = e.detail.lngLat.lng;
         $formData.coordinate.lat = e.detail.lngLat.lat;
     }
+
+    let showPlaints: boolean = true;
 </script>
 
 <main class="container mx-auto flex flex-1 gap-16 py-2 lg:gap-16">
-    <div class="flex flex-col">
+    <div class="ml-6 flex flex-col">
         <h1 class="h1">Création de pleinte</h1>
 
         <form class="grid gap-2" method="POST" use:enhance>
@@ -67,14 +69,6 @@
     </div>
 
     <div class="card relative mb-4 max-w-2xl flex-1">
-        {#if selectedmessage}
-            <div class="card absolute left-4 top-4">
-                <h2 class="text-lg">{selectedmessage.title}</h2>
-                <h2 class="text-lg">{selectedmessage.message}</h2>
-                <h2 class="text-lg">{selectedmessage.status}</h2>
-            </div>
-        {/if}
-
         <Map
             on:click={onMapClick}
             options={{
@@ -87,18 +81,40 @@
                     [-73.3, 45.7556], // Northeast corner: [longitude, latitude]
                 ],
             }}
-        >
-            {#each data.messages as message}
-                {#if message.lat && message.lon}
-                    <Marker coordinates={[+message.lon, +message.lat]} />
-                {/if}
-            {/each}
-
+            >{#if showPlaints}
+                {#each data.messages as message}
+                    {#if message.lat && message.lon}
+                        <Marker
+                            coordinates={[+message.lon, +message.lat]}
+                            color="#b40219"
+                            title={typeof message.title == "string" ? message.title : ""}
+                            message={message}
+                        />
+                    {/if}
+                {/each}
+            {/if}
             {#if $formData.coordinate.lon && $formData.coordinate.lat}
                 {#key $formData.coordinate}
                     <Marker coordinates={$formData.coordinate} />
                 {/key}
             {/if}
         </Map>
+    </div>
+    <div>
+        <button
+            class="btn"
+            on:click={() => {
+                showPlaints = !showPlaints;
+            }}
+        >
+            {showPlaints ? "Désactiver les plaintes" : "Activer les plaintes"}
+        </button>
+        {#if selectedmessage}
+            <div class="card absolute left-4 top-4">
+                <h2 class="text-lg">{selectedmessage.title}</h2>
+                <h2 class="text-lg">{selectedmessage.message}</h2>
+                <h2 class="text-lg">{selectedmessage.status}</h2>
+            </div>
+        {/if}
     </div>
 </main>

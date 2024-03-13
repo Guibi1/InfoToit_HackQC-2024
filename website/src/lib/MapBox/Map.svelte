@@ -7,7 +7,7 @@
         getMap: () => mapboxgl.Map | null;
         getLoaded: () => Writable<boolean>;
     }
-
+    
     const events = ["click", "contextmenu", "mousemove", "mouseout"] as const;
 </script>
 
@@ -21,7 +21,9 @@
     let map: mapboxgl.Map;
     let loaded = writable(false);
 
-    let dispatch = createEventDispatcher<Record<(typeof events)[number], mapboxgl.MapMouseEvent>>();
+    
+
+    let dispatch = createEventDispatcher<Record<(typeof events)[number], mapboxgl.MapMouseEvent|mapboxgl.MapMouseEvent>>();
     setContext<MapContext>("map", {
         getMap: () => map,
         getLoaded: () => loaded,
@@ -42,6 +44,7 @@
         }));
         for (const { event, handler } of eventHandlers) {
             map.on(event, handler);
+           
         }
 
         return () => {
