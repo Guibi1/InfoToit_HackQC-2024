@@ -23,6 +23,7 @@ export const lucia = new Lucia(adapter, {
         name: db.name,
         email: db.email,
         avatar: db.avatar,
+        isGov: db.isGov,
     }),
 });
 

@@ -3,6 +3,28 @@
     import { popup, type PopupOptions } from "$lib/popup";
     import "../app.postcss";
     import { IconUser, IconSettings, IconLogout } from "@tabler/icons-svelte";
+    import {
+        CategoryScale,
+        Chart as ChartJS,
+        Filler,
+        Legend,
+        LineElement,
+        LinearScale,
+        PointElement,
+        Title,
+        Tooltip,
+    } from "chart.js";
+
+    ChartJS.register(
+        Filler,
+        Title,
+        Tooltip,
+        Legend,
+        LineElement,
+        LinearScale,
+        PointElement,
+        CategoryScale
+    );
 
     export let data;
 
