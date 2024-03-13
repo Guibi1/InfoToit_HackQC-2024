@@ -5,8 +5,8 @@ import numpy as np
 import os.path
 import sys
 import copy
-def get_color(score):
-    min_score, max_score, midpoint = 0, 10, 0.075
+def get_color(score,midpoint):
+    min_score, max_score = 0, 100
     if score > midpoint:
         green_component = 255
         red_component = round(255 * (1 - (score - midpoint) / (max_score - midpoint)))
@@ -146,12 +146,12 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
     nonzerocount = np.count_nonzero(elementtotal)
     sum = np.sum(elementtotal)
     average = sum/nonzerocount
-    midpoint = (average / maxcount) * 10
+    midpoint = (average / maxcount) * 100
     if is_higher_better == False:
         midpoint = 10 - midpoint
 
     for elements in h3_index_data:
-        score = (h3_index_data[elements][f"{data_studied}_count"] / maxcount) * 10
+        score = round((h3_index_data[elements][f"{data_studied}_count"] / maxcount) * 100,2)
         if is_higher_better == False:
             score = 10 - score
         h3_index_data[elements]["area_score"] = score
@@ -166,12 +166,8 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
 
 
         neighborhoodmaxcount = np.max(neighborhoodtotal)
-        neighborhoodnonzerocount = np.count_nonzero(neighborhoodtotal)
-        neighborhoodsum = np.sum(neighborhoodtotal)
-        neighborhoodaverage = neighborhoodsum/neighborhoodnonzerocount
-        neighborhoodmidpoint = (neighborhoodaverage / neighborhoodmaxcount) * 10
-
-        neighborhoodscore = (h3_index_data[elements][f"{data_studied}_count"] / neighborhoodmaxcount) * 10
+        
+        neighborhoodscore = round((h3_index_data[elements][f"{data_studied}_count"] / neighborhoodmaxcount) * 100,2)
         if is_higher_better == False:
             neighborhoodscore = 10 - neighborhoodscore
         h3_index_data[elements]["direct_neighborhood_score"] = neighborhoodscore
@@ -219,6 +215,18 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
                         base_set = set(df[info_mapping[element]])
                         subtractedset = base_set - tempset
                         h3_index_data[h3_index][f"{data_studied}_{list_element}"] = list(subtractedset)
+
+    
+    for h3_index in set(h3_index_data):
+
+        description = (f"In this region, there are {h3_index_data[h3_index][f'{data_studied}_count']} {data_studied}. "
+        + f"On 10, this region has a score of {h3_index_data[h3_index]['area_score']} "
+        + f"and on 10, this region has a score of {h3_index_data[h3_index]['direct_neighborhood_score']} compared to his neighboring cells.")
+
+        h3_index_data[h3_index]["h3_description"] = description
+
+
+
     
     if delete_infos:
         for h3index in h3_index_data:
@@ -226,14 +234,20 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
                 h3_index_data[h3index].pop(data_studied)
 
 
-    with open("test.json", 'w') as f:
+    filenamein = csv_path.replace(".csv","")
+    output_geojson_path = filenamein + f'_h3_analysis_{resolution}.json'  # replace with your desired path
+    with open(output_geojson_path, 'w') as f:
         json.dump(h3_index_data, f,indent=4)
 
     
 valid_analysis_types_example = {"frequency","cut_frequency","entire_area_frequency","contained_categories","missing_categories"}
 
-geojsonfile = "../../data/montreal/montreal.geojson"
-businessfile = '../../data/montreal/businesses_cleaned.csv'
+
+
+
+
+geojsonfile = "../data/montreal/montreal.geojson"
+businessfile = '../data/montreal/businesses_cleaned.csv'
 res = 8
 csvelements = "businesses"
 csvelementsinfo = {
@@ -242,7 +256,7 @@ csvelementsinfo = {
     "adresse": "ADRESSE"
 }
 csvinfotoanalyze = {
-    "type": ["cut_frequency","entire_area_frequency"]
+    "type": ["cut_frequency"]
 }
 deleteinfos = True
 
