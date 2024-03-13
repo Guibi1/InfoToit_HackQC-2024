@@ -1,22 +1,20 @@
+<script context="module" lang="ts">
+    export interface MarkerContext {
+        getMarker: () => Marker;
+    }
+</script>
+
 <script lang="ts">
-    import mapboxgl, { type LngLatLike } from "mapbox-gl";
-    import { getContext, onMount, setContext } from "svelte";
-    import { createEventDispatcher } from "svelte";
-
+    import mapboxgl, { type LngLatLike, type Marker } from "mapbox-gl";
+    import { createEventDispatcher, getContext, onMount, setContext } from "svelte";
     import type { MapContext } from "./Map.svelte";
-    import { popup } from "$lib/popup";
-    import type { JSONData } from "@xata.io/client";
-    import type { MessagesRecord } from "$xata";
 
-    export let zoomOnAdd: number | undefined = undefined;
     export let coordinates: LngLatLike;
     export let color: string | undefined = undefined;
-    export let message: JSONData<MessagesRecord> | undefined = undefined;
+    export let zoomOnAdd: number | undefined = undefined;
 
-    setContext("marker", {
-        getMarker: () => marker,
-    });
-    const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher<Record<"click", MouseEvent>>();
+    setContext("marker", { getMarker: () => marker });
 
     const mapContext = getContext<MapContext>("map");
     const map = mapContext.getMap();
@@ -26,25 +24,17 @@
     $: marker.setLngLat(coordinates);
 
     onMount(() => {
-        if (map) {
-            marker.addTo(map);
-            if (message?.title) {
-                let popup = new mapboxgl.Popup()
-                    .setLngLat(coordinates)
-                    .setHTML(typeof message.title == "string" ? message.title : "");
+        const onClick = (e: MouseEvent) => dispatch("click", e);
 
-                marker.getElement().addEventListener("mouseenter", () => {
-                    dispatch("markerhover", { detail: marker });
-                    popup.addTo(map);
-                });
-                marker.getElement().addEventListener("mouseleave", () => {
-                    popup.remove();
-                });
-            }
-        }
-
+        if (map) marker.addTo(map);
         if (zoomOnAdd) map?.easeTo({ center: coordinates, zoom: zoomOnAdd });
-        return () => marker.remove();
+
+        marker.getElement().addEventListener("mousedown", onClick);
+
+        return () => {
+            marker.getElement().removeEventListener("mousedown", onClick);
+            marker.remove();
+        };
     });
 </script>
 
