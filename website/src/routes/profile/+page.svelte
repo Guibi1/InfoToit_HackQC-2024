@@ -26,7 +26,6 @@
 
         <button class="btn mt-4" on:click={() => (showPlaints = false)}> Maisons </button>
         <button class="btn" on:click={() => (showPlaints = true)}> Pleintes </button>
-        <a class="btn" href="/settings"> Paramètres </a>
     </div>
 
     <div class="flex flex-1 flex-col">
@@ -59,11 +58,19 @@
                 <div class="m-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {#each data.savedHomes as home}
                         <a class="card p-2" href={`/house/${home.address}`}>
-                            <img
-                                class="h-24 w-24 rounded"
-                                src={`https://maps.googleapis.com/maps/api/streetview?size=400x400&location=${home.lat},${home.lon}&fov=50&pitch=0&key=${PUBLIC_GOOGLE_MAPS_KEY}`}
-                                alt="la maison vue de la rue"
-                            />
+                            <div
+                                class="flex h-24 w-24 items-center justify-center overflow-hidden rounded"
+                            >
+                                {#if home.address?.latitude && home.address.longitude}
+                                    <img
+                                        class="h-full w-full"
+                                        src={`https://maps.googleapis.com/maps/api/streetview?size=400x400&location=${home.address.latitude},${home.address.longitude}&fov=50&pitch=0&key=${PUBLIC_GOOGLE_MAPS_KEY}`}
+                                        alt="la maison vue de la rue"
+                                    />
+                                {:else}
+                                    <span>H</span>
+                                {/if}
+                            </div>
 
                             <span class="text-xl">{home.address}</span>
                         </a>

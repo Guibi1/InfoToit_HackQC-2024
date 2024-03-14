@@ -1,189 +1,122 @@
 <script lang="ts">
-    import { Splide, SplideSlide, SplideTrack } from "@splidejs/svelte-splide";
-    import "@splidejs/svelte-splide/css";
-    import { IconChevronLeft, IconChevronRight } from "@tabler/icons-svelte";
-    import mapboxgl from "mapbox-gl";
+    import type { AddressSearchResult } from "$api/address/search/+server";
+    import { goto } from "$app/navigation";
+    import Map from "$lib/MapBox/Map.svelte";
+    import Marker from "$lib/MapBox/Marker.svelte";
+    import { popup, type PopupOptions } from "$lib/popup";
 
-    const { LngLat } = mapboxgl;
+    const popupSettings: PopupOptions = {
+        popupId: "popupAutocomplete",
+        placement: "bottom",
+    };
 
-    let defaultCoords = new LngLat(-73.709274, 45.531926);
+    let suggestions: AddressSearchResult[] = [];
+    let address = "";
+    let selectedAddress: AddressSearchResult | null = null;
+    let searchTimout: number;
+
+    async function onInput() {
+        selectedAddress = null;
+
+        if (address.length < 4) {
+            suggestions = [];
+            return;
+        }
+
+        clearTimeout(searchTimout);
+        searchTimout = setTimeout(
+            () =>
+                fetch("/api/address/search", {
+                    method: "POST",
+                    body: address,
+                })
+                    .then((res) => res.json())
+                    .then((s) => (suggestions = s)),
+            400
+        ) as unknown as number;
+    }
+
+    function onSelect(result: AddressSearchResult) {
+        selectedAddress = result;
+        address = `${result.civic_no} ${result.street_name}${result.street_dir ? " " : ""}${result.street_dir}, ${result.mail_mun_name}, ${result.mail_postal_code}`;
+    }
+
+    function submit() {
+        if (selectedAddress) {
+            goto(`/house/${selectedAddress.id}`);
+        }
+    }
 </script>
 
-<main class="container mx-auto grid gap-4 py-4">
-    <span>
-        <h1 class="h1 mb-0">Bienvenue sur InfoToit,</h1>
-        <h2 class="h2">
-            La platforme multi-fonctionelle qui promouvoit le développement d'une société consciente
-        </h2>
-    </span>
-
-      <Splide
-        hasTrack={false}
-        aria-label="My Favorite Images"
-        options={{
-            width: 800,
-            gap: "1rem",
-            type: "loop",
-            perPage: 1,
-            autoplay: true,
-        }}
+<main class="relative flex flex-1 items-center justify-center">
+    <div
+        class="card absolute top-12 z-10 flex flex-col items-center gap-4 p-6 text-center md:items-start md:text-start"
     >
-        <SplideTrack class="img-slider">
-            <SplideSlide>
-                <a href="#target-1"
-                    ><img
-                        src="https://source.unsplash.com/pjrPSQLElq8"
-                        class="object-cover"
-                        alt="Neighborhood"
-                    />
-                </a>
-            </SplideSlide>
-            <SplideSlide>
-                <a href="#target-2">
-                    <img
-                        src="https://source.unsplash.com/1N49Cn7P0Fg"
-                        class="object-cover"
-                        alt="Business"
-                    />
-                </a>
-            </SplideSlide>
-            <SplideSlide>
-                <a href="#target-3">
-                    <img
-                        src="https://source.unsplash.com/KMVypJ9_IM8"
-                        class="object-cover"
-                        alt="Restaurant"
-                    />
-                </a>
-            </SplideSlide>
-            <SplideSlide>
-                <a href="#target-4">
-                    <img
-                        src="https://source.unsplash.com/zFSo6bnZJTw"
-                        class="object-cover"
-                        alt="School"
-                    />
-                </a>
-            </SplideSlide>
-            <SplideSlide>
-                <a href="#target-5">
-                    <img
-                        src="https://source.unsplash.com/YmaWL-z9mEU"
-                        class="object-cover"
-                        alt="House Fire"
-                    />
-                </a>
-            </SplideSlide>
-            <SplideSlide>
-                <a href="#target-6">
-                    <img
-                        src="https://source.unsplash.com/ckzGwPUgJrQ"
-                        class="object-cover"
-                        alt="Police"
-                    />
-                </a>
-            </SplideSlide>
-            <SplideSlide>
-                <a href="#target-7">
-                    <img
-                        src="https://source.unsplash.com/8oAZllGPRSo"
-                        class="object-cover"
-                        alt="Park"
-                    />
-                </a>
-            </SplideSlide>
-            <SplideSlide>
-                <a href="#target-8">
-                    <img
-                        src="https://source.unsplash.com/V4Y1z8Eebq0"
-                        class="object-cover"
-                        alt="Bike"
-                    />
-                </a>
-            </SplideSlide>
-        </SplideTrack>
-
-        <div class="h-4">
-            <div class="splide__progress__bar" />
+        <div>
+            <h1 class="h1 mb-0">Bienvenue</h1>
+            <span class="text-muted-foreground">Entrez une adresse pour commencer</span>
         </div>
 
-        
-    </Splide>
+        <input
+            class="input"
+            type="search"
+            name="address"
+            bind:value={address}
+            use:popup={popupSettings}
+            on:input={onInput}
+        />
 
-
-  
-    <div>
-        <h1 id="target-1" class="h1">Intertitre 1</h1>
-        <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam necessitatibus
-            mollitia iste pariatur. Quo consequatur neque dolor quisquam possimus consequuntur,
-            cumque ducimus sint? Officiis totam voluptates veritatis delectus exercitationem
-            molestiae?
-        </p>
-    </div>
-
-    <div>
-        <h1 id="target-2" class="h1">Intertitre 2</h1>
-        <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam necessitatibus
-            mollitia iste pariatur. Quo consequatur neque dolor quisquam possimus consequuntur,
-            cumque ducimus sint? Officiis totam voluptates veritatis delectus exercitationem
-            molestiae?
-        </p>
-    </div>
-
-    <div>
-        <h1 id="target-3" class="h1">Intertitre 3</h1>
-        <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam necessitatibus
-            mollitia iste pariatur. Quo consequatur neque dolor quisquam possimus consequuntur,
-            cumque ducimus sint? Officiis totam voluptates veritatis delectus exercitationem
-            molestiae?
-        </p>
-    </div>
-    <div>
-        <h1 id="target-4" class="h1">Intertitre 2</h1>
-        <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam necessitatibus
-            mollitia iste pariatur. Quo consequatur neque dolor quisquam possimus consequuntur,
-            cumque ducimus sint? Officiis totam voluptates veritatis delectus exercitationem
-            molestiae?
-        </p>
-    </div>
-    <div>
-        <h1 id="target-5" class="h1">Intertitre 2</h1>
-        <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam necessitatibus
-            mollitia iste pariatur. Quo consequatur neque dolor quisquam possimus consequuntur,
-            cumque ducimus sint? Officiis totam voluptates veritatis delectus exercitationem
-            molestiae?
-        </p>
-    </div>
-    <div>
-        <h1 id="target-6" class="h1">Intertitre 2</h1>
-        <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam necessitatibus
-            mollitia iste pariatur. Quo consequatur neque dolor quisquam possimus consequuntur,
-            cumque ducimus sint? Officiis totam voluptates veritatis delectus exercitationem
-            molestiae?
-        </p>
-    </div>
-    <div>
-        <h1 id="target-7" class="h1">Intertitre 2</h1>
-        <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam necessitatibus
-            mollitia iste pariatur. Quo consequatur neque dolor quisquam possimus consequuntur,
-            cumque ducimus sint? Officiis totam voluptates veritatis delectus exercitationem
-            molestiae?
-        </p>
-    </div>
-    <div>
-        <h1 id="target-8" class="h1">Intertitre 2</h1>
-        <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Numquam necessitatibus
-            mollitia iste pariatur. Quo consequatur neque dolor quisquam possimus consequuntur,
-            cumque ducimus sint? Officiis totam voluptates veritatis delectus exercitationem
-            molestiae?
-        </p>
+        <button on:click={submit} class="btn w-full" disabled={!selectedAddress}> Explorer </button>
     </div>
 </main>
+
+<div class="absolute inset-0">
+    <Map
+        options={{
+            center: [-73.6128865, 45.5308667],
+            zoom: 10,
+        }}
+    >
+        {#if selectedAddress?.location.longitude && selectedAddress.location.latitude}
+            {#key selectedAddress}
+                <Marker
+                    coordinates={[
+                        selectedAddress.location.longitude,
+                        selectedAddress.location.latitude,
+                    ]}
+                    zoomOnAdd={15}
+                />
+            {/key}
+        {/if}
+    </Map>
+</div>
+
+<div class="popup" id={popupSettings.popupId}>
+    <div class="popup-arrow" id="arrow" />
+
+    <ul
+        class="flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 border-dark bg-white py-2"
+        tabindex="-1"
+    >
+        {#each suggestions as suggestion}
+            <li class="contents">
+                <button
+                    on:click={() => onSelect(suggestion)}
+                    class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
+                    type="button"
+                >
+                    {suggestion.civic_no}
+                    {suggestion.street_type?.toLowerCase()}
+                    {suggestion.street_name}
+                    {suggestion.street_dir}
+                    <span class="text-sm opacity-60">
+                        {suggestion.mail_mun_name}
+                        {suggestion.mail_postal_code}
+                    </span>
+                </button>
+            </li>
+        {:else}
+            <li class="autocomplete-item p-2">Aucun résultat</li>
+        {/each}
+    </ul>
+</div>

@@ -38,7 +38,7 @@ const tables = [
     name: "SavedHouses",
     columns: [
       { name: "user", type: "link", link: { table: "Users" } },
-      { name: "address", type: "link", link: { table: "Addresses" } },
+      { name: "address", type: "link", link: { table: "Addresses_old" } },
     ],
   },
   {
@@ -68,7 +68,7 @@ const tables = [
   },
   { name: "MapData", columns: [{ name: "numberOfTrees", type: "int" }] },
   {
-    name: "Addresses",
+    name: "Addresses_old",
     columns: [
       { name: "latitude", type: "float" },
       { name: "longitude", type: "float" },
@@ -94,6 +94,45 @@ const tables = [
     ],
     revLinks: [{ column: "address", table: "SavedHouses" }],
   },
+  {
+    name: "Addresses",
+    columns: [
+      { name: "location", type: "link", link: { table: "Locations" } },
+      { name: "civic_no", type: "int" },
+      { name: "civic_no_suffix", type: "string" },
+      { name: "street_name", type: "string" },
+      { name: "street_type", type: "string" },
+      { name: "street_dir", type: "string" },
+      { name: "mail_street_name", type: "string" },
+      { name: "mail_street_type", type: "string" },
+      { name: "mail_street_dir", type: "string" },
+      { name: "mail_mun_name", type: "string" },
+      { name: "mail_prov", type: "string" },
+      { name: "mail_postal_code", type: "string" },
+      { name: "mail_info", type: "string" },
+      { name: "usage", type: "int", notNull: true, defaultValue: "4" },
+    ],
+  },
+  {
+    name: "Locations",
+    columns: [
+      { name: "er_code", type: "string", notNull: true, defaultValue: " " },
+      { name: "fed_name", type: "string", notNull: true, defaultValue: " " },
+      { name: "er_name", type: "string", notNull: true, defaultValue: " " },
+      { name: "latitude", type: "float", notNull: true, defaultValue: "0" },
+      { name: "longitude", type: "float", notNull: true, defaultValue: "0" },
+    ],
+    revLinks: [{ column: "location", table: "Addresses" }],
+  },
+  {
+    name: "MessagesStats",
+    columns: [
+      { name: "Year", type: "int", notNull: true, defaultValue: "0" },
+      { name: "Month", type: "int", notNull: true, defaultValue: "0" },
+      { name: "Category", type: "string", notNull: true, defaultValue: "" },
+      { name: "Count", type: "int", notNull: true, defaultValue: "0" },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -117,8 +156,17 @@ export type SessionsRecord = Sessions & XataRecord;
 export type MapData = InferredTypes["MapData"];
 export type MapDataRecord = MapData & XataRecord;
 
+export type AddressesOld = InferredTypes["Addresses_old"];
+export type AddressesOldRecord = AddressesOld & XataRecord;
+
 export type Addresses = InferredTypes["Addresses"];
 export type AddressesRecord = Addresses & XataRecord;
+
+export type Locations = InferredTypes["Locations"];
+export type LocationsRecord = Locations & XataRecord;
+
+export type MessagesStats = InferredTypes["MessagesStats"];
+export type MessagesStatsRecord = MessagesStats & XataRecord;
 
 export type DatabaseSchema = {
   Users: UsersRecord;
@@ -127,7 +175,10 @@ export type DatabaseSchema = {
   OAuth: OAuthRecord;
   Sessions: SessionsRecord;
   MapData: MapDataRecord;
+  Addresses_old: AddressesOldRecord;
   Addresses: AddressesRecord;
+  Locations: LocationsRecord;
+  MessagesStats: MessagesStatsRecord;
 };
 
 const DatabaseClient = buildClient();

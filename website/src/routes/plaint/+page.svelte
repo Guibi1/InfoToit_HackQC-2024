@@ -1,20 +1,21 @@
 <script lang="ts">
+    import { invalidate } from "$app/navigation";
     import Map from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
+    import { messageCategories } from "$lib/consts";
     import { Control, Description, Field, FieldErrors, Label } from "formsnap";
     import { superForm } from "sveltekit-superforms/client";
-    import { categoriesDePlaintes } from "./schema.js";
-    import { invalidate } from "$app/navigation";
 
     export let data;
+
+    let selectedmessage: (typeof data)["messages"][number] | undefined;
+    let showOtherPlaints = true;
 
     const form = superForm(data.form, {
         dataType: "json",
         onResult: () => invalidate("plaints"),
     });
     const { form: formData, enhance } = form;
-
-    let selectedmessage: (typeof data)["messages"][number] | undefined;
 
     function onMapClick(e: { detail: mapboxgl.MapMouseEvent }) {
         console.log(e.detail.lngLat);
@@ -23,8 +24,8 @@
     }
 </script>
 
-<main class="container mx-auto flex flex-1 gap-16 py-2 lg:gap-16">
-    <div class="flex flex-col">
+<main class="container mx-auto flex flex-1 gap-16 p-4 lg:gap-16">
+    <div class="ml-6 flex flex-col">
         <h1 class="h1">Création de pleinte</h1>
 
         <form class="grid gap-2" method="POST" use:enhance>
@@ -43,7 +44,7 @@
                     <Label>Catégorie</Label>
 
                     <select {...attrs} class="input" bind:value={$formData.category}>
-                        {#each categoriesDePlaintes as category}
+                        {#each messageCategories as category}
                             <option value={category}>{category}</option>
                         {/each}
                     </select>
@@ -66,39 +67,51 @@
         </form>
     </div>
 
-    <div class="card relative mb-4 max-w-2xl flex-1">
-        {#if selectedmessage}
-            <div class="card absolute left-4 top-4">
-                <h2 class="text-lg">{selectedmessage.title}</h2>
-                <h2 class="text-lg">{selectedmessage.message}</h2>
-                <h2 class="text-lg">{selectedmessage.status}</h2>
-            </div>
-        {/if}
+    <div class="mb-4 flex flex-1 flex-col gap-4">
+        <button class="btn" on:click={() => (showOtherPlaints = !showOtherPlaints)}>
+            {showOtherPlaints ? "Cacher les plaintes" : "Montrer les plaintes"}
+        </button>
 
-        <Map
-            on:click={onMapClick}
-            options={{
-                center: [-73.6128865, 45.5308667],
-                interactive: true,
-                zoom: 10,
-                minZoom: 10,
-                maxBounds: [
-                    [-74, 45.3308067], // Southwest corner: [longitude, latitude]
-                    [-73.3, 45.7556], // Northeast corner: [longitude, latitude]
-                ],
-            }}
-        >
-            {#each data.messages as message}
-                {#if message.lat && message.lon}
-                    <Marker coordinates={[+message.lon, +message.lat]} />
-                {/if}
-            {/each}
-
-            {#if $formData.coordinate.lon && $formData.coordinate.lat}
-                {#key $formData.coordinate}
-                    <Marker coordinates={$formData.coordinate} />
-                {/key}
+        <div class="card relative flex-1">
+            {#if selectedmessage}
+                <div class="card absolute right-4 top-4 z-50 w-80">
+                    <h2 class="text-lg">{selectedmessage.title}</h2>
+                    <h2 class="text-lg">{selectedmessage.message}</h2>
+                    <h2 class="text-lg">{selectedmessage.status}</h2>
+                </div>
             {/if}
-        </Map>
+
+            <Map
+                on:click={onMapClick}
+                options={{
+                    center: [-73.6128865, 45.5308667],
+                    interactive: true,
+                    zoom: 10,
+                    minZoom: 10,
+                    maxBounds: [
+                        [-74, 45.3308067], // Southwest corner: [longitude, latitude]
+                        [-73.3, 45.7556], // Northeast corner: [longitude, latitude]
+                    ],
+                }}
+            >
+                {#if showOtherPlaints}
+                    {#each data.messages as message}
+                        {#if message.lat && message.lon}
+                            <Marker
+                                coordinates={[+message.lon, +message.lat]}
+                                color="#b40219"
+                                on:click={() => (selectedmessage = message)}
+                            />
+                        {/if}
+                    {/each}
+                {/if}
+
+                {#if $formData.coordinate.lon && $formData.coordinate.lat}
+                    {#key $formData.coordinate}
+                        <Marker coordinates={$formData.coordinate} />
+                    {/key}
+                {/if}
+            </Map>
+        </div>
     </div>
 </main>

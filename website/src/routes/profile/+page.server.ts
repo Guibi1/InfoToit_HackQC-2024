@@ -5,7 +5,7 @@ export const load = async ({ locals }) => {
     if (!locals.user) redirect(302, "/");
 
     const savedHomes = await getXataClient()
-        .db.SavedHouses.select(["address", "lon", "lat"])
+        .db.SavedHouses.select(["address", "address.longitude", "address.latitude"])
         .filter({ user: locals.user })
         .getAll();
 
@@ -16,7 +16,7 @@ export const load = async ({ locals }) => {
 
     return {
         user: locals.user,
-        savedHomes: savedHomes.map((h) => h.toSerializable()),
-        messages: messages.map((m) => m.toSerializable()),
+        savedHomes: savedHomes,
+        messages: messages,
     };
 };
