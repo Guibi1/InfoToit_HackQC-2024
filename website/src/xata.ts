@@ -38,7 +38,7 @@ const tables = [
     name: "SavedHouses",
     columns: [
       { name: "user", type: "link", link: { table: "Users" } },
-      { name: "address", type: "link", link: { table: "Addresses" } },
+      { name: "address", type: "link", link: { table: "Addresses_old" } },
     ],
   },
   {
@@ -68,7 +68,7 @@ const tables = [
   },
   { name: "MapData", columns: [{ name: "numberOfTrees", type: "int" }] },
   {
-    name: "Addresses",
+    name: "Addresses_old",
     columns: [
       { name: "latitude", type: "float" },
       { name: "longitude", type: "float" },
@@ -95,9 +95,9 @@ const tables = [
     revLinks: [{ column: "address", table: "SavedHouses" }],
   },
   {
-    name: "AA",
+    name: "Addresses",
     columns: [
-      { name: "location", type: "link", link: { table: "LL" } },
+      { name: "location", type: "link", link: { table: "Locations" } },
       { name: "civic_no", type: "int" },
       { name: "civic_no_suffix", type: "string" },
       { name: "street_name", type: "string" },
@@ -114,7 +114,7 @@ const tables = [
     ],
   },
   {
-    name: "LL",
+    name: "Locations",
     columns: [
       { name: "er_code", type: "string", notNull: true, defaultValue: " " },
       { name: "fed_name", type: "string", notNull: true, defaultValue: " " },
@@ -122,7 +122,16 @@ const tables = [
       { name: "latitude", type: "float", notNull: true, defaultValue: "0" },
       { name: "longitude", type: "float", notNull: true, defaultValue: "0" },
     ],
-    revLinks: [{ column: "location", table: "AA" }],
+    revLinks: [{ column: "location", table: "Addresses" }],
+  },
+  {
+    name: "MessagesStats",
+    columns: [
+      { name: "Year", type: "int", notNull: true, defaultValue: "0" },
+      { name: "Month", type: "int", notNull: true, defaultValue: "0" },
+      { name: "Category", type: "string", notNull: true, defaultValue: "" },
+      { name: "Count", type: "int", notNull: true, defaultValue: "0" },
+    ],
   },
 ] as const;
 
@@ -147,14 +156,17 @@ export type SessionsRecord = Sessions & XataRecord;
 export type MapData = InferredTypes["MapData"];
 export type MapDataRecord = MapData & XataRecord;
 
+export type AddressesOld = InferredTypes["Addresses_old"];
+export type AddressesOldRecord = AddressesOld & XataRecord;
+
 export type Addresses = InferredTypes["Addresses"];
 export type AddressesRecord = Addresses & XataRecord;
 
-export type Aa = InferredTypes["AA"];
-export type AaRecord = Aa & XataRecord;
+export type Locations = InferredTypes["Locations"];
+export type LocationsRecord = Locations & XataRecord;
 
-export type Ll = InferredTypes["LL"];
-export type LlRecord = Ll & XataRecord;
+export type MessagesStats = InferredTypes["MessagesStats"];
+export type MessagesStatsRecord = MessagesStats & XataRecord;
 
 export type DatabaseSchema = {
   Users: UsersRecord;
@@ -163,9 +175,10 @@ export type DatabaseSchema = {
   OAuth: OAuthRecord;
   Sessions: SessionsRecord;
   MapData: MapDataRecord;
+  Addresses_old: AddressesOldRecord;
   Addresses: AddressesRecord;
-  AA: AaRecord;
-  LL: LlRecord;
+  Locations: LocationsRecord;
+  MessagesStats: MessagesStatsRecord;
 };
 
 const DatabaseClient = buildClient();

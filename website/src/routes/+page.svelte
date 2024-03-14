@@ -3,7 +3,6 @@
     import { goto } from "$app/navigation";
     import Map from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
-    import Layer from "$lib/MapBox/Layer.svelte";
     import { popup, type PopupOptions } from "$lib/popup";
 
     const popupSettings: PopupOptions = {
@@ -14,24 +13,32 @@
     let suggestions: AddressSearchResult[] = [];
     let address = "";
     let selectedAddress: AddressSearchResult | null = null;
+    let searchTimout: number;
 
     async function onInput() {
         selectedAddress = null;
 
-        if (!address) {
+        if (address.length < 4) {
             suggestions = [];
             return;
         }
 
-        suggestions = await fetch("/api/address/search", {
-            method: "POST",
-            body: address,
-        }).then((res) => res.json());
+        clearTimeout(searchTimout);
+        searchTimout = setTimeout(
+            () =>
+                fetch("/api/address/search", {
+                    method: "POST",
+                    body: address,
+                })
+                    .then((res) => res.json())
+                    .then((s) => (suggestions = s)),
+            400
+        ) as unknown as number;
     }
 
     function onSelect(result: AddressSearchResult) {
         selectedAddress = result;
-        address = `${result.full_addr}, ${result.csdname}`;
+        address = `${result.civic_no} ${result.street_name}${result.street_dir ? " " : ""}${result.street_dir}, ${result.mail_mun_name}, ${result.mail_postal_code}`;
     }
 
     function submit() {
@@ -70,10 +77,13 @@
             zoom: 10,
         }}
     >
-        {#if selectedAddress?.longitude && selectedAddress?.latitude}
+        {#if selectedAddress?.location.longitude && selectedAddress.location.latitude}
             {#key selectedAddress}
                 <Marker
-                    coordinates={[selectedAddress.longitude, selectedAddress.latitude]}
+                    coordinates={[
+                        selectedAddress.location.longitude,
+                        selectedAddress.location.latitude,
+                    ]}
                     zoomOnAdd={15}
                 />
             {/key}
@@ -95,9 +105,13 @@
                     class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
                     type="button"
                 >
-                    {suggestion.full_addr}
+                    {suggestion.civic_no}
+                    {suggestion.street_type?.toLowerCase()}
+                    {suggestion.street_name}
+                    {suggestion.street_dir}
                     <span class="text-sm opacity-60">
-                        {suggestion.provider}
+                        {suggestion.mail_mun_name}
+                        {suggestion.mail_postal_code}
                     </span>
                 </button>
             </li>
