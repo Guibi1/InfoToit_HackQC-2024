@@ -41,9 +41,9 @@
     }
 </script>
 
-<main class="relative">
+<main class="relative flex flex-1 items-center justify-center">
     <div
-        class="card absolute left-8 top-8 z-10 flex flex-col items-center gap-4 p-4 text-center md:items-start md:text-start"
+        class="card absolute top-12 z-10 flex flex-col items-center gap-4 p-6 text-center md:items-start md:text-start"
     >
         <div>
             <h1 class="h1 mb-0">Bienvenue</h1>
@@ -59,7 +59,7 @@
             on:input={onInput}
         />
 
-        <button on:click={submit} class="btn" disabled={!selectedAddress}> Explorer </button>
+        <button on:click={submit} class="btn w-full" disabled={!selectedAddress}> Explorer </button>
     </div>
 </main>
 
