@@ -4,7 +4,6 @@
     import Marker from "$lib/MapBox/Marker.svelte";
     import MultiSelect from "$lib/MultiSelect.svelte";
     import { messageCategories, mois } from "$lib/consts";
-    import { Line } from "svelte-chartjs";
 
     export let data;
 
@@ -73,11 +72,6 @@
         </MultiSelect>
     </div>
 
-    <Line
-        data={{
-            labels: mois,
-            datasets: data.stats,
-        }}
-        options={{ responsive: true }}
-    />
+    <a href="/dashboard/history" class="btn">Voir l'historique</a>
+    <a href="/dashboard/plaints" class="btn">Voir les pleintes</a>
 </main>
