@@ -11,7 +11,7 @@
         LineLayer,
         RasterLayer,
         SkyLayer,
-        SymbolLayer
+        SymbolLayer,
     } from "mapbox-gl";
 
     type LayerWithoutId<T extends AnyLayer> = Omit<T, "id">;
