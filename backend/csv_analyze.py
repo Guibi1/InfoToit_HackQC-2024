@@ -61,7 +61,7 @@ def h3_index_set_to_file(filename,indexset):
 
     print(f"Created GeoJSON file at {output_geojson_path}")
 
-def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=None, resolution=8, is_higher_better=True,delete_infos=False):
+def agregate_data(csv_path, data_studied,latlongin, info_mapping, analysis=None, map_path=None, resolution=8, is_higher_better=True,delete_infos=False):
     
 
     valid_analysis_types = {"frequency","cut_frequency","entire_area_frequency","contained_categories","missing_categories"}
@@ -88,7 +88,7 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
         h3_indexes = geojson_to_h3_index_set(map_path, resolution)
     
     df = pd.read_csv(csv_path, engine='python')
-    if "LAT" not in df.columns or "LONG" not in df.columns:
+    if latlongin[0] not in df.columns or latlongin[1] not in df.columns:
         raise Exception("CSV missing LAT or LONG columns")
 
     for element in info_mapping:
@@ -111,27 +111,27 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
     
     # Process each row in the CSV
     for index, row in df.iterrows():
-        if pd.notnull(row["LAT"]) and pd.notnull(row["LONG"]):
-            h3_index = h3.geo_to_h3(row["LAT"], row["LONG"], resolution)
-            element_dict = {}
-            if h3_index not in h3_index_data:
-                h3_index_data[h3_index] = {
-                    "adjacent_indexes": [],
-                    "h3_description": "",
-                    f"has_{data_studied}_info": False,
-                    data_studied: [],
-                    f"{data_studied}_count": 0,
-                    "area_score": 0,
-                    "direct_neighborhood_score": 0,
-                    # "h3_neighborhood_score": 0,
-                    "color": ""
-                }
-            
-            for element in info_mapping:
-                if pd.notnull(row[info_mapping[element]]):
-                    element_dict[element] = row[info_mapping[element]]
-            h3_index_data[h3_index][data_studied].append(element_dict)
-            h3_index_data[h3_index][f"{data_studied}_count"] += 1
+            if pd.notnull(row[latlongin[0]]) and pd.notnull(row[latlongin[1]]):
+                h3_index = h3.geo_to_h3(row[latlongin[0]], row[latlongin[1]], resolution)
+                element_dict = {}
+                if h3_index not in h3_index_data:
+                    h3_index_data[h3_index] = {
+                        "adjacent_indexes": [],
+                        "h3_description": "",
+                        f"has_{data_studied}_info": False,
+                        data_studied: [],
+                        f"{data_studied}_count": 0,
+                        "area_score": 0,
+                        "direct_neighborhood_score": 0,
+                        # "h3_neighborhood_score": 0,
+                        "color": ""
+                    }
+                
+                for element in info_mapping:
+                    if pd.notnull(row[info_mapping[element]]):
+                        element_dict[element] = row[info_mapping[element]]
+                h3_index_data[h3_index][data_studied].append(element_dict)
+                h3_index_data[h3_index][f"{data_studied}_count"] += 1
 
     df.reset_index(drop=True)
 
@@ -219,9 +219,9 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
     
     for h3_index in set(h3_index_data):
 
-        description = (f"In this region, there are {h3_index_data[h3_index][f'{data_studied}_count']} {data_studied}. "
-        + f"On 10, this region has a score of {h3_index_data[h3_index]['area_score']} "
-        + f"and on 10, this region has a score of {h3_index_data[h3_index]['direct_neighborhood_score']} compared to his neighboring cells.")
+        description = (f"Dans cette région, il y a {h3_index_data[h3_index][f'{data_studied}_count']} {data_studied}. "
+        + f"Sur 100, cette région a un score de {h3_index_data[h3_index]['area_score']} "
+        + f"et sur 100, cette région a un score de {h3_index_data[h3_index]['direct_neighborhood_score']} par rapport à ses cellules voisines.")
 
         h3_index_data[h3_index]["h3_description"] = description
 
@@ -234,85 +234,36 @@ def agregate_data(csv_path, data_studied, info_mapping, analysis=None, map_path=
                 h3_index_data[h3index].pop(data_studied)
 
 
-    filenamein = csv_path.replace(".csv","")
-    output_geojson_path = filenamein + f'_h3_analysis_{resolution}.json'  # replace with your desired path
+    filenamein = csv_path.replace(".csv", "")
+    output_folder = os.path.join(os.path.dirname(filenamein), 'jsonformated')  # Path to the jsonformated folder
+    if not os.path.exists(output_folder):  # Check if the folder exists
+        os.makedirs(output_folder)  # Create the folder if it does not exist
+
+    output_geojson_filename = f'{data_studied}_h3_analysis_{resolution}.json'
+    output_geojson_path = os.path.join(output_folder, output_geojson_filename)  # Full path to the output file
+
     with open(output_geojson_path, 'w') as f:
-        json.dump(h3_index_data, f,indent=4)
+        json.dump(h3_index_data, f, indent=4)
 
     
 valid_analysis_types_example = {"frequency","cut_frequency","entire_area_frequency","contained_categories","missing_categories"}
 
-
-
-
-
 geojsonfile = "../data/montreal/montreal.geojson"
 businessfile = '../data/montreal/businesses_cleaned.csv'
 res = 8
-csvelements = "businesses"
+csvelements = "entreprises"
+
+latlong = ["LAT","LONG"]
+
 csvelementsinfo = {
     "name": "NOM_ETAB_2023",
     "type": "USAGE3",
-    "adresse": "ADRESSE"
+    # "adresse": "ADRESSE"
 }
 csvinfotoanalyze = {
-    "type": ["cut_frequency"]
+    # "type": ["cut_frequency"]
 }
-deleteinfos = True
+deleteinfos = False
 
-agregate_data(businessfile,csvelements,csvelementsinfo, csvinfotoanalyze,delete_infos=deleteinfos)
-
-
-
-
-# highestbusinesscount = 0
-
-# businesscountlist = []
-
-# for elements in h3indexhashmap:
-
-#     h3indexhashmap[elements]["businesscount"] = len(h3indexhashmap[elements]["businesses"])
-#     businesscountlist.append(h3indexhashmap[elements]["businesscount"])
-#     if (h3indexhashmap[elements]["businesscount"] > highestbusinesscount):
-#         highestbusinesscount = h3indexhashmap[elements]["businesscount"]
-#     adjacentindex = list(h3.k_ring(elements,1))
-#     adjacentindex.remove(elements)
-#     h3indexhashmap[elements]["adjacentindexes"] = adjacentindex
-# print(np.sum(np.array(businesscountlist)))
-# print(np.count_nonzero(np.array(businesscountlist)))
-
-# for elements in h3indexhashmap:
-#     score = (h3indexhashmap[elements]["businesscount"] / highestbusinesscount) * 10
-#     h3indexhashmap[elements]["businessscore"] = score
-#     colorchosen = get_color(score)
-#     h3indexhashmap[elements]["color"] = colorchosen
-    
-# print(highestbusinesscount)
-
-# geojson_polygons = []
-# for index in set(h3indexhashmap):
-#     {"type": "Feature", "properties": {}, "geometry": h3_to_geojson_polygon(index) }
-
-#     currentdict = {"type": "Feature", "properties": {}, "geometry": h3_to_geojson_polygon(index) }
-#     currentdict["properties"] = {
-#         "fill": h3indexhashmap[index]["color"],
-#         "stroke": h3indexhashmap[index]["color"],
-#         "stroke-width": 2,
-#         "stroke-opacity": 1,
-#         "fill-opacity": 0.5
-#       }
-#     geojson_polygons.append(currentdict)
-
-# # Wrap the polygons in a FeatureCollection
-# geojson_feature_collection = {
-#     "type": "FeatureCollection",
-#     "features": geojson_polygons}
-
-
-# # Save the GeoJSON FeatureCollection to a file
-# output_geojson_path = "test.geojson"  # replace with your desired path
-# with open(output_geojson_path, 'w') as f:
-#     json.dump(geojson_feature_collection, f)
-
-# print(f"Created GeoJSON file at {output_geojson_path}")
+agregate_data(csv_path=businessfile,data_studied=csvelements,info_mapping=csvelementsinfo, analysis=csvinfotoanalyze,latlongin=latlong,delete_infos=deleteinfos)
 

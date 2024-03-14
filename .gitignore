@@ -2,3 +2,4 @@
 *.json
 *.geojson
 data/*
+backend/addpolygondb.py
