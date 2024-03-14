@@ -122,7 +122,10 @@ const tables = [
       { name: "latitude", type: "float", notNull: true, defaultValue: "0" },
       { name: "longitude", type: "float", notNull: true, defaultValue: "0" },
     ],
-    revLinks: [{ column: "location", table: "Addresses" }],
+    revLinks: [
+      { column: "location", table: "Addresses" },
+      { column: "location", table: "AA" },
+    ],
   },
   {
     name: "MessagesStats",
@@ -131,6 +134,63 @@ const tables = [
       { name: "Month", type: "int", notNull: true, defaultValue: "0" },
       { name: "Category", type: "string", notNull: true, defaultValue: "" },
       { name: "Count", type: "int", notNull: true, defaultValue: "0" },
+    ],
+  },
+  {
+    name: "h3_hexes",
+    columns: [
+      { name: "polygon", type: "json" },
+      { name: "resolution", type: "int" },
+    ],
+  },
+  {
+    name: "AA",
+    columns: [
+      { name: "civic_no", type: "string", notNull: true, defaultValue: "" },
+      {
+        name: "civic_no_suffix",
+        type: "string",
+        notNull: true,
+        defaultValue: "",
+      },
+      { name: "street_name", type: "string", notNull: true, defaultValue: "" },
+      { name: "street_type", type: "string", notNull: true, defaultValue: "" },
+      { name: "street_dir", type: "string", notNull: true, defaultValue: "" },
+      { name: "mail_street_name", type: "string" },
+      {
+        name: "mail_street_type",
+        type: "string",
+        notNull: true,
+        defaultValue: "",
+      },
+      {
+        name: "mail_street_dir",
+        type: "string",
+        notNull: true,
+        defaultValue: "",
+      },
+      {
+        name: "mail_mun_name",
+        type: "string",
+        notNull: true,
+        defaultValue: "",
+      },
+      { name: "mail_prov", type: "string", notNull: true, defaultValue: "" },
+      {
+        name: "mail_postal_code",
+        type: "string",
+        notNull: true,
+        defaultValue: "",
+      },
+      { name: "mail_info", type: "string", notNull: true, defaultValue: "" },
+      { name: "usage", type: "int", notNull: true, defaultValue: "4" },
+      { name: "location", type: "link", link: { table: "Locations" } },
+      {
+        name: "civic_no_prefix",
+        type: "string",
+        notNull: true,
+        defaultValue: "",
+      },
     ],
   },
 ] as const;
@@ -168,6 +228,12 @@ export type LocationsRecord = Locations & XataRecord;
 export type MessagesStats = InferredTypes["MessagesStats"];
 export type MessagesStatsRecord = MessagesStats & XataRecord;
 
+export type H3Hexes = InferredTypes["h3_hexes"];
+export type H3HexesRecord = H3Hexes & XataRecord;
+
+export type Aa = InferredTypes["AA"];
+export type AaRecord = Aa & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
@@ -179,12 +245,14 @@ export type DatabaseSchema = {
   Addresses: AddressesRecord;
   Locations: LocationsRecord;
   MessagesStats: MessagesStatsRecord;
+  h3_hexes: H3HexesRecord;
+  AA: AaRecord;
 };
 
 const DatabaseClient = buildClient();
 
 const defaultOptions = {
-  databaseURL: "https://Wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
+  databaseURL: "https://wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
 };
 
 export class XataClient extends DatabaseClient<DatabaseSchema> {
