@@ -1,4 +1,4 @@
-<script lang="ts" generics="T">
+<script lang="ts" generics="T extends number | string">
     import { createEventDispatcher } from "svelte";
     import { popup, type PopupOptions } from "$lib/popup";
 
@@ -8,11 +8,19 @@
     export let maxSelection = Infinity;
 
     const dispatch = createEventDispatcher<{ change: T[] }>();
+    let search = "";
+    let searchResults: T[] = [...choices];
 
     const popupSettings: PopupOptions = {
         popupId: `${name}MultiselectPopup`,
         placement: "bottom",
     };
+
+    async function onInput() {
+        searchResults = choices.filter((c) =>
+            c.toString().toLowerCase().includes(search.toLowerCase())
+        );
+    }
 
     function onSelect(result: T) {
         const i = selected.indexOf(result);
@@ -27,28 +35,39 @@
 
 <button class="input" use:popup={popupSettings}>
     <slot />
-    {selected.length}
 </button>
 
 <div class="popup" id={popupSettings.popupId}>
     <div class="popup-arrow" id="arrow" />
 
     <ul
-        class="flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 border-dark bg-white py-2"
+        class="flex max-h-60 w-80 flex-col gap-1 overflow-y-auto overflow-x-hidden rounded border-2 border-dark bg-white py-2"
         tabindex="-1"
     >
-        {#each choices as choice}
+        <input
+            type="text"
+            placeholder="Rechercher"
+            class="border-none !ring-0"
+            bind:value={search}
+            on:input={onInput}
+        />
+
+        <hr class="hr" />
+
+        {#each searchResults as choice}
             <li class="contents">
                 <button
                     on:click={() => onSelect(choice)}
-                    class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
+                    class={`flex items-center gap-2 px-4 py-1 text-start transition-colors hover:bg-pale ${selected.includes(choice) ? "bg-pale" : ""}`}
                     type="button"
                 >
-                    {choice}
+                    <input
+                        type="checkbox"
+                        checked={selected.includes(choice)}
+                        class="pointer-events-none"
+                    />
 
-                    {#if selected.includes(choice)}
-                        O
-                    {/if}
+                    {choice}
                 </button>
             </li>
         {:else}
