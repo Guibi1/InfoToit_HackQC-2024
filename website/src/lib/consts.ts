@@ -13,7 +13,7 @@ export const mois = [
     "Décembre",
 ];
 
-export const messageStatuses = ["En cours", "Terminé"] as const;
+export const messageStatuses = ["Nouveau","En cours","En pause", "Abandonné", "Terminé"] as const;
 
 export const messageCategories = [
     "Feux de circulation - Entretien",

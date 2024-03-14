@@ -1,9 +1,13 @@
 <script lang="ts">
     import type { AddressSearchResult } from "$api/address/search/+server";
     import { goto } from "$app/navigation";
+    import Layer from "$lib/MapBox/Layer.svelte";
     import Map from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
+    import Source from "$lib/MapBox/Source.svelte";
     import { popup, type PopupOptions } from "$lib/popup";
+
+    export let data;
 
     const popupSettings: PopupOptions = {
         popupId: "popupAutocomplete",
@@ -88,6 +92,28 @@
                 />
             {/key}
         {/if}
+        <Source
+            data={{
+                type: "geojson",
+                data: { type: "FeatureCollection", features: data.h3_hexes.map((h) => h.polygon) },
+            }}
+        >
+            <Layer
+                layer={{
+                    type: "fill",
+                    layout: {
+                        visibility: "visible",
+                    },
+                    source: {
+                        type: "vector",
+                        url: "mapbox://mapbox.3o7ubwm8",
+                    },
+                    paint: {
+                        "fill-color": "rgba(61,153,80,0.55)",
+                    },
+                }}
+            />
+        </Source>
     </Map>
 </div>
 
@@ -95,14 +121,14 @@
     <div class="popup-arrow" id="arrow" />
 
     <ul
-        class="flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 border-dark bg-white py-2"
+        class="border-dark flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 bg-white py-2"
         tabindex="-1"
     >
         {#each suggestions as suggestion}
             <li class="contents">
                 <button
                     on:click={() => onSelect(suggestion)}
-                    class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
+                    class="hover:bg-pale flex flex-col px-4 py-1 text-start transition-colors"
                     type="button"
                 >
                     {suggestion.civic_no}
