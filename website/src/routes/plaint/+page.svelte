@@ -2,9 +2,9 @@
     import { invalidate } from "$app/navigation";
     import Map from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
+    import { messageCategories } from "$lib/consts";
     import { Control, Description, Field, FieldErrors, Label } from "formsnap";
-    import { message, superForm } from "sveltekit-superforms/client";
-    import { categoriesDePlaintes } from "./schema.js";
+    import { superForm } from "sveltekit-superforms/client";
 
     export let data;
 
@@ -44,7 +44,7 @@
                     <Label>Catégorie</Label>
 
                     <select {...attrs} class="input" bind:value={$formData.category}>
-                        {#each categoriesDePlaintes as category}
+                        {#each messageCategories as category}
                             <option value={category}>{category}</option>
                         {/each}
                     </select>

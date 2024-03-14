@@ -94,6 +94,36 @@ const tables = [
     ],
     revLinks: [{ column: "address", table: "SavedHouses" }],
   },
+  {
+    name: "AA",
+    columns: [
+      { name: "location", type: "link", link: { table: "LL" } },
+      { name: "civic_no", type: "int" },
+      { name: "civic_no_suffix", type: "string" },
+      { name: "street_name", type: "string" },
+      { name: "street_type", type: "string" },
+      { name: "street_dir", type: "string" },
+      { name: "mail_street_name", type: "string" },
+      { name: "mail_street_type", type: "string" },
+      { name: "mail_street_dir", type: "string" },
+      { name: "mail_mun_name", type: "string" },
+      { name: "mail_prov", type: "string" },
+      { name: "mail_postal_code", type: "string" },
+      { name: "mail_info", type: "string" },
+      { name: "usage", type: "int", notNull: true, defaultValue: "4" },
+    ],
+  },
+  {
+    name: "LL",
+    columns: [
+      { name: "er_code", type: "string", notNull: true, defaultValue: " " },
+      { name: "fed_name", type: "string", notNull: true, defaultValue: " " },
+      { name: "er_name", type: "string", notNull: true, defaultValue: " " },
+      { name: "latitude", type: "float", notNull: true, defaultValue: "0" },
+      { name: "longitude", type: "float", notNull: true, defaultValue: "0" },
+    ],
+    revLinks: [{ column: "location", table: "AA" }],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -120,6 +150,12 @@ export type MapDataRecord = MapData & XataRecord;
 export type Addresses = InferredTypes["Addresses"];
 export type AddressesRecord = Addresses & XataRecord;
 
+export type Aa = InferredTypes["AA"];
+export type AaRecord = Aa & XataRecord;
+
+export type Ll = InferredTypes["LL"];
+export type LlRecord = Ll & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
@@ -128,12 +164,14 @@ export type DatabaseSchema = {
   Sessions: SessionsRecord;
   MapData: MapDataRecord;
   Addresses: AddressesRecord;
+  AA: AaRecord;
+  LL: LlRecord;
 };
 
 const DatabaseClient = buildClient();
 
 const defaultOptions = {
-  databaseURL: "https://wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
+  databaseURL: "https://Wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
 };
 
 export class XataClient extends DatabaseClient<DatabaseSchema> {
