@@ -139,12 +139,12 @@ def density_visualization(densityfile,mapfile=None,resolution=8,colorinverse=Fal
 
             currentdict = {"type": "Feature", "properties": {}, "geometry": h3_to_geojson_polygon(index) }
             currentdict["properties"] = {
-                "fill": h3indexhashmap[index]["color"],
-                "stroke": h3indexhashmap[index]["color"],
-                "stroke-width": 2,
-                "stroke-opacity": 1,
-                "fill-opacity": 0.5,
-                "elementcount": h3indexhashmap[index]["elementcount"]
+                # "fill": h3indexhashmap[index]["color"],
+                # "stroke": h3indexhashmap[index]["color"],
+                # "stroke-width": 2,
+                # "stroke-opacity": 1,
+                # "fill-opacity": 0.5,
+                # "elementcount": h3indexhashmap[index]["elementcount"]
             }
             geojson_polygons.append(currentdict)
 
