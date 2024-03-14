@@ -252,7 +252,7 @@ export type DatabaseSchema = {
 const DatabaseClient = buildClient();
 
 const defaultOptions = {
-  databaseURL: "https://Wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
+  databaseURL: "https://wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
 };
 
 export class XataClient extends DatabaseClient<DatabaseSchema> {
