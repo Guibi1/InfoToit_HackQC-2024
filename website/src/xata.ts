@@ -95,7 +95,7 @@ const tables = [
     revLinks: [{ column: "address", table: "SavedHouses" }],
   },
   {
-    name: "Addresses",
+    name: "Addresses_canada_old",
     columns: [
       { name: "location", type: "link", link: { table: "Locations" } },
       { name: "civic_no", type: "int" },
@@ -123,8 +123,8 @@ const tables = [
       { name: "longitude", type: "float", notNull: true, defaultValue: "0" },
     ],
     revLinks: [
+      { column: "location", table: "Addresses_canada_old" },
       { column: "location", table: "Addresses" },
-      { column: "location", table: "AA" },
     ],
   },
   {
@@ -144,7 +144,7 @@ const tables = [
     ],
   },
   {
-    name: "AA",
+    name: "Addresses",
     columns: [
       { name: "civic_no", type: "string", notNull: true, defaultValue: "" },
       {
@@ -219,8 +219,8 @@ export type MapDataRecord = MapData & XataRecord;
 export type AddressesOld = InferredTypes["Addresses_old"];
 export type AddressesOldRecord = AddressesOld & XataRecord;
 
-export type Addresses = InferredTypes["Addresses"];
-export type AddressesRecord = Addresses & XataRecord;
+export type AddressesCanadaOld = InferredTypes["Addresses_canada_old"];
+export type AddressesCanadaOldRecord = AddressesCanadaOld & XataRecord;
 
 export type Locations = InferredTypes["Locations"];
 export type LocationsRecord = Locations & XataRecord;
@@ -231,8 +231,8 @@ export type MessagesStatsRecord = MessagesStats & XataRecord;
 export type H3Hexes = InferredTypes["h3_hexes"];
 export type H3HexesRecord = H3Hexes & XataRecord;
 
-export type Aa = InferredTypes["AA"];
-export type AaRecord = Aa & XataRecord;
+export type Addresses = InferredTypes["Addresses"];
+export type AddressesRecord = Addresses & XataRecord;
 
 export type DatabaseSchema = {
   Users: UsersRecord;
@@ -242,17 +242,17 @@ export type DatabaseSchema = {
   Sessions: SessionsRecord;
   MapData: MapDataRecord;
   Addresses_old: AddressesOldRecord;
-  Addresses: AddressesRecord;
+  Addresses_canada_old: AddressesCanadaOldRecord;
   Locations: LocationsRecord;
   MessagesStats: MessagesStatsRecord;
   h3_hexes: H3HexesRecord;
-  AA: AaRecord;
+  Addresses: AddressesRecord;
 };
 
 const DatabaseClient = buildClient();
 
 const defaultOptions = {
-  databaseURL: "https://wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
+  databaseURL: "https://Wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
 };
 
 export class XataClient extends DatabaseClient<DatabaseSchema> {
