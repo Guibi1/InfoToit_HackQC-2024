@@ -1,13 +1,16 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import MapBox from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
-    import { mois } from "$lib/consts";
+    import MultiSelect from "$lib/MultiSelect.svelte";
+    import { messageCategories, mois } from "$lib/consts";
     import { Line } from "svelte-chartjs";
 
     export let data;
 
-    let selectedCategories: string[] = [];
+    let selectedYears: number[] = [2023, 2022];
     let selectedStatuses: string[] = [];
+    let selectedCategories: string[] = [];
 
     $: filteredMessages = data.messages.filter((m) => {
         if (selectedCategories.length > 0) {
@@ -22,6 +25,14 @@
         }
         return true;
     });
+
+    function onGraphDataChange() {
+        const searchParams = new URLSearchParams();
+        searchParams.set("y1", "" + selectedYears[0]);
+        searchParams.set("y2", "" + selectedYears[1]);
+        for (const c of selectedCategories) searchParams.append("c", c);
+        goto(`?${searchParams}`);
+    }
 </script>
 
 <main class="container mx-auto p-4">
@@ -38,6 +49,28 @@
                 {/if}
             {/each}
         </MapBox>
+    </div>
+
+    <div>
+        <MultiSelect
+            name="graphYears"
+            choices={[2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]}
+            bind:selected={selectedYears}
+            maxSelection={2}
+            on:change={onGraphDataChange}
+        >
+            Années
+        </MultiSelect>
+
+        <MultiSelect
+            name="graphCategories"
+            choices={messageCategories}
+            bind:selected={selectedCategories}
+            maxSelection={5}
+            on:change={onGraphDataChange}
+        >
+            Catégories
+        </MultiSelect>
     </div>
 
     <Line

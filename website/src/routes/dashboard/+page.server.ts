@@ -10,22 +10,24 @@ export const load = async ({ locals, url }) => {
     const years = [
         Number.parseInt(searchParams.get("y1") ?? "2022"),
         Number.parseInt(searchParams.get("y2") ?? "2023"),
-    ].toSorted();
+    ]
+        .filter((y) => !isNaN(y))
+        .toSorted();
+
     const categories = searchParams
         .getAll("c")
         .filter((v) => (messageCategories as readonly string[]).includes(v))
         .slice(0, 5);
 
-    let nextColor = 0;
-
     const stats = await getXataClient()
         .db.MessagesStats.select(["Year", "Month", "Count", "Category"])
         .filter({
-            Year: { $any: years },
+            Year: { $any: years.length > 0 ? years : [2023] },
             Category: { $any: categories.length > 0 ? categories : ["Plantation d'arbre"] },
         })
         .getAll();
 
+    let nextColor = 0;
     const datasets = stats.reduce<
         Record<string, { colors: string[]; years: Record<number, ChartDataset<"line", number[]>> }>
     >((datasets, val) => {
