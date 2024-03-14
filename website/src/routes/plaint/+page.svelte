@@ -3,6 +3,7 @@
     import Map from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
     import { messageCategories } from "$lib/consts";
+    import  { popup,type PopupOptions } from "$lib/popup";
     import { Control, Description, Field, FieldErrors, Label } from "formsnap";
     import { superForm } from "sveltekit-superforms/client";
 
@@ -21,6 +22,22 @@
         console.log(e.detail.lngLat);
         $formData.coordinate.lon = e.detail.lngLat.lng;
         $formData.coordinate.lat = e.detail.lngLat.lat;
+    }
+
+    const popupSettings: PopupOptions = {
+        popupId: "popupCategoryAutocomplete",
+        placement: "bottom",
+    };
+
+    let searchTimout: number;
+    let suggestions: string[] = [];
+
+    async function onInput() {
+        suggestions = messageCategories.filter((message) => message.includes($formData.category));
+    }
+
+    function onSelect(result: any) {
+        $formData.category = result;
     }
 </script>
 
@@ -43,11 +60,14 @@
                 <Control let:attrs>
                     <Label>Catégorie</Label>
 
-                    <select {...attrs} class="input" bind:value={$formData.category}>
-                        {#each messageCategories as category}
-                            <option value={category}>{category}</option>
-                        {/each}
-                    </select>
+                    <input
+                        class="input"
+                        type="search"
+                        name="address"
+                        bind:value={$formData.category}
+                        use:popup={popupSettings}
+                        on:input={onInput}
+                    />
                 </Control>
                 <Description></Description>
                 <FieldErrors />
@@ -115,3 +135,27 @@
         </div>
     </div>
 </main>
+
+<div class="popup" id={popupSettings.popupId}>
+    <div class="popup-arrow" id="arrow" />
+
+    <ul
+        class="border-dark flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 bg-white py-2"
+        tabindex="-1"
+    >
+        {#each suggestions as suggestion}
+            <li class="contents">
+                <button
+                    on:click={() => onSelect(suggestion)}
+                    class="hover:bg-pale flex flex-col px-4 py-1 text-start transition-colors"
+                    type="button"
+                >
+                    {suggestion}
+                    
+                </button>
+            </li>
+        {:else}
+            <li class="autocomplete-item p-2">Aucun résultat</li>
+        {/each}
+    </ul>
+</div>
