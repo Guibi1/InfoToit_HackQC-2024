@@ -133,9 +133,18 @@
                         </span>
                     </div>
 
-                    <a class="absolute left-4 top-4 rounded-full bg-pale p-1" href="/">
-                        <IconArrowLeft />
-                    </a>
+                    {#if data.user}
+                        <button
+                            class="btn btn-flat btn-sm"
+                            on:click={() => data.house && saveHouse(data.house.id)}
+                        >
+                            {#if data.houseSaved}
+                                Supprimer des enregistrements
+                            {:else}
+                                Enregistrer pour plus tard
+                            {/if}
+                        </button>
+                    {/if}
 
                     <div
                         class="mt-2 grid w-full grid-cols-5 gap-0.5 overflow-hidden rounded border-2 border-dark bg-pale"
@@ -210,18 +219,9 @@
                         {/each}
                     </ul>
 
-                    {#if data.user}
-                        <button
-                            class="btn btn-flat"
-                            on:click={() => data.house && saveHouse(data.house.id)}
-                        >
-                            {#if data.houseSaved}
-                                Supprimer des enregistrements
-                            {:else}
-                                Enregistrer pour plus tard
-                            {/if}
-                        </button>
-                    {/if}
+                    <a href="/" class="btn btn-flat items-center gap-1">
+                        <IconArrowLeft size={16} /> Refaire un recherche
+                    </a>
                 {/if}
             </main>
         </div>
