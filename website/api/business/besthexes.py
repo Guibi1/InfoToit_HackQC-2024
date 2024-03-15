@@ -11,8 +11,7 @@ import os
 
 def bestbusinesshex(lat, long, type):
 
-    return "LOL"
-    load_dotenv()
+    load_dotenv("../../.env")
     db_url_env = os.environ.get("XATA_DATABASE_URL")
     api_key_env = os.environ.get("XATA_API_KEY")
     xata = XataClient(db_url=db_url_env,
