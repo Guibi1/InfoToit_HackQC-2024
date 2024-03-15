@@ -34,6 +34,10 @@
     };
 </script>
 
+<svelte:head>
+    <title>Info Toit</title>
+</svelte:head>
+
 <div
     class="sticky inset-2 z-50 m-2 flex justify-between rounded-lg border-2 border-dark bg-white px-4 py-2"
 >

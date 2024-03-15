@@ -22,7 +22,6 @@
     };
 
     let suggestions: AddressSearchResult[] = [];
-    $: console.log("🚀 ~ suggestions:", suggestions);
     let address = "";
     let selectedAddress: AddressSearchResult | null = null;
     let searchTimout: number;
