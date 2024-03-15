@@ -95,25 +95,6 @@ const tables = [
     revLinks: [{ column: "address", table: "SavedHouses" }],
   },
   {
-    name: "Addresses_canada_old",
-    columns: [
-      { name: "location", type: "link", link: { table: "Locations" } },
-      { name: "civic_no", type: "int" },
-      { name: "civic_no_suffix", type: "string" },
-      { name: "street_name", type: "string" },
-      { name: "street_type", type: "string" },
-      { name: "street_dir", type: "string" },
-      { name: "mail_street_name", type: "string" },
-      { name: "mail_street_type", type: "string" },
-      { name: "mail_street_dir", type: "string" },
-      { name: "mail_mun_name", type: "string" },
-      { name: "mail_prov", type: "string" },
-      { name: "mail_postal_code", type: "string" },
-      { name: "mail_info", type: "string" },
-      { name: "usage", type: "int", notNull: true, defaultValue: "4" },
-    ],
-  },
-  {
     name: "Locations",
     columns: [
       { name: "er_code", type: "string", notNull: true, defaultValue: " " },
@@ -122,10 +103,7 @@ const tables = [
       { name: "latitude", type: "float", notNull: true, defaultValue: "0" },
       { name: "longitude", type: "float", notNull: true, defaultValue: "0" },
     ],
-    revLinks: [
-      { column: "location", table: "Addresses_canada_old" },
-      { column: "location", table: "Addresses" },
-    ],
+    revLinks: [{ column: "location", table: "Addresses" }],
   },
   {
     name: "MessagesStats",
@@ -142,6 +120,7 @@ const tables = [
       { name: "polygon", type: "json" },
       { name: "resolution", type: "int" },
     ],
+    revLinks: [{ column: "hex", table: "BusinessAnalysis" }],
   },
   {
     name: "Addresses",
@@ -193,6 +172,17 @@ const tables = [
       },
     ],
   },
+  {
+    name: "BusinessAnalysis",
+    columns: [
+      { name: "entreprises", type: "json" },
+      { name: "contained", type: "json" },
+      { name: "neighborhoodscore", type: "float" },
+      { name: "score", type: "float" },
+      { name: "count", type: "int" },
+      { name: "hex", type: "link", link: { table: "h3_hexes" }, unique: true },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -219,9 +209,6 @@ export type MapDataRecord = MapData & XataRecord;
 export type AddressesOld = InferredTypes["Addresses_old"];
 export type AddressesOldRecord = AddressesOld & XataRecord;
 
-export type AddressesCanadaOld = InferredTypes["Addresses_canada_old"];
-export type AddressesCanadaOldRecord = AddressesCanadaOld & XataRecord;
-
 export type Locations = InferredTypes["Locations"];
 export type LocationsRecord = Locations & XataRecord;
 
@@ -234,6 +221,9 @@ export type H3HexesRecord = H3Hexes & XataRecord;
 export type Addresses = InferredTypes["Addresses"];
 export type AddressesRecord = Addresses & XataRecord;
 
+export type BusinessAnalysis = InferredTypes["BusinessAnalysis"];
+export type BusinessAnalysisRecord = BusinessAnalysis & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
@@ -242,11 +232,11 @@ export type DatabaseSchema = {
   Sessions: SessionsRecord;
   MapData: MapDataRecord;
   Addresses_old: AddressesOldRecord;
-  Addresses_canada_old: AddressesCanadaOldRecord;
   Locations: LocationsRecord;
   MessagesStats: MessagesStatsRecord;
   h3_hexes: H3HexesRecord;
   Addresses: AddressesRecord;
+  BusinessAnalysis: BusinessAnalysisRecord;
 };
 
 const DatabaseClient = buildClient();

@@ -95,6 +95,7 @@
             {#if selectedmessage}
                 <div class="card absolute right-4 top-4 z-50 w-80">
                     <h2 class="text-lg">{selectedmessage.title}</h2>
+                    <h2 class="text-lg">{selectedmessage.category}</h2>
                     <h2 class="text-lg">{selectedmessage.message}</h2>
                     <h2 class="text-lg">{selectedmessage.status}</h2>
                 </div>
