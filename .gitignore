@@ -3,3 +3,6 @@
 *.geojson
 data/*
 backend/addpolygondb.py
+backend/csv_analyze.py
+backend/businesslocationfinder.py
+backend/csv_analyze.py
