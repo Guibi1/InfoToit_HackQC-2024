@@ -66,7 +66,7 @@ export const load = async ({ locals, url }) => {
     return {
         years,
         categories,
-        stats: Object.values(datasets).flatMap((d) => Object.values(d.years).toReversed()),
+        stats: Object.values(datasets).flatMap((d) => Object.values(d.years).reverse()),
     };
 };
 
