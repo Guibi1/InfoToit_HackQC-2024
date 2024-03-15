@@ -20,11 +20,11 @@
     let map = mapContext.getMap();
     let loaded = mapContext.getLoaded();
 
-    $: {
-        if (map && $loaded) {
+    loaded.subscribe((loaded) => {
+        if (map && loaded) {
             map.addSource($id, data);
         }
-    }
+    });
 
     onDestroy(() => map?.getStyle() && map.removeSource($id));
 </script>

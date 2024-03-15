@@ -120,7 +120,10 @@ const tables = [
       { name: "polygon", type: "json" },
       { name: "resolution", type: "int" },
     ],
-    revLinks: [{ column: "hex", table: "BusinessAnalysis" }],
+    revLinks: [
+      { column: "hex", table: "BusinessAnalysis" },
+      { column: "hex", table: "HouseAnalysis" },
+    ],
   },
   {
     name: "Addresses",
@@ -183,6 +186,19 @@ const tables = [
       { name: "hex", type: "link", link: { table: "h3_hexes" }, unique: true },
     ],
   },
+  {
+    name: "HouseAnalysis",
+    columns: [
+      { name: "hex", type: "link", link: { table: "h3_hexes" }, unique: true },
+      { name: "score", type: "float", notNull: true, defaultValue: "0" },
+      {
+        name: "neighborhoodscore",
+        type: "float",
+        notNull: true,
+        defaultValue: "0",
+      },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -224,6 +240,9 @@ export type AddressesRecord = Addresses & XataRecord;
 export type BusinessAnalysis = InferredTypes["BusinessAnalysis"];
 export type BusinessAnalysisRecord = BusinessAnalysis & XataRecord;
 
+export type HouseAnalysis = InferredTypes["HouseAnalysis"];
+export type HouseAnalysisRecord = HouseAnalysis & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
@@ -237,12 +256,13 @@ export type DatabaseSchema = {
   h3_hexes: H3HexesRecord;
   Addresses: AddressesRecord;
   BusinessAnalysis: BusinessAnalysisRecord;
+  HouseAnalysis: HouseAnalysisRecord;
 };
 
 const DatabaseClient = buildClient();
 
 const defaultOptions = {
-  databaseURL: "https://wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
+  databaseURL: "https://Wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
 };
 
 export class XataClient extends DatabaseClient<DatabaseSchema> {

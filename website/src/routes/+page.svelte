@@ -6,6 +6,13 @@
     import Marker from "$lib/MapBox/Marker.svelte";
     import Source from "$lib/MapBox/Source.svelte";
     import { popup, type PopupOptions } from "$lib/popup";
+    import {
+        IconSchool,
+        IconShoppingBag,
+        IconLeaf,
+        IconBuildingBank,
+        IconBike,
+    } from "@tabler/icons-svelte";
 
     export let data;
 
@@ -14,12 +21,12 @@
         placement: "bottom",
     };
 
-    $: panelLeft = false;
-
     let suggestions: AddressSearchResult[] = [];
     let address = "";
     let selectedAddress: AddressSearchResult | null = null;
     let searchTimout: number;
+
+    let tab = 0;
 
     async function onInput() {
         selectedAddress = null;
@@ -49,35 +56,86 @@
 
     function submit() {
         if (selectedAddress) {
-            goto(`/house/${selectedAddress.id}`);
+            goto(`?id=${selectedAddress.location.id}`);
         }
     }
 </script>
 
 <div class="flex-1">
     <div
-        class={`relative mt-4 flex items-start justify-end transition-[width] ${panelLeft ? "w-52" : "w-1/2"}`}
+        class={`relative mt-4 flex items-start justify-end transition-[width] duration-300 ${data.house ? "w-[250px]" : "w-1/2"}`}
     >
         <main
-            class="card z-10 flex translate-x-1/2 flex-col items-center gap-4 p-6 text-center md:items-start md:text-start"
+            class="card absolute z-10 flex w-[450px] translate-x-1/2 flex-col items-center gap-2 p-4"
         >
-            <div>
-                <h1 class="h1 mb-0">Bienvenue</h1>
-                <span class="text-muted-foreground">Entrez une adresse pour commencer</span>
+            <div class="flex flex-col gap-4 text-center">
+                <div>
+                    <h1 class="h1 mb-0">Bienvenue</h1>
+                    <span class="text-muted-foreground">Entrez une adresse pour commencer</span>
+                </div>
+
+                <input
+                    class="input"
+                    type="search"
+                    name="address"
+                    bind:value={address}
+                    use:popup={popupSettings}
+                    on:input={onInput}
+                />
+
+                <button on:click={submit} class="btn w-full" disabled={!selectedAddress}>
+                    Explorer
+                </button>
             </div>
 
-            <input
-                class="input"
-                type="search"
-                name="address"
-                bind:value={address}
-                use:popup={popupSettings}
-                on:input={onInput}
-            />
+            {#if data.house}
+                <div
+                    class="mt-2 grid w-full grid-cols-5 gap-0.5 overflow-hidden rounded border-2 border-dark bg-pale"
+                >
+                    <button
+                        class={`flex flex-col items-center p-2 font-semibold ${tab == 0 ? "bg-pale" : "bg-white"}`}
+                        on:click={() => (tab = 0)}
+                    >
+                        <IconBuildingBank /> Services
+                    </button>
+                    <button
+                        class={`flex flex-col items-center p-2 font-semibold ${tab == 1 ? "bg-pale" : "bg-white"}`}
+                        on:click={() => (tab = 1)}
+                    >
+                        <IconBike /> Transit
+                    </button>
+                    <button
+                        class={`flex flex-col items-center p-2 font-semibold ${tab == 2 ? "bg-pale" : "bg-white"}`}
+                        on:click={() => (tab = 2)}
+                    >
+                        <IconSchool /> Écoles
+                    </button>
+                    <button
+                        class={`flex flex-col items-center p-2 font-semibold ${tab == 3 ? "bg-pale" : "bg-white"}`}
+                        on:click={() => (tab = 3)}
+                    >
+                        <IconLeaf /> Nature
+                    </button>
+                    <button
+                        class={`flex flex-col items-center p-2 font-semibold ${tab == 4 ? "bg-pale" : "bg-white"}`}
+                        on:click={() => (tab = 4)}
+                    >
+                        <IconShoppingBag /> Achats
+                    </button>
+                </div>
 
-            <button on:click={submit} class="btn w-full" disabled={!selectedAddress}>
-                Explorer
-            </button>
+                {#if tab == 0}
+                    1
+                {:else if tab == 1}
+                    2
+                {:else if tab == 2}
+                    3
+                {:else if tab == 3}
+                    4
+                {:else if tab == 4}
+                    5
+                {/if}
+            {/if}
         </main>
     </div>
 </div>
@@ -100,6 +158,16 @@
                 />
             {/key}
         {/if}
+
+        {#if data.house}
+            {#key data.house}
+                <Marker
+                    coordinates={[data.house.longitude, data.house.latitude]}
+                    zoomOnAdd={13.5}
+                />
+            {/key}
+        {/if}
+
         <Source
             data={{
                 type: "geojson",
@@ -117,7 +185,7 @@
                         url: "mapbox://mapbox.3o7ubwm8",
                     },
                     paint: {
-                        "fill-color": "rgba(61,153,80,0.55)",
+                        "fill-color": "rgba(61,153,80,0.4)",
                     },
                 }}
             />
