@@ -7,7 +7,7 @@ export const POST = async ({ request }) => {
 
     const res = await getXataClient().db.Addresses.search(searchTerms, {
         target: [
-            { column: "civic_no", weight: 6 },
+            { column: "civic_no", weight: 4 },
             "civic_no_suffix",
             "street_type",
             { column: "street_name", weight: 2 },

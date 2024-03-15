@@ -1,14 +1,20 @@
 <script lang="ts">
     import type { AddressSearchResult } from "$api/address/search/+server";
     import { goto } from "$app/navigation";
+    import Layer from "$lib/MapBox/Layer.svelte";
     import Map from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
+    import Source from "$lib/MapBox/Source.svelte";
     import { popup, type PopupOptions } from "$lib/popup";
+
+    export let data;
 
     const popupSettings: PopupOptions = {
         popupId: "popupAutocomplete",
         placement: "bottom",
     };
+
+    $: panelLeft = false;
 
     let suggestions: AddressSearchResult[] = [];
     let address = "";
@@ -48,27 +54,33 @@
     }
 </script>
 
-<main class="relative flex flex-1 items-center justify-center">
+<div class="flex-1">
     <div
-        class="card absolute top-12 z-10 flex flex-col items-center gap-4 p-6 text-center md:items-start md:text-start"
+        class={`relative mt-4 flex items-start justify-end transition-[width] ${panelLeft ? "w-52" : "w-1/2"}`}
     >
-        <div>
-            <h1 class="h1 mb-0">Bienvenue</h1>
-            <span class="text-muted-foreground">Entrez une adresse pour commencer</span>
-        </div>
+        <main
+            class="card z-10 flex translate-x-1/2 flex-col items-center gap-4 p-6 text-center md:items-start md:text-start"
+        >
+            <div>
+                <h1 class="h1 mb-0">Bienvenue</h1>
+                <span class="text-muted-foreground">Entrez une adresse pour commencer</span>
+            </div>
 
-        <input
-            class="input"
-            type="search"
-            name="address"
-            bind:value={address}
-            use:popup={popupSettings}
-            on:input={onInput}
-        />
+            <input
+                class="input"
+                type="search"
+                name="address"
+                bind:value={address}
+                use:popup={popupSettings}
+                on:input={onInput}
+            />
 
-        <button on:click={submit} class="btn w-full" disabled={!selectedAddress}> Explorer </button>
+            <button on:click={submit} class="btn w-full" disabled={!selectedAddress}>
+                Explorer
+            </button>
+        </main>
     </div>
-</main>
+</div>
 
 <div class="absolute inset-0">
     <Map
@@ -88,6 +100,28 @@
                 />
             {/key}
         {/if}
+        <Source
+            data={{
+                type: "geojson",
+                data: { type: "FeatureCollection", features: data.h3_hexes.map((h) => h.polygon) },
+            }}
+        >
+            <Layer
+                layer={{
+                    type: "fill",
+                    layout: {
+                        visibility: "visible",
+                    },
+                    source: {
+                        type: "vector",
+                        url: "mapbox://mapbox.3o7ubwm8",
+                    },
+                    paint: {
+                        "fill-color": "rgba(61,153,80,0.55)",
+                    },
+                }}
+            />
+        </Source>
     </Map>
 </div>
 

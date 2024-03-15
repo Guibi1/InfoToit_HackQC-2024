@@ -1,49 +1,15 @@
 <script lang="ts">
-    import Map from "$lib/MapBox/Map.svelte";
+    import { goto } from "$app/navigation";
+    import MapBox from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
-    import { Line } from "svelte-chartjs";
-    import { mois } from "$lib/consts";
+    import MultiSelect from "$lib/MultiSelect.svelte";
+    import { messageCategories, mois } from "$lib/consts";
 
     export let data;
 
-    let selectedCategories: string[] = [];
+    let selectedYears: number[] = [2023, 2022];
     let selectedStatuses: string[] = [];
-
-    const datasets = [
-        {
-            label: "My First dataset",
-            fill: "origin",
-            lineTension: 0.4,
-            backgroundColor: "rgba(225, 204,230, .3)",
-            borderColor: "rgb(205, 130, 158)",
-            pointBorderWidth: 10,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgb(0, 0, 0)",
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: [65, 59, 80, 81, 56, 55, 40],
-        },
-        {
-            label: "My Second dataset",
-            fill: "origin",
-            lineTension: 0.4,
-            backgroundColor: "rgba(184, 185, 210, .3)",
-            borderColor: "rgb(35, 26, 136)",
-            borderDash: [],
-            borderDashOffset: 0.0,
-            pointBorderColor: "rgb(35, 26, 136)",
-            pointBackgroundColor: "rgb(255, 255, 255)",
-            pointBorderWidth: 10,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgb(0, 0, 0)",
-            pointHoverBorderColor: "rgba(220, 220, 220, 1)",
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10,
-            data: [28, 48, 40, 19, 86, 27, 90],
-        },
-    ];
+    let selectedCategories: string[] = [];
 
     $: filteredMessages = data.messages.filter((m) => {
         if (selectedCategories.length > 0) {
@@ -58,24 +24,54 @@
         }
         return true;
     });
+
+    function onGraphDataChange() {
+        const searchParams = new URLSearchParams();
+        searchParams.set("y1", "" + selectedYears[0]);
+        searchParams.set("y2", "" + selectedYears[1]);
+        for (const c of selectedCategories) searchParams.append("c", c);
+        goto(`?${searchParams}`);
+    }
 </script>
 
 <main class="container mx-auto p-4">
-    <div class="h-80">
-        <Map options={{}}>
+    <div class="card h-80 overflow-hidden">
+        <MapBox
+            options={{
+                center: [-73.6128865, 45.5308667],
+                zoom: 10,
+            }}
+        >
             {#each filteredMessages as message}
                 {#if message.lat && message.lon}
                     <Marker coordinates={[+message.lon, +message.lat]} />
                 {/if}
             {/each}
-        </Map>
+        </MapBox>
     </div>
 
-    <Line
-        data={{
-            labels: mois.slice(0, new Date().getMonth() + 1),
-            datasets,
-        }}
-        options={{ responsive: true }}
-    />
+    <div>
+        <MultiSelect
+            name="graphYears"
+            choices={[2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]}
+            bind:selected={selectedYears}
+            maxSelection={2}
+            on:change={onGraphDataChange}
+        >
+            Années
+        </MultiSelect>
+
+        <MultiSelect
+            name="graphCategories"
+            choices={messageCategories}
+            bind:selected={selectedCategories}
+            maxSelection={5}
+            on:change={onGraphDataChange}
+        >
+            Catégories
+        </MultiSelect>
+    </div>
+
+    <a href="/dashboard/history" class="btn">Voir l'historique</a>
+    <a href="/dashboard/plaints" class="btn">Voir les pleintes</a>
 </main>
