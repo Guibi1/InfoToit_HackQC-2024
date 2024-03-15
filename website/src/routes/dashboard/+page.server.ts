@@ -5,6 +5,8 @@ export const load = async ({ locals }) => {
     if (!locals.user?.isGov) redirect(302, "/");
 
     return {
-        messages: await getXataClient().db.Messages.getAll(),
+        messages: await getXataClient()
+            .db.Messages.filter({ status: { $isNot: "Terminé" } })
+            .getAll(),
     };
 };
