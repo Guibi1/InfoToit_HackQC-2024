@@ -32,6 +32,7 @@
     let searchTimout: number;
     let height = 210;
     let loading = false;
+    let loadingAuto = false;
 
     let tab = 0;
     let pointsToShow: { name: string; coordinates: [number, number]; type: string }[] = [];
@@ -44,22 +45,19 @@
             return;
         }
 
+        loadingAuto = true;
         clearTimeout(searchTimout);
-        searchTimout = setTimeout(
-            () =>
-                fetch("/api/address/search", {
-                    method: "POST",
-                    body: address,
-                })
-                    .then((res) => res.json())
-                    .then((s) => (suggestions = s)),
-            400
-        ) as unknown as number;
+        searchTimout = setTimeout(async () => {
+            suggestions = await fetch("/api/address/search", {
+                method: "POST",
+                body: address,
+            }).then((res) => res.json());
+            loadingAuto = false;
+        }, 1000) as unknown as number;
     }
 
     function onSelect(result: AddressSearchResult) {
         selectedAddress = result;
-        console.log("🚀 ~ onSelect ~ selectedAddress:", selectedAddress);
         address = `${result.Text}, ${result.Description}`;
     }
 
@@ -236,9 +234,9 @@
             center: [-73.6128865, 45.5308667],
             zoom: 10,
             maxBounds: [
-                        [-74, 45.3308067], // Southwest corner: [longitude, latitude]
-                        [-73.3, 45.7556], // Northeast corner: [longitude, latitude]
-                    ],
+                [-74, 45.3308067], // Southwest corner: [longitude, latitude]
+                [-73.3, 45.7556], // Northeast corner: [longitude, latitude]
+            ],
         }}
     >
         {#if selectedAddress?.longitude && selectedAddress.latitude}
@@ -311,21 +309,28 @@
         class="flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 border-dark bg-white py-2"
         tabindex="-1"
     >
-        {#each suggestions as suggestion}
-            <li class="contents">
-                <button
-                    on:click={() => onSelect(suggestion)}
-                    class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
-                    type="button"
-                >
-                    {suggestion.Text}
-                    <span class="text-sm opacity-60">
-                        {suggestion.Description}
-                    </span>
-                </button>
+        {#if suggestions.length}
+            {#each suggestions as suggestion}
+                <li class="contents">
+                    <button
+                        on:click={() => onSelect(suggestion)}
+                        class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
+                        type="button"
+                    >
+                        {suggestion.Text}
+                        <span class="text-sm opacity-60">
+                            {suggestion.Description}
+                        </span>
+                    </button>
+                </li>
+            {/each}
+        {:else if loadingAuto}
+            <li class="autocomplete-item flex items-end justify-center gap-2 p-2">
+                <IconLoader2 class="animate-spin" />
+                Chargement
             </li>
         {:else}
             <li class="autocomplete-item p-2">Aucun résultat</li>
-        {/each}
+        {/if}
     </ul>
 </div>
