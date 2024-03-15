@@ -1,23 +1,20 @@
 <script lang="ts">
-    import Map from "$lib/MapBox/Map.svelte";
-    import Marker from "$lib/MapBox/Marker.svelte";
-    import Popup from "$lib/MapBox/Popup.svelte";
     import Layer from "$lib/MapBox/Layer.svelte";
+    import Map from "$lib/MapBox/Map.svelte";
     import Source from "$lib/MapBox/Source.svelte";
+    import { IconArrowLeft } from "@tabler/icons-svelte";
     import { latLngToCell } from "h3-js";
 
     export let data;
-    
-    //Add animation, just needs data and connect coordinates to hex id
 
-   
-    let tab = -1;
-    let selectedHex = "";
+    let selectedHex: (typeof data.hex)[number] | undefined;
 
     function onMapClick(e: { detail: mapboxgl.MapMouseEvent }) {
-        selectedHex = latLngToCell(e.detail.lngLat.lat, e.detail.lngLat.lng, 8);
+        const id = latLngToCell(e.detail.lngLat.lat, e.detail.lngLat.lng, 8);
+        selectedHex = data.hex.find((h) => h.id == id);
     }
-    let hexScore = [
+
+    const hexScore = [
         {
             color: "rgba(45, 250, 45, 0.4)",
             filter: (h: (typeof data.hex)[number]) => {
@@ -51,14 +48,22 @@
     ];
 </script>
 
-<main class="relative left-12 flex flex-1">
-    <div class="card absolute left-8 top-20 z-10">
-        <h1 class="h1 m-4">Suggestion</h1>
-        {#each data.hex as hex}
-            {#if hex.id == selectedHex}
-                <div class=" "><h1 class="h1">{hex.recommendation}</h1></div>
-            {/if}
-        {/each}
+<main class="relative flex flex-1">
+    <div class="card absolute left-8 top-8 z-10 w-96 p-4">
+        <h1 class="h1 mb-1">Suggestion</h1>
+        <p class="text-muted-foreground">
+            Sélectionnez une zone de la carte pour afficher des recommendations.
+        </p>
+
+        {#if selectedHex}
+            <p class="mt-2">{selectedHex.recommendation}</p>
+            <p>Importance: {selectedHex.score}/5</p>
+        {/if}
+
+        <a href="/dashboard" class="btn btn-sm btn-flat mx-auto mt-4 items-center gap-1">
+            <IconArrowLeft size={16} /> Revenir
+            <span class="hidden sm:inline-block"> au tableau de bord </span>
+        </a>
     </div>
 </main>
 
@@ -75,8 +80,6 @@
             ],
         }}
     >
-        <!-- "fill-color": "rgba(61,153,80,0.55)", -->
-
         {#each hexScore as { color, filter }}
             <Source
                 data={{

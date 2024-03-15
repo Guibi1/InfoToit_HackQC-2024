@@ -92,6 +92,7 @@
         </ul>
 
         <a href="/dashboard/history" class="btn mt-2 self-center">Voir l'historique</a>
+        <a href="/dashboard/overview" class="btn mt-2 self-center">Voir les recommendations</a>
     </main>
 </div>
 
