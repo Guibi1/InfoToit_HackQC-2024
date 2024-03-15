@@ -90,7 +90,7 @@ def agregate_data(csv_path, data_studied,latlongin, info_mapping, analysis=None,
     df = pd.read_csv(csv_path, engine='python')
     if latlongin[0] not in df.columns or latlongin[1] not in df.columns:
         raise Exception("CSV missing LAT or LONG columns")
-
+    print(len(list(set(df["USAGE3"]))))
     for element in info_mapping:
         if info_mapping[element] not in df.columns:
             raise Exception("Mismatch in info_mapping and CSV columns")
@@ -151,7 +151,10 @@ def agregate_data(csv_path, data_studied,latlongin, info_mapping, analysis=None,
         midpoint = 10 - midpoint
 
     for elements in h3_index_data:
-        score = round((h3_index_data[elements][f"{data_studied}_count"] / maxcount) * 100,2)
+        if maxcount > 0:
+            score = round((h3_index_data[elements][f"{data_studied}_count"] / maxcount) * 100,2)
+        else: 
+            score = 0.0
         if is_higher_better == False:
             score = 10 - score
         h3_index_data[elements]["area_score"] = score
@@ -166,8 +169,10 @@ def agregate_data(csv_path, data_studied,latlongin, info_mapping, analysis=None,
 
 
         neighborhoodmaxcount = np.max(neighborhoodtotal)
-        
-        neighborhoodscore = round((h3_index_data[elements][f"{data_studied}_count"] / neighborhoodmaxcount) * 100,2)
+        if neighborhoodmaxcount > 0:
+            neighborhoodscore = round((h3_index_data[elements][f"{data_studied}_count"] / neighborhoodmaxcount) * 100,2)
+        else: 
+            neighborhoodscore = 0.0
         if is_higher_better == False:
             neighborhoodscore = 10 - neighborhoodscore
         h3_index_data[elements]["direct_neighborhood_score"] = neighborhoodscore
@@ -241,14 +246,15 @@ def agregate_data(csv_path, data_studied,latlongin, info_mapping, analysis=None,
 
     output_geojson_filename = f'{data_studied}_h3_analysis_{resolution}.json'
     output_geojson_path = os.path.join(output_folder, output_geojson_filename)  # Full path to the output file
-
+    print(len(set(h3_index_data)))
     with open(output_geojson_path, 'w') as f:
         json.dump(h3_index_data, f, indent=4)
+    print(set(h3_index_data))
 
     
 valid_analysis_types_example = {"frequency","cut_frequency","entire_area_frequency","contained_categories","missing_categories"}
 
-geojsonfile = "../data/montreal/montreal.geojson"
+geojsonfile = "../data/montreal/limites-terrestres.geojson"
 businessfile = '../data/montreal/businesses_cleaned.csv'
 res = 8
 csvelements = "entreprises"
@@ -261,9 +267,9 @@ csvelementsinfo = {
     # "adresse": "ADRESSE"
 }
 csvinfotoanalyze = {
-    # "type": ["cut_frequency"]
+    "type": ["contained_categories","missing_categories"]
 }
 deleteinfos = False
 
-agregate_data(csv_path=businessfile,data_studied=csvelements,info_mapping=csvelementsinfo, analysis=csvinfotoanalyze,latlongin=latlong,delete_infos=deleteinfos)
+agregate_data(csv_path=businessfile,map_path=geojsonfile,data_studied=csvelements,info_mapping=csvelementsinfo, analysis=csvinfotoanalyze,latlongin=latlong,delete_infos=deleteinfos)
 
