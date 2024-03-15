@@ -30,12 +30,12 @@
     <div class="mb-4 flex flex-col gap-4">
         <label class="label">
             Nom
-            <input type="text" class="input" />
+            <input type="text" class="input" value={data.user?.name} />
         </label>
 
         <label class="label">
             Adresse courriel
-            <input type="text" class="input" />
+            <input type="text" class="input" value={data.user?.email} />
         </label>
 
         <button class="btn mt-2"> Enregistrer </button>
