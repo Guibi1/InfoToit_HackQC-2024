@@ -33,7 +33,7 @@
     }
 </script>
 
-<button class="input w-full" use:popup={popupSettings}>
+<button type="button" class="input w-full" use:popup={popupSettings}>
     <slot />
 </button>
 

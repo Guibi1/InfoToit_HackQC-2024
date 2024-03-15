@@ -2,6 +2,7 @@
     import { invalidate } from "$app/navigation";
     import Map from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
+    import MultiSelect from "$lib/MultiSelect.svelte";
     import { messageCategories } from "$lib/consts";
     import { popup, type PopupOptions } from "$lib/popup";
     import { Control, Description, Field, FieldErrors, Label } from "formsnap";
@@ -58,14 +59,17 @@
                 <Control let:attrs>
                     <Label>Catégorie</Label>
 
-                    <input
-                        class="input"
-                        type="search"
-                        name="address"
-                        bind:value={$formData.category}
-                        use:popup={popupSettings}
-                        on:input={onInput}
-                    />
+                    <MultiSelect
+                        name="signalCategories"
+                        choices={messageCategories}
+                        maxSelection={1}
+                        selected={[$formData.category]}
+                        on:change={(c) => ($formData.category = c.detail[0])}
+                    >
+                        {#if $formData.category}
+                            {$formData.category}
+                        {/if}
+                    </MultiSelect>
                 </Control>
                 <Description></Description>
                 <FieldErrors />
