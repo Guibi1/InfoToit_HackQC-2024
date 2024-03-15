@@ -19,7 +19,6 @@
     const { form: formData, enhance } = form;
 
     function onMapClick(e: { detail: mapboxgl.MapMouseEvent }) {
-        console.log(e.detail.lngLat);
         $formData.coordinate.lon = e.detail.lngLat.lng;
         $formData.coordinate.lat = e.detail.lngLat.lat;
     }
