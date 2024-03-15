@@ -216,6 +216,10 @@
         options={{
             center: [-73.6128865, 45.5308667],
             zoom: 10,
+            maxBounds: [
+                        [-74, 45.3308067], // Southwest corner: [longitude, latitude]
+                        [-73.3, 45.7556], // Northeast corner: [longitude, latitude]
+                    ],
         }}
     >
         {#if selectedAddress?.longitude && selectedAddress.latitude}
