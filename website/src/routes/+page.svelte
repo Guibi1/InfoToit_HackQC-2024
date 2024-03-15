@@ -15,6 +15,8 @@
         IconSchool,
         IconShoppingBag,
         IconX,
+        IconLoader2,
+        IconArrowLeft,
     } from "@tabler/icons-svelte";
 
     export let data;
@@ -29,6 +31,7 @@
     let selectedAddress: AddressSearchResult | null = null;
     let searchTimout: number;
     let height = 210;
+    let loading = false;
 
     let tab = 0;
     let pointsToShow: { name: string; coordinates: [number, number]; type: string }[] = [];
@@ -60,9 +63,11 @@
         address = `${result.Text}, ${result.Description}`;
     }
 
-    function submit() {
+    async function submit() {
         if (selectedAddress) {
-            goto(`?id=${selectedAddress.id}`);
+            loading = true;
+            await goto(`?id=${selectedAddress.id}`);
+            loading = false;
             setTab(0);
         }
     }
@@ -89,7 +94,10 @@
             class="card absolute z-10 grid w-[450px] translate-x-1/2 overflow-hidden transition-[height]"
             style={`height: ${height}px`}
         >
-            <main bind:clientHeight={height} class="flex flex-col items-center gap-2 p-4">
+            <main
+                bind:clientHeight={height}
+                class="relative flex w-[450px] flex-col items-center gap-2 p-4"
+            >
                 {#if !data.house}
                     <div class="flex flex-col gap-4 text-center">
                         <div>
@@ -108,7 +116,14 @@
                             on:input={onInput}
                         />
 
-                        <button on:click={submit} class="btn w-full" disabled={!selectedAddress}>
+                        <button
+                            on:click={submit}
+                            class="btn w-full"
+                            disabled={!selectedAddress || loading}
+                        >
+                            {#if loading}
+                                <IconLoader2 class="animate-spin" />
+                            {/if}
                             Explorer
                         </button>
                     </div>
@@ -119,6 +134,10 @@
                             Découvrez les services à proximité
                         </span>
                     </div>
+
+                    <a class="absolute left-4 top-4 rounded-full bg-pale p-1" href="/">
+                        <IconArrowLeft />
+                    </a>
 
                     <div
                         class="mt-2 grid w-full grid-cols-5 gap-0.5 overflow-hidden rounded border-2 border-dark bg-pale"
@@ -155,7 +174,7 @@
                         </button>
                     </div>
 
-                    <h2 class="h2 mb-0 mt-2">Cette maison comparé à Montréal</h2>
+                    <h2 class="h2 mb-0 mt-2">Cette maison comparée à Montréal</h2>
                     <ul
                         class="flex w-full flex-col gap-1 overflow-x-hidden rounded border-2 border-dark bg-background py-1"
                     >
