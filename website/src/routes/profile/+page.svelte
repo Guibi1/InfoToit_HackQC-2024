@@ -4,6 +4,12 @@
     export let data;
 
     let showPlaints = false;
+
+    async function removeHouse(house: (typeof data.savedHomes)[number]) {
+        await fetch("/api/house", { method: "POST", body: house.id });
+        data.savedHomes.splice(data.savedHomes.indexOf(house));
+        data.savedHomes = data.savedHomes;
+    }
 </script>
 
 <main class="container mx-auto flex flex-col gap-8 py-4 md:flex-row">
@@ -32,47 +38,60 @@
         {#if showPlaints}
             <h2 class="h1 mx-2 border-b-2 border-dark">Pleintes</h2>
 
-            {#each data.messages as pleinte}
+            {#if data.messages.length}
                 <div class="m-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    <div class="card">
-                        <h1 class="h1">{pleinte.title}</h1>
-                        <p>{pleinte.message}</p>
-                        <p>{pleinte.category}</p>
-                        <p>lon{pleinte.lon?.toString()}</p>
-                        <p>lat{pleinte.lat?.toString()}</p>
-                        <h1 class="h1">Status:</h1>
-                        <div class="card">{pleinte.status}</div>
-                    </div>
+                    {#each data.messages as pleinte}
+                        <div class="card p-4">
+                            <h1 class="text-lg font-semibold">{pleinte.title}</h1>
+                            <p>{pleinte.message}</p>
+
+                            <p class="my-2 italic">{pleinte.category}</p>
+
+                            <p>
+                                Status:
+                                <span class="font-semibold">{pleinte.status}</span>
+                            </p>
+                        </div>
+                    {/each}
                 </div>
             {:else}
                 <div class="flex justify-center">
-                    <div class="card p-2">
+                    <div class="card p-4">
                         <p class="">Aucun résultat</p>
                     </div>
                 </div>
-            {/each}
+            {/if}
         {:else}
             <h2 class="h1 mx-2 border-b-2 border-dark">Maisons sauvegardées</h2>
 
             {#if data.savedHomes.length}
                 <div class="m-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {#each data.savedHomes as home}
-                        <a class="card p-2" href={`/house/${home.address}`}>
+                        <a
+                            class="card flex-row gap-2 p-2"
+                            href={`/?id=${home.address?.location?.id}`}
+                        >
                             <div
                                 class="flex h-24 w-24 items-center justify-center overflow-hidden rounded"
                             >
-                                {#if home.address?.latitude && home.address.longitude}
+                                {#if home.address?.location?.latitude && home.address.location.longitude}
                                     <img
                                         class="h-full w-full"
-                                        src={`https://maps.googleapis.com/maps/api/streetview?size=400x400&location=${home.address.latitude},${home.address.longitude}&fov=50&pitch=0&key=${PUBLIC_GOOGLE_MAPS_KEY}`}
+                                        src={`https://maps.googleapis.com/maps/api/streetview?size=400x400&location=${home.address.location.latitude},${home.address.location.longitude}&fov=50&pitch=0&key=${PUBLIC_GOOGLE_MAPS_KEY}`}
                                         alt="la maison vue de la rue"
                                     />
-                                {:else}
-                                    <span>H</span>
                                 {/if}
                             </div>
 
-                            <span class="text-xl">{home.address}</span>
+                            <div class="flex flex-col justify-between gap-2">
+                                <span class="text-xl">
+                                    {`${home.address?.civic_no_prefix}${home.address?.civic_no_prefix ? "-" : ""}${home.address?.civic_no}${home.address?.civic_no_suffix} ${home.address?.street_type.toLowerCase()} ${home.address?.street_name}${home.address?.street_dir ? " " : ""}${home.address?.street_dir}, ${home.address?.mail_postal_code}`}
+                                </span>
+
+                                <button class="btn btn-sm" on:click={() => removeHouse(home)}>
+                                    Retirer
+                                </button>
+                            </div>
                         </a>
                     {/each}
                 </div>

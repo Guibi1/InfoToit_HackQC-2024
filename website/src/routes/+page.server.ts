@@ -1,7 +1,7 @@
 import { getXataClient } from "$xata";
 import { latLngToCell } from "h3-js";
 
-export const load = async ({ url }) => {
+export const load = async ({ locals, url }) => {
     const locationId = url.searchParams.get("id");
 
     const h3_hexes = await getXataClient()
@@ -12,19 +12,44 @@ export const load = async ({ url }) => {
     if (!locationId) return { h3_hexes };
 
     const house = await getXataClient()
-        .db.Locations.select(["id", "longitude", "latitude"])
-        .filter({ id: locationId })
+        .db.Addresses.select([
+            "id",
+            "civic_no_prefix",
+            "civic_no",
+            "civic_no_suffix",
+            "street_type",
+            "street_name",
+            "street_dir",
+            "mail_postal_code",
+            "location.longitude",
+            "location.latitude",
+        ])
+        .filter({ location: locationId })
         .getFirst();
 
-    if (!house) return { h3_hexes };
+    if (!house || !house.location) return { h3_hexes };
 
-    const hexId = latLngToCell(house?.latitude, house?.longitude, 8);
+    const hexId = latLngToCell(house.location.latitude, house.location.longitude, 8);
 
-    const houseAnalysis = await getXataClient().db.HouseAnalysis.filter({ id: hexId }).getFirst();
+    const houseAnalysis = await getXataClient()
+        .db.HouseAnalysis.select(["info"])
+        .filter({ id: hexId })
+        .getFirst();
+
+    const savedHouse = locals.user
+        ? await getXataClient()
+              .db.SavedHouses.select(["id"])
+              .filter({ user: locals.user.id, address: house.id })
+              .getFirst()
+        : false;
+
+    if (!houseAnalysis) return { h3_hexes };
 
     return {
         h3_hexes,
         house,
-        houseAnalysis,
+        houseAnalysis: houseAnalysis.info,
+        address: `${house.civic_no_prefix}${house.civic_no_prefix ? "-" : ""}${house.civic_no}${house.civic_no_suffix} ${house.street_type.toLowerCase()} ${house.street_name}${house.street_dir ? " " : ""}${house.street_dir}, ${house.mail_postal_code}`,
+        houseSaved: !!savedHouse,
     };
 };

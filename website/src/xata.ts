@@ -38,7 +38,7 @@ const tables = [
     name: "SavedHouses",
     columns: [
       { name: "user", type: "link", link: { table: "Users" } },
-      { name: "address", type: "link", link: { table: "Addresses_old" } },
+      { name: "address", type: "link", link: { table: "Addresses" } },
     ],
   },
   {
@@ -92,7 +92,6 @@ const tables = [
       { name: "pruid", type: "int" },
       { name: "provider", type: "string" },
     ],
-    revLinks: [{ column: "address", table: "SavedHouses" }],
   },
   {
     name: "Locations",
@@ -122,7 +121,7 @@ const tables = [
     ],
     revLinks: [
       { column: "hex", table: "BusinessAnalysis" },
-      { column: "hex", table: "HouseAnalysis" },
+      { column: "hex", table: "GouvernementAnalysis" },
     ],
   },
   {
@@ -174,6 +173,7 @@ const tables = [
         defaultValue: "",
       },
     ],
+    revLinks: [{ column: "address", table: "SavedHouses" }],
   },
   {
     name: "BusinessAnalysis",
@@ -189,14 +189,21 @@ const tables = [
   {
     name: "HouseAnalysis",
     columns: [
-      { name: "hex", type: "link", link: { table: "h3_hexes" }, unique: true },
-      { name: "score", type: "float", notNull: true, defaultValue: "0" },
+      { name: "info", type: "json", notNull: true, defaultValue: "{}" },
+    ],
+  },
+  {
+    name: "GouvernementAnalysis",
+    columns: [
       {
-        name: "neighborhoodscore",
-        type: "float",
+        name: "recommendation",
+        type: "string",
         notNull: true,
-        defaultValue: "0",
+        defaultValue: '""',
       },
+      { name: "hex", type: "link", link: { table: "h3_hexes" } },
+      { name: "score", type: "int", notNull: true, defaultValue: "0" },
+      { name: "type", type: "string", notNull: true, defaultValue: "service" },
     ],
   },
 ] as const;
@@ -243,6 +250,9 @@ export type BusinessAnalysisRecord = BusinessAnalysis & XataRecord;
 export type HouseAnalysis = InferredTypes["HouseAnalysis"];
 export type HouseAnalysisRecord = HouseAnalysis & XataRecord;
 
+export type GouvernementAnalysis = InferredTypes["GouvernementAnalysis"];
+export type GouvernementAnalysisRecord = GouvernementAnalysis & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
@@ -257,6 +267,7 @@ export type DatabaseSchema = {
   Addresses: AddressesRecord;
   BusinessAnalysis: BusinessAnalysisRecord;
   HouseAnalysis: HouseAnalysisRecord;
+  GouvernementAnalysis: GouvernementAnalysisRecord;
 };
 
 const DatabaseClient = buildClient();

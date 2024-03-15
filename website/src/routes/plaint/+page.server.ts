@@ -15,7 +15,7 @@ export const load = async ({ locals, depends }) => {
 
     return {
         user: locals.user,
-        messages: messages.map((m) => m.toSerializable()),
+        messages: messages,
         form: await superValidate(zod(schema)),
     };
 };

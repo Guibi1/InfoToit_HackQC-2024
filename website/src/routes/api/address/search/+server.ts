@@ -6,10 +6,10 @@ export const POST = async ({ request }) => {
     const searchTerms = await request.text();
 
     const results: PostCanadaItem[] = await fetch(
-        `https://ws1.postescanada-canadapost.ca/addresscomplete/interactive/find/v2.10/json.ws?key=${POST_CANADA_KEY}&provider=AddressComplete&package=Interactive&service=Find&version=2.1&SearchTerm=QC ${searchTerms}&LanguagePreference=fr&MaxSuggestions=6&endpoint=json.ws`
+        `https://ws1.postescanada-canadapost.ca/addresscomplete/interactive/find/v2.10/json.ws?key=${POST_CANADA_KEY}&provider=AddressComplete&package=Interactive&service=Find&version=2.1&SearchTerm=QC ${searchTerms}&LanguagePreference=fr&MaxSuggestions=4&endpoint=json.ws`
     ).then((res) => res.json());
 
-    const a = await Promise.all(
+    const data = await Promise.all(
         results.map((r) =>
             getXataClient()
                 .db.Addresses.select(["location.id", "location.longitude", "location.latitude"])
@@ -29,7 +29,7 @@ export const POST = async ({ request }) => {
         )
     );
 
-    return json(a);
+    return json(data);
 };
 
 type PostCanadaItem = {
