@@ -38,8 +38,8 @@
             />
         </div>
 
-        <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-start lg:flex-col">
-            <div>
+        <div class="grid w-full gap-4 sm:grid-cols-2 lg:w-80 lg:grid-cols-1">
+            <div class="w-full">
                 <h2 class="h2">Catégories</h2>
 
                 <MultiSelect
@@ -55,7 +55,7 @@
                 </MultiSelect>
             </div>
 
-            <div class="w-80">
+            <div class="w-full">
                 <h2 class="h2">Années</h2>
 
                 <SelectList
