@@ -5,8 +5,27 @@
     import Layer from "$lib/MapBox/Layer.svelte";
     import Source from "$lib/MapBox/Source.svelte";
     export let data;
+    import {
+        IconSchool,
+        IconShoppingBag,
+        IconLeaf,
+        IconBuildingBank,
+        IconBike,
+    } from "@tabler/icons-svelte";
+
+
+    //Add animation, just needs data and connect coordinates to hex id
 
     import { popup, type PopupOptions } from "$lib/popup";
+    import { goto } from "$app/navigation";
+
+    let tab = -1;
+    let lnglat;
+
+    function onMapClick(e: { detail: mapboxgl.MapMouseEvent }) {
+        console.log(e.detail.lngLat);
+        lnglat=e.detail.lngLat;
+    }
 
     let hexScore = [
         {
@@ -47,14 +66,53 @@
         class="card absolute top-12 z-10 flex flex-col items-center gap-4 p-6 text-center md:items-start md:text-start"
     >
         <div>
-            <h1 class="h1 mb-0">Bienvenue</h1>
-            <span class="text-muted-foreground">Sélectionnez un hexagone pour commencer</span>
+            {#if data.hex}
+                <div
+                    class="border-dark bg-pale mt-2 grid w-full grid-cols-5 gap-0.5 overflow-hidden rounded border-2"
+                >
+                    <a
+                        class={`flex flex-col items-center p-2 font-semibold ${tab == 0 ? "bg-pale" : "bg-white"}`}
+                        href="?type=service"
+                    >
+                        <IconBuildingBank /> Services
+                    </a>
+                    <a
+                        class={`flex flex-col items-center p-2 font-semibold ${tab == 1 ? "bg-pale" : "bg-white"}`}
+                        href="?type=transit"
+                    >
+                        <IconBike /> Transit
+                    </a>
+                    <a
+                        class={`flex flex-col items-center p-2 font-semibold ${tab == 2 ? "bg-pale" : "bg-white"}`}
+                        href="?type=ecole"
+                    >
+                        <IconSchool /> Écoles
+                    </a>
+                    <a
+                        class={`flex flex-col items-center p-2 font-semibold ${tab == 3 ? "bg-pale" : "bg-white"}`}
+                        href="?type=nature"
+                    >
+                        <IconLeaf /> Nature
+                    </a>
+                    <a
+                        class={`flex flex-col items-center p-2 font-semibold ${tab == 4 ? "bg-pale" : "bg-white"}`}
+                        href="?type=achat"
+                    >
+                        <IconShoppingBag /> Achats
+                    </a>
+                </div>
+
+                {#if data.dataType}
+                    <div class="card"></div>
+                {/if}
+            {/if}
         </div>
     </div>
 </main>
 
 <div class="absolute inset-0">
     <Map
+        on:click={onMapClick}
         options={{
             center: [-73.65, 45.55],
             zoom: 10,
