@@ -38,7 +38,7 @@ const tables = [
     name: "SavedHouses",
     columns: [
       { name: "user", type: "link", link: { table: "Users" } },
-      { name: "address", type: "link", link: { table: "Addresses_old" } },
+      { name: "address", type: "link", link: { table: "Addresses" } },
     ],
   },
   {
@@ -92,7 +92,6 @@ const tables = [
       { name: "pruid", type: "int" },
       { name: "provider", type: "string" },
     ],
-    revLinks: [{ column: "address", table: "SavedHouses" }],
   },
   {
     name: "Locations",
@@ -122,7 +121,10 @@ const tables = [
     ],
     revLinks: [
       { column: "hex", table: "BusinessAnalysis" },
+<<<<<<< HEAD
       { column: "hex", table: "HouseAnalysis" },
+=======
+>>>>>>> 0e825ef28f3fcca25e81edbb01ea22d4b0383f1c
       { column: "hex", table: "GouvernementAnalysis" },
     ],
   },
@@ -175,6 +177,7 @@ const tables = [
         defaultValue: "",
       },
     ],
+    revLinks: [{ column: "address", table: "SavedHouses" }],
   },
   {
     name: "BusinessAnalysis",
@@ -190,13 +193,17 @@ const tables = [
   {
     name: "HouseAnalysis",
     columns: [
-      { name: "hex", type: "link", link: { table: "h3_hexes" }, unique: true },
-      { name: "score", type: "float", notNull: true, defaultValue: "0" },
+      { name: "info", type: "json", notNull: true, defaultValue: "{}" },
+    ],
+  },
+  {
+    name: "GouvernementAnalysis",
+    columns: [
       {
-        name: "neighborhoodscore",
-        type: "float",
+        name: "recommendation",
+        type: "string",
         notNull: true,
-        defaultValue: "0",
+        defaultValue: '""',
       },
       { name: "info", type: "json", notNull: true, defaultValue: "{}" },
     ],

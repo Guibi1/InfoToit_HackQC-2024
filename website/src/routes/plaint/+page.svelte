@@ -39,11 +39,11 @@
     }
 </script>
 
-<main class="container mx-auto flex flex-1 gap-16 p-4 lg:gap-16">
-    <div class="ml-6 flex flex-col">
+<main class="container mx-auto flex flex-1 gap-16 p-2 lg:gap-16">
+    <div class="mx-auto flex flex-col">
         <h1 class="h1">Création de pleinte</h1>
 
-        <form class="grid gap-2" method="POST" use:enhance>
+        <form class="mx-auto flex flex-col gap-1" method="POST" use:enhance>
             <Field {form} name="title">
                 <Control let:attrs>
                     <Label class="label">Titre</Label>
@@ -85,7 +85,7 @@
         </form>
     </div>
 
-    <div class="mb-4 flex flex-1 flex-col gap-4">
+    <div class="mb-4 hidden flex-1 flex-col gap-4 md:flex">
         <button class="btn" on:click={() => (showOtherPlaints = !showOtherPlaints)}>
             {showOtherPlaints ? "Cacher les plaintes" : "Montrer les plaintes"}
         </button>

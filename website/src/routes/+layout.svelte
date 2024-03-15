@@ -52,6 +52,8 @@
             <a class="btn btn-sm" href="/dashboard"> Panneau de bord </a>
         {/if}
 
+        <a class="btn btn-sm" href="/plaint"> Signaler à ma ville </a>
+
         <a class="btn btn-sm" href="/"> Chercher une maison </a>
 
         {#if !data.user}
@@ -70,15 +72,12 @@
     <div class="popup-arrow" id="arrow" />
 
     <div class="card flex w-40 flex-col items-stretch bg-background py-2">
-        <a
-            class="flex items-center gap-1 p-1 px-2 transition-colors hover:bg-pale hover:text-pale"
-            href="/profile"
-        >
+        <a class="flex items-center gap-1 p-1 px-2 transition-colors hover:bg-pale" href="/profile">
             <IconUser size={16} /> Profil
         </a>
 
         <a
-            class="flex items-center gap-1 p-1 px-2 transition-colors hover:bg-muted-foreground hover:text-pale"
+            class="flex items-center gap-1 p-1 px-2 transition-colors hover:bg-pale"
             href="/settings"
         >
             <IconSettings size={16} /> Paramètres
@@ -87,7 +86,7 @@
         <hr class="hr mx-2 my-1" />
 
         <a
-            class="flex items-center gap-1 p-1 px-2 transition-colors hover:bg-muted-foreground hover:text-pale"
+            class="flex items-center gap-1 p-1 px-2 transition-colors hover:bg-pale"
             href="/sign-out"
             data-sveltekit-preload-data="off"
             on:click={() => invalidateAll()}
