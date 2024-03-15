@@ -1,38 +1,45 @@
-import { XataClient, getXataClient, type LocationsRecord } from "$xata";
+import { POST_CANADA_KEY } from "$env/static/private";
+import { getXataClient } from "$xata";
 import { json } from "@sveltejs/kit";
-import type { SelectedPick } from "@xata.io/client";
 
 export const POST = async ({ request }) => {
     const searchTerms = await request.text();
 
-    const res = await getXataClient().db.Addresses.search(searchTerms, {
-        target: [
-            { column: "civic_no", weight: 4 },
-            "civic_no_suffix",
-            "street_type",
-            { column: "street_name", weight: 2 },
-            "street_dir",
-            "mail_mun_name",
-            "mail_postal_code",
-        ],
-        page: { size: 5 },
-    });
+    const results: PostCanadaItem[] = await fetch(
+        `https://ws1.postescanada-canadapost.ca/addresscomplete/interactive/find/v2.10/json.ws?key=${POST_CANADA_KEY}&provider=AddressComplete&package=Interactive&service=Find&version=2.1&SearchTerm=QC ${searchTerms}&LanguagePreference=fr&MaxSuggestions=6&endpoint=json.ws`
+    ).then((res) => res.json());
 
-    return json(
-        await Promise.all(
-            res.records.map((r) =>
-                getXataClient()
-                    .db.Locations.select(["id", "longitude", "latitude"])
-                    .filter({ id: r.location!.id })
-                    .getFirst()
-                    .then((l) => ({ ...r, location: l }))
-            )
+    const a = await Promise.all(
+        results.map((r) =>
+            getXataClient()
+                .db.Addresses.select(["location.id", "location.longitude", "location.latitude"])
+                .filter({
+                    civic_no: r.Text.match(/\d+/)?.at(0),
+                    mail_postal_code: r.Description.match(/\w\d\w \d\w\d/)
+                        ?.at(0)
+                        ?.replace(" ", ""),
+                })
+                .getFirst()
+                .then((l) => ({
+                    ...r,
+                    id: l?.location?.id,
+                    longitude: l?.location?.longitude,
+                    latitude: l?.location?.latitude,
+                }))
         )
     );
+
+    return json(a);
 };
 
-export type AddressSearchResult = Awaited<
-    ReturnType<XataClient["db"]["Addresses"]["search"]>
->["records"][number] & {
-    location: SelectedPick<LocationsRecord, ("latitude" | "longitude" | "id")[]>;
+type PostCanadaItem = {
+    Text: string;
+    Highlight: string;
+    Description: string;
+};
+
+export type AddressSearchResult = PostCanadaItem & {
+    id: string;
+    longitude: number;
+    latitude: number;
 };

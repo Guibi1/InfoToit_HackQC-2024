@@ -34,6 +34,10 @@
     };
 </script>
 
+<svelte:head>
+    <title>Info Toit</title>
+</svelte:head>
+
 <div
     class="sticky inset-2 z-50 m-2 flex justify-between rounded-lg border-2 border-dark bg-white px-4 py-2"
 >
@@ -44,7 +48,11 @@
     </a>
 
     <div class="flex items-center gap-4">
-        <a class="btn btn-sm" href="/search"> Chercher une maison </a>
+        {#if data.user?.isGov}
+            <a class="btn btn-sm" href="/dashboard"> Panneau de bord </a>
+        {/if}
+
+        <a class="btn btn-sm" href="/"> Chercher une maison </a>
 
         {#if !data.user}
             <a class="btn btn-sm" href="/sign-in">Sign In</a>
@@ -61,9 +69,9 @@
 <div class="popup" id={popupSettings.popupId}>
     <div class="popup-arrow" id="arrow" />
 
-    <div class="card flex w-40 flex-col items-stretch py-2">
+    <div class="card flex w-40 flex-col items-stretch bg-background py-2">
         <a
-            class="flex items-center gap-1 p-1 px-2 transition-colors hover:bg-muted-foreground hover:text-pale"
+            class="flex items-center gap-1 p-1 px-2 transition-colors hover:bg-pale hover:text-pale"
             href="/profile"
         >
             <IconUser size={16} /> Profil
