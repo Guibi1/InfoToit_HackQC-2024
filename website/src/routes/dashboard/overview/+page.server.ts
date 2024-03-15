@@ -4,8 +4,13 @@ export const load = async ({ url }) => {
     const dataType = url.searchParams.get("type") ?? "service";
 
     const data_hexes = await getXataClient()
-        .db.GouvernementAnalysis.select(["hex.polygon", "score", "hex.id", "recommendation"])
-        .filter({ type: dataType })
+        .db.GouvernementAnalysis.select([
+            "hex.polygon",
+            "score",
+            "typeneeded",
+            "hex.id",
+            "recommendation",
+        ])
         .getAll();
 
     return {

@@ -7,26 +7,16 @@
     import { latLngToCell } from "h3-js";
 
     export let data;
-    import {
-        IconSchool,
-        IconShoppingBag,
-        IconLeaf,
-        IconBuildingBank,
-        IconBike,
-    } from "@tabler/icons-svelte";
-
+    
     //Add animation, just needs data and connect coordinates to hex id
 
-    import { popup, type PopupOptions } from "$lib/popup";
-    import { goto } from "$app/navigation";
-
+   
     let tab = -1;
     let selectedHex = "";
 
     function onMapClick(e: { detail: mapboxgl.MapMouseEvent }) {
         selectedHex = latLngToCell(e.detail.lngLat.lat, e.detail.lngLat.lng, 8);
     }
-
     let hexScore = [
         {
             color: "rgba(45, 250, 45, 0.4)",
@@ -62,51 +52,13 @@
 </script>
 
 <main class="relative left-12 flex flex-1">
-    <div
-        class="card absolute top-12 z-10 flex flex-col items-center gap-4 p-6 text-center md:items-start md:text-start"
-    >
-        <div>
-            {#if data.hex}
-                <div
-                    class="border-dark bg-pale mt-2 grid w-full grid-cols-5 gap-0.5 overflow-hidden rounded border-2"
-                >
-                    <a
-                        class={`flex flex-col items-center p-2 font-semibold ${tab == 0 ? "bg-pale" : "bg-white"}`}
-                        href="?type=service"
-                    >
-                        <IconBuildingBank /> Services
-                    </a>
-                    <a
-                        class={`flex flex-col items-center p-2 font-semibold ${tab == 1 ? "bg-pale" : "bg-white"}`}
-                        href="?type=transit"
-                    >
-                        <IconBike /> Transit
-                    </a>
-                    <a
-                        class={`flex flex-col items-center p-2 font-semibold ${tab == 2 ? "bg-pale" : "bg-white"}`}
-                        href="?type=ecole"
-                    >
-                        <IconSchool /> Écoles
-                    </a>
-                    <a
-                        class={`flex flex-col items-center p-2 font-semibold ${tab == 3 ? "bg-pale" : "bg-white"}`}
-                        href="?type=nature"
-                    >
-                        <IconLeaf /> Nature
-                    </a>
-                    <a
-                        class={`flex flex-col items-center p-2 font-semibold ${tab == 4 ? "bg-pale" : "bg-white"}`}
-                        href="?type=achat"
-                    >
-                        <IconShoppingBag /> Achats
-                    </a>
-                </div>
-
-                {#if data.dataType}
-                    <div class="card"></div>
-                {/if}
+    <div class="card absolute left-8 top-20 z-10">
+        <h1 class="h1 m-4">Suggestion</h1>
+        {#each data.hex as hex}
+            {#if hex.id == selectedHex}
+                <div class=" "><h1 class="h1">{hex.recommendation}</h1></div>
             {/if}
-        </div>
+        {/each}
     </div>
 </main>
 

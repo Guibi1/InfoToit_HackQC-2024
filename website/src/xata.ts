@@ -202,7 +202,8 @@ const tables = [
         defaultValue: '""',
       },
       { name: "hex", type: "link", link: { table: "h3_hexes" }, unique: true },
-      { name: "type", type: "int" },
+      { name: "score", type: "int" },
+      { name: "typeneeded", type: "int" },
     ],
   },
 ] as const;
