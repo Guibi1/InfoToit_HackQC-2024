@@ -123,6 +123,7 @@ const tables = [
     revLinks: [
       { column: "hex", table: "BusinessAnalysis" },
       { column: "hex", table: "HouseAnalysis" },
+      { column: "hex", table: "GouvernementAnalysis" },
     ],
   },
   {
@@ -197,6 +198,21 @@ const tables = [
         notNull: true,
         defaultValue: "0",
       },
+      { name: "info", type: "json", notNull: true, defaultValue: "{}" },
+    ],
+  },
+  {
+    name: "GouvernementAnalysis",
+    columns: [
+      {
+        name: "recommendation",
+        type: "string",
+        notNull: true,
+        defaultValue: '""',
+      },
+      { name: "hex", type: "link", link: { table: "h3_hexes" } },
+      { name: "score", type: "int", notNull: true, defaultValue: "0" },
+      { name: "type", type: "string", notNull: true, defaultValue: "service" },
     ],
   },
 ] as const;
@@ -243,6 +259,9 @@ export type BusinessAnalysisRecord = BusinessAnalysis & XataRecord;
 export type HouseAnalysis = InferredTypes["HouseAnalysis"];
 export type HouseAnalysisRecord = HouseAnalysis & XataRecord;
 
+export type GouvernementAnalysis = InferredTypes["GouvernementAnalysis"];
+export type GouvernementAnalysisRecord = GouvernementAnalysis & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
@@ -257,12 +276,13 @@ export type DatabaseSchema = {
   Addresses: AddressesRecord;
   BusinessAnalysis: BusinessAnalysisRecord;
   HouseAnalysis: HouseAnalysisRecord;
+  GouvernementAnalysis: GouvernementAnalysisRecord;
 };
 
 const DatabaseClient = buildClient();
 
 const defaultOptions = {
-  databaseURL: "https://Wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
+  databaseURL: "https://wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
 };
 
 export class XataClient extends DatabaseClient<DatabaseSchema> {

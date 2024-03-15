@@ -4,6 +4,8 @@
     import Popup from "$lib/MapBox/Popup.svelte";
     import Layer from "$lib/MapBox/Layer.svelte";
     import Source from "$lib/MapBox/Source.svelte";
+    import { latLngToCell } from "h3-js";
+
     export let data;
     import {
         IconSchool,
@@ -13,18 +15,16 @@
         IconBike,
     } from "@tabler/icons-svelte";
 
-
     //Add animation, just needs data and connect coordinates to hex id
 
     import { popup, type PopupOptions } from "$lib/popup";
     import { goto } from "$app/navigation";
 
     let tab = -1;
-    let lnglat;
+    let selectedHex = "";
 
     function onMapClick(e: { detail: mapboxgl.MapMouseEvent }) {
-        console.log(e.detail.lngLat);
-        lnglat=e.detail.lngLat;
+        selectedHex = latLngToCell(e.detail.lngLat.lat, e.detail.lngLat.lng, 8);
     }
 
     let hexScore = [
@@ -140,6 +140,7 @@
                         type: "fill",
                         paint: {
                             "fill-color": color,
+                            "fill-outline-color": "rgba(0,0,0,0.4)",
                         },
                     }}
                 ></Layer>
