@@ -14,6 +14,8 @@
         placement: "bottom",
     };
 
+    $: panelLeft = false;
+
     let suggestions: AddressSearchResult[] = [];
     let address = "";
     let selectedAddress: AddressSearchResult | null = null;
@@ -52,27 +54,33 @@
     }
 </script>
 
-<main class="relative flex flex-1 items-center justify-center">
+<div class="flex-1">
     <div
-        class="card absolute top-12 z-10 flex flex-col items-center gap-4 p-6 text-center md:items-start md:text-start"
+        class={`relative mt-4 flex items-start justify-end transition-[width] ${panelLeft ? "w-52" : "w-1/2"}`}
     >
-        <div>
-            <h1 class="h1 mb-0">Bienvenue</h1>
-            <span class="text-muted-foreground">Entrez une adresse pour commencer</span>
-        </div>
+        <main
+            class="card z-10 flex translate-x-1/2 flex-col items-center gap-4 p-6 text-center md:items-start md:text-start"
+        >
+            <div>
+                <h1 class="h1 mb-0">Bienvenue</h1>
+                <span class="text-muted-foreground">Entrez une adresse pour commencer</span>
+            </div>
 
-        <input
-            class="input"
-            type="search"
-            name="address"
-            bind:value={address}
-            use:popup={popupSettings}
-            on:input={onInput}
-        />
+            <input
+                class="input"
+                type="search"
+                name="address"
+                bind:value={address}
+                use:popup={popupSettings}
+                on:input={onInput}
+            />
 
-        <button on:click={submit} class="btn w-full" disabled={!selectedAddress}> Explorer </button>
+            <button on:click={submit} class="btn w-full" disabled={!selectedAddress}>
+                Explorer
+            </button>
+        </main>
     </div>
-</main>
+</div>
 
 <div class="absolute inset-0">
     <Map
@@ -121,14 +129,14 @@
     <div class="popup-arrow" id="arrow" />
 
     <ul
-        class="border-dark flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 bg-white py-2"
+        class="flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 border-dark bg-white py-2"
         tabindex="-1"
     >
         {#each suggestions as suggestion}
             <li class="contents">
                 <button
                     on:click={() => onSelect(suggestion)}
-                    class="hover:bg-pale flex flex-col px-4 py-1 text-start transition-colors"
+                    class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
                     type="button"
                 >
                     {suggestion.civic_no}
