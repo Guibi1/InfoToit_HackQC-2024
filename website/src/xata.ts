@@ -121,10 +121,6 @@ const tables = [
     ],
     revLinks: [
       { column: "hex", table: "BusinessAnalysis" },
-<<<<<<< HEAD
-      { column: "hex", table: "HouseAnalysis" },
-=======
->>>>>>> 0e825ef28f3fcca25e81edbb01ea22d4b0383f1c
       { column: "hex", table: "GouvernementAnalysis" },
     ],
   },
@@ -205,21 +201,8 @@ const tables = [
         notNull: true,
         defaultValue: '""',
       },
-      { name: "info", type: "json", notNull: true, defaultValue: "{}" },
-    ],
-  },
-  {
-    name: "GouvernementAnalysis",
-    columns: [
-      {
-        name: "recommendation",
-        type: "string",
-        notNull: true,
-        defaultValue: '""',
-      },
-      { name: "hex", type: "link", link: { table: "h3_hexes" } },
-      { name: "score", type: "int", notNull: true, defaultValue: "0" },
-      { name: "type", type: "string", notNull: true, defaultValue: "service" },
+      { name: "hex", type: "link", link: { table: "h3_hexes" }, unique: true },
+      { name: "type", type: "int" },
     ],
   },
 ] as const;
