@@ -22,6 +22,7 @@
     };
 
     let suggestions: AddressSearchResult[] = [];
+    $: console.log("🚀 ~ suggestions:", suggestions);
     let address = "";
     let selectedAddress: AddressSearchResult | null = null;
     let searchTimout: number;
@@ -51,12 +52,12 @@
 
     function onSelect(result: AddressSearchResult) {
         selectedAddress = result;
-        address = `${result.civic_no} ${result.street_name}${result.street_dir ? " " : ""}${result.street_dir}, ${result.mail_mun_name}, ${result.mail_postal_code}`;
+        address = `${result.Text}, ${result.Description}`;
     }
 
     function submit() {
         if (selectedAddress) {
-            goto(`?id=${selectedAddress.location.id}`);
+            goto(`?id=${selectedAddress.id}`);
         }
     }
 </script>
@@ -147,13 +148,10 @@
             zoom: 10,
         }}
     >
-        {#if selectedAddress?.location.longitude && selectedAddress.location.latitude}
+        {#if selectedAddress?.longitude && selectedAddress.latitude}
             {#key selectedAddress}
                 <Marker
-                    coordinates={[
-                        selectedAddress.location.longitude,
-                        selectedAddress.location.latitude,
-                    ]}
+                    coordinates={[selectedAddress.longitude, selectedAddress.latitude]}
                     zoomOnAdd={15}
                 />
             {/key}
@@ -207,13 +205,9 @@
                     class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
                     type="button"
                 >
-                    {suggestion.civic_no}
-                    {suggestion.street_type?.toLowerCase()}
-                    {suggestion.street_name}
-                    {suggestion.street_dir}
+                    {suggestion.Text}
                     <span class="text-sm opacity-60">
-                        {suggestion.mail_mun_name}
-                        {suggestion.mail_postal_code}
+                        {suggestion.Description}
                     </span>
                 </button>
             </li>
