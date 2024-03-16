@@ -11,7 +11,13 @@
 
     export let coordinates: LngLatLike;
     export let color: string | undefined = undefined;
-    export let zoomOnAdd: number | undefined = undefined;
+    export let easeOnAdd:
+        | Partial<
+              Omit<mapboxgl.EaseToOptions, "padding"> & {
+                  padding: Partial<mapboxgl.PaddingOptions>;
+              }
+          >
+        | undefined = undefined;
 
     const dispatch = createEventDispatcher<Record<"click", MouseEvent>>();
     setContext("marker", { getMarker: () => marker });
@@ -27,7 +33,14 @@
         const onClick = (e: MouseEvent) => dispatch("click", e);
 
         if (map) marker.addTo(map);
-        if (zoomOnAdd) map?.easeTo({ center: coordinates, zoom: zoomOnAdd });
+        if (easeOnAdd) {
+            map?.easeTo({
+                center: coordinates,
+                pitch: 50,
+                ...easeOnAdd,
+                padding: { top: 0, bottom: 0, left: 0, right: 0, ...easeOnAdd.padding },
+            });
+        }
 
         marker.getElement().addEventListener("mousedown", onClick);
 

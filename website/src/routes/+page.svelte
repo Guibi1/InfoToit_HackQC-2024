@@ -243,7 +243,7 @@
             {#key selectedAddress}
                 <Marker
                     coordinates={[selectedAddress.longitude, selectedAddress.latitude]}
-                    zoomOnAdd={15}
+                    easeOnAdd={{ zoom: 18 }}
                 />
             {/key}
         {/if}
@@ -253,7 +253,7 @@
                 <Marker
                     coordinates={[data.house.location.longitude, data.house.location.latitude]}
                     color="#b40219"
-                    zoomOnAdd={13.5}
+                    easeOnAdd={{ padding: { left: 300 }, zoom: 16 }}
                 />
             {/key}
         {/if}
@@ -275,30 +275,6 @@
                 </Marker>
             {/key}
         {/each}
-
-        <Source
-            data={{
-                type: "geojson",
-                data: { type: "FeatureCollection", features: data.h3_hexes.map((h) => h.polygon) },
-            }}
-        >
-            <Layer
-                layer={{
-                    type: "fill",
-                    layout: {
-                        visibility: "visible",
-                    },
-                    source: {
-                        type: "vector",
-                        url: "mapbox://mapbox.3o7ubwm8",
-                    },
-                    paint: {
-                        "fill-color": "rgba(71,153,80,0.4)",
-                        "fill-outline-color": "rgba(0,0,0,0.2)",
-                    },
-                }}
-            />
-        </Source>
     </Map>
 </div>
 
