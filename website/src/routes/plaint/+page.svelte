@@ -4,7 +4,6 @@
     import Marker from "$lib/MapBox/Marker.svelte";
     import MultiSelect from "$lib/MultiSelect.svelte";
     import { messageCategories } from "$lib/consts";
-    import { popup, type PopupOptions } from "$lib/popup";
     import { Control, Description, Field, FieldErrors, Label } from "formsnap";
     import { superForm } from "sveltekit-superforms/client";
 
@@ -22,21 +21,6 @@
     function onMapClick(e: { detail: mapboxgl.MapMouseEvent }) {
         $formData.coordinate.lon = e.detail.lngLat.lng;
         $formData.coordinate.lat = e.detail.lngLat.lat;
-    }
-
-    const popupSettings: PopupOptions = {
-        popupId: "popupCategoryAutocomplete",
-        placement: "bottom",
-    };
-
-    let suggestions: string[] = [];
-
-    async function onInput() {
-        suggestions = messageCategories.filter((message) => message.includes($formData.category));
-    }
-
-    function onSelect(result: any) {
-        $formData.category = result;
     }
 </script>
 
@@ -138,26 +122,3 @@
         </div>
     </div>
 </main>
-
-<div class="popup" id={popupSettings.popupId}>
-    <div class="popup-arrow" id="arrow" />
-
-    <ul
-        class="flex max-h-48 w-80 flex-col gap-1 overflow-y-auto rounded border-2 border-dark bg-white py-2"
-        tabindex="-1"
-    >
-        {#each suggestions as suggestion}
-            <li class="contents">
-                <button
-                    on:click={() => onSelect(suggestion)}
-                    class="flex flex-col px-4 py-1 text-start transition-colors hover:bg-pale"
-                    type="button"
-                >
-                    {suggestion}
-                </button>
-            </li>
-        {:else}
-            <li class="autocomplete-item p-2">Aucun résultat</li>
-        {/each}
-    </ul>
-</div>
