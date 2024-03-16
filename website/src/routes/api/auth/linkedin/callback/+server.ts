@@ -72,6 +72,7 @@ export const GET = async ({ locals, cookies, url, fetch }) => {
                 name: linkedinUserResult.name,
                 email: linkedinUserResult.email,
                 avatar: linkedinUserResult.picture,
+                isGov: true,
             });
             userId = user.id;
         }

@@ -69,6 +69,7 @@ export const GET = async ({ locals, cookies, url, fetch }) => {
                 name: githubUserResult.name,
                 email: githubUserResult.email,
                 avatar: githubUserResult.avatar_url,
+                isGov: true,
             });
             userId = user.id;
         }

@@ -72,6 +72,7 @@ export const GET = async ({ locals, cookies, url, fetch }) => {
                 name: discordUserResult.global_name ?? discordUserResult.username,
                 email: discordUserResult.email,
                 avatar: `https://cdn.discordapp.com/avatars/${discordUserResult.id}/${discordUserResult.avatar}.webp`,
+                isGov: true,
             });
             userId = user.id;
         }
