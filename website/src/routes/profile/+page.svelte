@@ -69,7 +69,7 @@
                     {#each data.savedHomes as home}
                         <a
                             class="card flex-row gap-2 p-2"
-                            href={`/?id=${home.address?.location?.id}`}
+                            href={`/?id=${home.address?.id}`}
                         >
                             <div
                                 class="flex h-24 w-24 items-center justify-center overflow-hidden rounded"

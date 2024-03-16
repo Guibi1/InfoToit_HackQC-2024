@@ -2,8 +2,8 @@ import { getXataClient } from "$xata";
 import { latLngToCell } from "h3-js";
 
 export const load = async ({ locals, url }) => {
-    const locationId = url.searchParams.get("id");
-    if (!locationId) return {};
+    const id = url.searchParams.get("id");
+    if (!id) return {};
 
     const house = await getXataClient()
         .db.Addresses.select([
@@ -18,7 +18,7 @@ export const load = async ({ locals, url }) => {
             "location.longitude",
             "location.latitude",
         ])
-        .filter({ location: locationId })
+        .filter({ id })
         .getFirst();
 
     if (!house || !house.location) return {};

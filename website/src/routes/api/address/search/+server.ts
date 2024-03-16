@@ -47,7 +47,7 @@ export const POST = async ({ request }) => {
             }))
             .map(({ r, a }) => ({
                 ...r,
-                id: a?.location?.id,
+                id: a?.id,
                 longitude: a?.location?.longitude,
                 latitude: a?.location?.latitude,
             }))
