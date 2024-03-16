@@ -75,7 +75,7 @@
 
     <div class="mb-4 hidden flex-1 flex-col gap-4 md:flex">
         <button class="btn" on:click={() => (showOtherPlaints = !showOtherPlaints)}>
-            {showOtherPlaints ? "Cacher les plaintes" : "Montrer les plaintes"}
+            {showOtherPlaints ? "Cacher les pleintes" : "Montrer les pleintes"}
         </button>
 
         <div class="card relative flex-1">

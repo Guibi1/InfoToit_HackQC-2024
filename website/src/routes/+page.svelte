@@ -220,7 +220,7 @@
                     </ul>
 
                     <a href="/" class="btn btn-flat items-center gap-1">
-                        <IconArrowLeft size={16} /> Refaire un recherche
+                        <IconArrowLeft size={16} /> Refaire une recherche
                     </a>
                 {/if}
             </main>
