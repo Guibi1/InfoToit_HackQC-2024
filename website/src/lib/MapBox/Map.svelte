@@ -30,7 +30,7 @@
     onMount(() => {
         map = new mapboxgl.Map({
             container,
-            style: "mapbox://styles/mapbox/streets-v11",
+            style: "mapbox://styles/bababouille1/cltuj887v01rz01p50thz7myg",
             ...options,
         });
 
