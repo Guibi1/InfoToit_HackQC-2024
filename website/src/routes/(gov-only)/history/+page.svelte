@@ -21,7 +21,7 @@
     <div class="mb-4 flex items-center justify-between gap-4 md:justify-start">
         <h1 class="h1 mb-0">Historique</h1>
 
-        <a href="/dashboard" class="btn btn-sm btn-flat items-center gap-1">
+        <a href="/messages" class="btn btn-sm btn-flat items-center gap-1">
             <IconArrowLeft size={16} /> Revenir
             <span class="hidden sm:inline-block"> au tableau de bord </span>
         </a>

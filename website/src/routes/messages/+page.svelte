@@ -256,8 +256,8 @@
     {#if data.user.isGov}
         <div class="card absolute right-6 z-10 items-stretch justify-center gap-2 p-4 text-center">
             <div class="mb-2 text-center">
-                <h1 class="h1 mb-0">Messages citoyens</h1>
-                <p class="text-muted-foreground">Informez votre ville et vos concitoyens</p>
+                <h1 class="h1 mb-0">Tableau de bord Gouvernemental</h1>
+                <p class="text-muted-foreground">Renseignez-vous sur les données de votre ville</p>
             </div>
 
             <a href="/history" class="btn h-14 self-center">Explorer l'historique des messages</a>
