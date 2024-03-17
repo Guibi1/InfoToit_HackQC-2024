@@ -20,6 +20,7 @@ const tables = [
       { column: "user", table: "SavedHouses" },
       { column: "user", table: "OAuth" },
       { column: "user", table: "Sessions" },
+      { column: "user", table: "VotesMessages" },
     ],
   },
   {
@@ -33,6 +34,7 @@ const tables = [
       { name: "lat", type: "float", defaultValue: "0" },
       { name: "category", type: "string", defaultValue: "Aucune" },
     ],
+    revLinks: [{ column: "message", table: "VotesMessages" }],
   },
   {
     name: "SavedHouses",
@@ -184,6 +186,7 @@ const tables = [
       { name: "score", type: "float" },
       { name: "count", type: "int" },
       { name: "hex", type: "link", link: { table: "h3_hexes" }, unique: true },
+      { name: "vacant", type: "json" },
     ],
   },
   {
@@ -204,6 +207,13 @@ const tables = [
       { name: "hex", type: "link", link: { table: "h3_hexes" }, unique: true },
       { name: "score", type: "int" },
       { name: "typeneeded", type: "int" },
+    ],
+  },
+  {
+    name: "VotesMessages",
+    columns: [
+      { name: "message", type: "link", link: { table: "Messages" } },
+      { name: "user", type: "link", link: { table: "Users" } },
     ],
   },
 ] as const;
@@ -253,6 +263,9 @@ export type HouseAnalysisRecord = HouseAnalysis & XataRecord;
 export type GouvernementAnalysis = InferredTypes["GouvernementAnalysis"];
 export type GouvernementAnalysisRecord = GouvernementAnalysis & XataRecord;
 
+export type VotesMessages = InferredTypes["VotesMessages"];
+export type VotesMessagesRecord = VotesMessages & XataRecord;
+
 export type DatabaseSchema = {
   Users: UsersRecord;
   Messages: MessagesRecord;
@@ -268,12 +281,13 @@ export type DatabaseSchema = {
   BusinessAnalysis: BusinessAnalysisRecord;
   HouseAnalysis: HouseAnalysisRecord;
   GouvernementAnalysis: GouvernementAnalysisRecord;
+  VotesMessages: VotesMessagesRecord;
 };
 
 const DatabaseClient = buildClient();
 
 const defaultOptions = {
-  databaseURL: "https://Wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
+  databaseURL: "https://wolfgang-p564tb.us-east-1.xata.sh/db/InfoToit",
 };
 
 export class XataClient extends DatabaseClient<DatabaseSchema> {

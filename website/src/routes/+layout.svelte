@@ -1,19 +1,21 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
+    import Logo from "$lib/assets/Logo.svelte";
+    import LogoSimple from "$lib/assets/LogoSimple.svelte";
     import { popup, type PopupOptions } from "$lib/popup";
-    import "../app.postcss";
-    import { IconUser, IconSettings, IconLogout } from "@tabler/icons-svelte";
+    import { IconLogout, IconSettings, IconUser } from "@tabler/icons-svelte";
     import {
         CategoryScale,
         Chart as ChartJS,
         Filler,
         Legend,
-        LineElement,
         LinearScale,
+        LineElement,
         PointElement,
         Title,
         Tooltip,
     } from "chart.js";
+    import "../app.postcss";
 
     ChartJS.register(
         Filler,
@@ -42,19 +44,15 @@
     class="sticky inset-2 z-50 m-2 flex justify-between rounded-lg border-2 border-dark bg-white px-4 py-2"
 >
     <a class="flex items-center gap-2" href="/">
-        <strong class="text-xl">
-            InfoToit<small class="text-sm">.ca</small>
-        </strong>
+        <LogoSimple size={36} />
     </a>
 
     <div class="flex items-center gap-4">
-        {#if data.user?.isGov}
-            <a class="btn btn-sm" href="/dashboard"> Panneau de bord </a>
-        {/if}
-
-        <a class="btn btn-sm" href="/plaint"> Signaler à ma ville </a>
+        <a class="btn btn-sm" href="/commerce"> Commerce </a>
 
         <a class="btn btn-sm" href="/"> Chercher une maison </a>
+
+        <a class="btn btn-sm" href="/messages"> Messages citoyens </a>
 
         {#if !data.user}
             <a class="btn btn-sm" href="/sign-in">Sign In</a>
@@ -67,6 +65,27 @@
 </div>
 
 <slot />
+
+<div
+    class="absolute inset-0 z-[999999999999] flex animate-[fade_1s_3s_forwards] items-center justify-center overflow-hidden bg-pale"
+>
+    <Logo size={120} />
+
+    <style>
+        @keyframes fade {
+            from {
+                opacity: 1;
+            }
+            99% {
+                opacity: 0;
+            }
+            to {
+                opacity: 0;
+                height: 0px;
+            }
+        }
+    </style>
+</div>
 
 <div class="popup" id={popupSettings.popupId}>
     <div class="popup-arrow" id="arrow" />

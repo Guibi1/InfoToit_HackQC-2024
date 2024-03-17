@@ -17,12 +17,13 @@ export type PopupOptions = {
 
 export function popup(node: HTMLElement, { popupId, arrowId, placement }: PopupOptions) {
     const go = () => {
-        console.log("🚀 ~ popup ~ node:", node);
         const floatingEl = document.querySelector<HTMLElement>(`#${popupId ?? "popup"}`);
         const arrowEl = floatingEl?.querySelector<HTMLElement>(`#${arrowId ?? "arrow"}`);
         if (!floatingEl) {
             throw "Missing popover element";
         }
+
+        document.body.appendChild(floatingEl);
 
         const hide = () =>
             Object.assign(floatingEl.style, { "opacity": `0%`, "z-index": `-99999` });

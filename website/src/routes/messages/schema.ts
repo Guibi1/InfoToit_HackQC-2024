@@ -1,8 +1,6 @@
 import { messageCategories } from "$lib/consts";
 import { z } from "zod";
 
-
-
 export const schema = z.object({
     title: z.string().min(2),
     category: z.enum(messageCategories).default("Autre - Communications"),
