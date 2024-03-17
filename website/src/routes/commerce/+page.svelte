@@ -2,23 +2,21 @@
     import Layer from "$lib/MapBox/Layer.svelte";
     import Map from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
+    import Popup from "$lib/MapBox/Popup.svelte";
     import Source from "$lib/MapBox/Source.svelte";
     import MultiSelect from "$lib/MultiSelect.svelte";
-    import Popup from "$lib/MapBox/Popup.svelte";
     import { businessCategories } from "$lib/consts";
+    import { IconBuildingStore, IconLoader2, IconPlus } from "@tabler/icons-svelte";
     import { Control, Field, Label } from "formsnap";
     import { superForm } from "sveltekit-superforms";
-    import type { PageData } from "./$types.js";
 
-    export let data: PageData;
+    export let data;
     export let form;
-
-    let selectedMessage = "";
 
     const superform = superForm(data.form, {
         dataType: "json",
     });
-    const { form: formData, enhance } = superform;
+    const { form: formData, enhance, submitting } = superform;
 
     function onMapClick(e: { detail: mapboxgl.MapMouseEvent }) {
         $formData.long = e.detail.lngLat.lng;
@@ -26,30 +24,38 @@
     }
 </script>
 
-<main class="z-10 mx-auto flex flex-col">
-    <div class=" card mx-auto flex flex-col gap-1">
-        <h1 class="h1 m-2">Rechercherce d'emplacement pour votre commerce</h1>
-        <form class="m-6" method="POST" use:enhance>
-            <Field form={superform} name="type">
-                <Control let:attrs>
-                    <Label class="label">Type d'entreprise</Label>
-                    <MultiSelect
-                        name="Entreprise"
-                        choices={businessCategories}
-                        maxSelection={1}
-                        selected={[$formData.type]}
-                        on:change={(c) => ($formData.type = c.detail[0])}
-                    >
-                        {$formData.type}
-                    </MultiSelect>
-                </Control>
-            </Field>
-            <button class="btn">Rechercher</button>
-        </form>
-    </div>
+<main class="card z-10 m-8 flex w-[400px] flex-col gap-2 p-4 text-center">
+    <h1 class="h1">Rechercherce d'emplacements optimaux pour votre commerce</h1>
+
+    <p class="px-6">Appuyez sur la carte pour positioner la région que vous désirez</p>
+
+    <form class="flex w-full flex-col items-stretch gap-1 text-start" method="POST" use:enhance>
+        <Field form={superform} name="type">
+            <Control let:attrs>
+                <Label class="label">Type d'entreprise</Label>
+
+                <MultiSelect
+                    name="Entreprise"
+                    choices={businessCategories}
+                    maxSelection={1}
+                    selected={[$formData.type]}
+                    on:change={(c) => ($formData.type = c.detail[0])}
+                >
+                    {$formData.type}
+                </MultiSelect>
+            </Control>
+        </Field>
+
+        <button class="btn mx-auto mt-4" disabled={$submitting || !$formData.long}>
+            {#if $submitting}
+                <IconLoader2 class="animate-spin" />
+            {/if}
+            Rechercher
+        </button>
+    </form>
 </main>
 
-<div class="absolute inset-0 z-0">
+<div class="absolute inset-0">
     <Map
         on:click={onMapClick}
         options={{
@@ -77,8 +83,9 @@
                     layer={{
                         type: "fill",
                         paint: {
-                            "fill-color": "rgba(71,153,80,0.4)",
-                            "fill-outline-color": "rgba(0,0,0,0.2)",
+                            "fill-color": "#16a34a",
+                            "fill-opacity": 0.4,
+                            "fill-outline-color": "#44403c",
                         },
                     }}
                 />
@@ -86,16 +93,30 @@
         {/if}
 
         {#if $formData.long && $formData.lat}
-            {#key $formData.lat && $formData.long}
-                <Marker coordinates={[$formData.long, $formData.lat]} />
+            {#key $formData.lat + $formData.long}
+                <Marker
+                    coordinates={[$formData.long, $formData.lat]}
+                    icon={IconPlus}
+                    color="#ea580c"
+                    easeOnAdd={{ pitch: 0, zoom: 13 }}
+                    animate
+                />
             {/key}
         {/if}
 
         {#each form?.commerces ?? [] as commerce}
-            <Marker coordinates={[commerce.lng, commerce.lat]}>
+            <Marker
+                coordinates={[commerce.lng, commerce.lat]}
+                icon={IconBuildingStore}
+                color="#e11d48"
+                animate
+            >
                 {#if commerce.type}
                     <Popup>
-                        <div>{commerce.type}</div>
+                        <h1 class="text-sm font-semibold">{commerce.address}</h1>
+                        <h2 class="text-xs text-muted-foreground">{commerce.postal_code}</h2>
+
+                        <p>{commerce.type}</p>
                     </Popup>
                 {/if}
             </Marker>

@@ -182,7 +182,7 @@
             {:else}
                 <div class="text-center">
                     <h1 class="h1 mb-0">Créer un message</h1>
-                    <p>Appuyez sur la carte pour positioner votre message</p>
+                    <h2>Appuyez sur la carte pour positioner votre message</h2>
                 </div>
 
                 <form class="flex w-full flex-col gap-1" method="POST" use:enhance>
@@ -257,7 +257,7 @@
         <div class="card absolute right-6 z-10 items-stretch justify-center gap-2 p-4 text-center">
             <div class="mb-2 text-center">
                 <h1 class="h1 mb-0">Messages citoyens</h1>
-                <p class="text-muted-foreground">Informez votre ville et vos concitoyens</p>
+                <h2 class="text-muted-foreground">Informez votre ville et vos concitoyens</h2>
             </div>
 
             <a href="/history" class="btn h-14 self-center">Explorer l'historique des messages</a>
