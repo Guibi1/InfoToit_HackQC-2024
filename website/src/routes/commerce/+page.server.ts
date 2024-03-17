@@ -32,6 +32,11 @@ export const actions = {
             .filter({ id: { $any: hexes } })
             .getAll();
 
-        return { form, hexes: polygons };
+        const commerces = await getXataClient()
+            .db.BusinessAnalysis.select(["vacant"])
+            .filter({ id: { $any: hexes } })
+            .getAll();
+
+        return { form, hexes: polygons, commerces: commerces.flatMap((c) => c.vacant) };
     },
 };

@@ -1,15 +1,14 @@
 <script lang="ts">
-    import { superForm } from "sveltekit-superforms";
-    import { Control, Field, Label } from "formsnap";
-    import { zodClient } from "sveltekit-superforms/adapters";
-    import type { PageData } from "./$types.js";
-    import { schema } from "./schema.js";
-    import { businessCategories } from "$lib/consts";
-    import MultiSelect from "$lib/MultiSelect.svelte";
+    import Layer from "$lib/MapBox/Layer.svelte";
     import Map from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
-    import Layer from "$lib/MapBox/Layer.svelte";
     import Source from "$lib/MapBox/Source.svelte";
+    import MultiSelect from "$lib/MultiSelect.svelte";
+    import Popup from "$lib/MapBox/Popup.svelte";
+    import { businessCategories } from "$lib/consts";
+    import { Control, Field, Label } from "formsnap";
+    import { superForm } from "sveltekit-superforms";
+    import type { PageData } from "./$types.js";
 
     export let data: PageData;
     export let form;
@@ -91,5 +90,15 @@
                 <Marker coordinates={[$formData.long, $formData.lat]} />
             {/key}
         {/if}
+
+        {#each form?.commerces ?? [] as commerce}
+            <Marker coordinates={[commerce.lng, commerce.lat]}>
+                {#if commerce.type}
+                    <Popup>
+                        <div>{commerce.type}</div>
+                    </Popup>
+                {/if}
+            </Marker>
+        {/each}
     </Map>
 </div>
