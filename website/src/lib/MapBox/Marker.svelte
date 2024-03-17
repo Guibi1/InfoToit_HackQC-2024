@@ -49,10 +49,11 @@
             });
         }
 
-        marker.getElement().addEventListener("mousedown", onClick);
+        el.addEventListener("mousedown", onClick);
 
         return () => {
-            marker.getElement().removeEventListener("mousedown", onClick);
+            el.removeEventListener("mousedown", onClick);
+            el.remove();
             marker.remove();
         };
     });

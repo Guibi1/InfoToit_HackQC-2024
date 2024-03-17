@@ -1,17 +1,17 @@
 <script context="module" lang="ts">
     const markersData: Record<any, { icon: typeof IconGavel; color: string }> = {
         "Casernes": { icon: IconFireExtinguisher, color: "#dc2626" },
-        "Lieux divertissements": { icon: IconMasksTheater, color: "#f43f5e" },
+        "Lieux de divertissements": { icon: IconMasksTheater, color: "#f43f5e" },
         "Écocentres": { icon: IconRecycle, color: "#713f12" },
         "Lieux culturels": { icon: IconBuildingChurch, color: "#a21caf" },
-        "Poste de quartiers": { icon: IconGavel, color: "#075985" },
+        "Poste de quartier": { icon: IconGavel, color: "#075985" },
         "Arrêts d'autobus": { icon: IconBus, color: "#0284c7" },
         "Réseau cyclable": { icon: IconBike, color: "#059669" },
-        "Collèges": { icon: IconBackpack, color: "#4d7c0f" },
+        "Collège": { icon: IconBackpack, color: "#4d7c0f" },
         "Garderies": { icon: IconHorseToy, color: "#f87171" },
-        "Universités": { icon: IconMicroscope, color: "#8b5cf6" },
+        "Université": { icon: IconMicroscope, color: "#8b5cf6" },
         "Arbres": { icon: IconTree, color: "#15803d" },
-        "Achat alimentaire": { icon: IconCarrot, color: "#4f46e5" },
+        "Achats alimentaire": { icon: IconCarrot, color: "#4f46e5" },
         "Divertissement": { icon: IconBeer, color: "#d97706" },
         "Restauration": { icon: IconToolsKitchen2, color: "#0d9488" },
         "Services santés": { icon: IconHeartbeat, color: "#db2777" },
@@ -26,9 +26,12 @@
 <script lang="ts">
     import type { AddressSearchResult } from "$api/address/search/+server";
     import { goto } from "$app/navigation";
+    import { PUBLIC_MAPBOX_KEY } from "$env/static/public";
+    import Layer from "$lib/MapBox/Layer.svelte";
     import Map from "$lib/MapBox/Map.svelte";
     import Marker from "$lib/MapBox/Marker.svelte";
     import Popup from "$lib/MapBox/Popup.svelte";
+    import Source from "$lib/MapBox/Source.svelte";
     import { popup, type PopupOptions } from "$lib/popup";
     import {
         IconArrowLeft,
@@ -54,14 +57,18 @@
         IconShoppingBag,
         IconToolsKitchen2,
         IconTree,
+        IconWalk,
         IconX,
     } from "@tabler/icons-svelte";
+    import type { Geometry } from "geojson";
 
     export let data;
 
     let address = "";
     let selectedAddress: AddressSearchResult | null = null;
     let loadingSubmit = false;
+    let selectedWalk = "";
+    let timeToWalk: Record<string, { mins: number; geo: Geometry }> = {};
 
     let suggestions: AddressSearchResult[] = [];
     let searchAbort = new AbortController();
@@ -105,8 +112,25 @@
             loadingSubmit = false;
             tab = 0;
             selectedAddress = null;
+            selectedWalk = "";
             address = "";
         }
+    }
+
+    function setTab(newTab: number) {
+        tab = newTab;
+        selectedWalk = "";
+    }
+
+    async function getTTW(destination: [number, number]) {
+        const res = await fetch(
+            `https://api.mapbox.com/directions/v5/mapbox/walking/${data.house?.location?.longitude},${data.house?.location?.latitude};${destination[1]},${destination[0]}?geometries=geojson&access_token=${PUBLIC_MAPBOX_KEY}`
+        ).then((res) => res.json());
+        timeToWalk[destination.join(",")] = {
+            mins: Math.ceil(res.routes[0].duration / 60),
+            geo: res.routes[0].geometry,
+        };
+        selectedWalk = destination.join(",");
     }
 
     async function saveHouse(id: string) {
@@ -185,31 +209,31 @@
                         <div class="grid w-full grid-cols-5 gap-0.5">
                             <button
                                 class={`flex flex-col items-center p-2 font-semibold ${tab == 0 ? "bg-white" : "bg-pale"}`}
-                                on:click={() => (tab = 0)}
+                                on:click={() => setTab(0)}
                             >
                                 <IconBuildingBank /> Services
                             </button>
                             <button
                                 class={`flex flex-col items-center p-2 font-semibold ${tab == 1 ? "bg-white" : "bg-pale"}`}
-                                on:click={() => (tab = 1)}
+                                on:click={() => setTab(1)}
                             >
                                 <IconBike /> Transit
                             </button>
                             <button
                                 class={`flex flex-col items-center p-2 font-semibold ${tab == 2 ? "bg-white" : "bg-pale"}`}
-                                on:click={() => (tab = 2)}
+                                on:click={() => setTab(2)}
                             >
                                 <IconSchool /> Écoles
                             </button>
                             <button
                                 class={`flex flex-col items-center p-2 font-semibold ${tab == 3 ? "bg-white" : "bg-pale"}`}
-                                on:click={() => (tab = 3)}
+                                on:click={() => setTab(3)}
                             >
                                 <IconLeaf /> Nature
                             </button>
                             <button
                                 class={`flex flex-col items-center p-2 font-semibold ${tab == 4 ? "bg-white" : "bg-pale"}`}
-                                on:click={() => (tab = 4)}
+                                on:click={() => setTab(4)}
                             >
                                 <IconShoppingBag /> Achats
                             </button>
@@ -278,6 +302,7 @@
                 [-73.3, 45.7556], // Northeast corner: [longitude, latitude]
             ],
         }}
+        on:click={() => (selectedWalk = "")}
     >
         {#if selectedAddress?.longitude && selectedAddress.latitude}
             {#key selectedAddress}
@@ -308,24 +333,54 @@
                     {#key point}
                         <Marker
                             coordinates={[point.coordinates[1], point.coordinates[0]]}
+                            on:click={() => getTTW(point.coordinates)}
                             {...markersData[name]}
                             animate
                         >
-                            <Popup>
-                                <div class="flex flex-col">
-                                    <span class="font-semibold">
-                                        {point.name}
-                                    </span>
+                            {#if point.name}
+                                <Popup>
+                                    <div class="flex flex-col">
+                                        <div class="font-semibold">
+                                            {point.name}
+                                        </div>
 
-                                    {#if point.type}
-                                        {point.type}
-                                    {/if}
-                                </div>
-                            </Popup>
+                                        {#if point.type}
+                                            <p>
+                                                {point.type}
+                                            </p>
+                                        {/if}
+
+                                        {#if timeToWalk[point.coordinates.join(",")]}
+                                            <p class="flex items-center gap-1">
+                                                <IconWalk size={12} />
+                                                {timeToWalk[point.coordinates.join(",")].mins} minutes
+                                                de marche
+                                            </p>
+                                        {/if}
+                                    </div>
+                                </Popup>
+                            {/if}
                         </Marker>
                     {/key}
                 {/each}
             {/each}
+
+            {#if selectedWalk in timeToWalk}
+                {#key selectedWalk}
+                    <Source data={{ type: "geojson", data: timeToWalk[selectedWalk].geo }}>
+                        <Layer
+                            layer={{
+                                type: "line",
+                                paint: {
+                                    "line-color": "#0000ff",
+                                    "line-width": 6,
+                                    "line-blur": 1,
+                                },
+                            }}
+                        />
+                    </Source>
+                {/key}
+            {/if}
         {/if}
     </Map>
 </div>
