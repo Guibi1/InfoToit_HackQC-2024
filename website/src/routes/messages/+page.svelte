@@ -182,7 +182,7 @@
             {:else}
                 <div class="text-center">
                     <h1 class="h1 mb-0">Créer un message</h1>
-                    <p>Appuyez sur la carte pour positioner votre message</p>
+                    <h2>Appuyez sur la carte pour positioner votre message</h2>
                 </div>
 
                 <form class="flex w-full flex-col gap-1" method="POST" use:enhance>
