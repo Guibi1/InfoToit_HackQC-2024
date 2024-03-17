@@ -60,7 +60,7 @@
             <p>Importance: {selectedHex.score}/5</p>
         {/if}
 
-        <a href="/dashboard" class="btn btn-sm btn-flat mx-auto mt-4 items-center gap-1">
+        <a href="/messages" class="btn btn-sm btn-flat mx-auto mt-4 items-center gap-1">
             <IconArrowLeft size={16} /> Revenir
             <span class="hidden sm:inline-block"> au tableau de bord </span>
         </a>
