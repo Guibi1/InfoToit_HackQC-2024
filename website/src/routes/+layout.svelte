@@ -67,7 +67,7 @@
 <slot />
 
 <div
-    class="absolute inset-0 z-[999999999999] flex animate-[fade_1s_3s_forwards] items-center justify-center overflow-hidden bg-pale"
+    class="absolute inset-0 z-[999999999999] flex animate-[fade_0.5s_2.5s_forwards] items-center justify-center overflow-hidden bg-pale"
 >
     <Logo size={120} />
 
