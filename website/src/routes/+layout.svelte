@@ -1,5 +1,6 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
+    import LogoSimple from "$lib/assets/LogoSimple.svelte";
     import { popup, type PopupOptions } from "$lib/popup";
     import "../app.postcss";
     import { IconUser, IconSettings, IconLogout } from "@tabler/icons-svelte";
@@ -42,9 +43,7 @@
     class="sticky inset-2 z-50 m-2 flex justify-between rounded-lg border-2 border-dark bg-white px-4 py-2"
 >
     <a class="flex items-center gap-2" href="/">
-        <strong class="text-xl">
-            InfoToit<small class="text-sm">.ca</small>
-        </strong>
+        <LogoSimple size={36} />
     </a>
 
     <div class="flex items-center gap-4">
