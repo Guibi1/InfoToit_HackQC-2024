@@ -1,3 +1,17 @@
+<script context="module" lang="ts">
+    function makeid(length: number) {
+        let result = "";
+        const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < length) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            counter += 1;
+        }
+        return result;
+    }
+</script>
+
 <script lang="ts" generics="T extends number | string">
     import { createEventDispatcher } from "svelte";
     import { popup, type PopupOptions } from "$lib/popup";
@@ -12,7 +26,7 @@
     let searchResults: T[] = [...choices];
 
     const popupSettings: PopupOptions = {
-        popupId: `${name}MultiselectPopup`,
+        popupId: `${name}MultiselectPopup-${makeid(10)}`,
         placement: "bottom",
     };
 
@@ -33,7 +47,7 @@
     }
 </script>
 
-<button type="button" class="input w-full" use:popup={popupSettings}>
+<button type="button" class="btn btn-flat w-full" use:popup={popupSettings}>
     <slot />
 </button>
 

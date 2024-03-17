@@ -104,6 +104,7 @@
             await goto(`?id=${selectedAddress.id}`);
             loadingSubmit = false;
             tab = 0;
+            selectedAddress = null;
         }
     }
 
@@ -284,6 +285,7 @@
                     easeOnAdd={{ zoom: 18 }}
                     icon={IconHome}
                     color="#2563eb"
+                    animate
                 />
             {/key}
         {/if}
@@ -306,6 +308,7 @@
                         <Marker
                             coordinates={[point.coordinates[1], point.coordinates[0]]}
                             {...markersData[name]}
+                            animate
                         >
                             <Popup>
                                 <div class="flex flex-col">

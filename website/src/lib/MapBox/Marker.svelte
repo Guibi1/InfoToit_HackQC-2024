@@ -14,6 +14,7 @@
     export let coordinates: LngLatLike;
     export let icon: Icon["new"] = IconX;
     export let color: string | undefined = undefined;
+    export let animate = false;
     export let easeOnAdd:
         | Partial<
               Omit<mapboxgl.EaseToOptions, "padding"> & {
@@ -29,7 +30,7 @@
     const map = mapContext.getMap();
 
     const el = document.createElement("div");
-    new PinElement({ target: el, props: { icon, color } });
+    new PinElement({ target: el, props: { icon, color, animate } });
 
     const marker = new mapboxgl.Marker(el, { color }).setLngLat(coordinates);
 

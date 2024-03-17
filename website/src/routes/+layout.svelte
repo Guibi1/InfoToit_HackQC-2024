@@ -52,7 +52,7 @@
             <a class="btn btn-sm" href="/dashboard"> Panneau de bord </a>
         {/if}
 
-        <a class="btn btn-sm" href="/plaint"> Signaler à ma ville </a>
+        <a class="btn btn-sm" href="/messages"> Signaler à ma ville </a>
 
         <a class="btn btn-sm" href="/"> Chercher une maison </a>
 
@@ -69,7 +69,7 @@
 <slot />
 
 <div
-    class="absolute inset-0 z-[999999999999] flex animate-[fade_1s_4s_forwards] items-center justify-center bg-pale"
+    class="absolute inset-0 z-[999999999999] flex animate-[fade_1s_3s_forwards] items-center justify-center overflow-hidden bg-pale"
 >
     <Logo size={120} />
 

@@ -23,6 +23,8 @@ export function popup(node: HTMLElement, { popupId, arrowId, placement }: PopupO
             throw "Missing popover element";
         }
 
+        document.body.appendChild(floatingEl);
+
         const hide = () =>
             Object.assign(floatingEl.style, { "opacity": `0%`, "z-index": `-99999` });
         const show = () =>

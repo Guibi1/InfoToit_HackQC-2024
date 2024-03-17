@@ -5,20 +5,19 @@ import { zod } from "sveltekit-superforms/adapters";
 import { schema } from "./schema";
 
 export const load = async ({ locals, depends }) => {
-    if (!locals.user) redirect(302, "/");
+    if (!locals.user) redirect(302, "/sign-in");
     depends("plaints");
-
-    const messages = await getXataClient()
-        .db.Messages.select(["title", "message", "category", "status", "lon", "lat"])
-        .filter({ user: locals.user })
-        .getAll();
 
     return {
         user: locals.user,
-        messages: messages,
         form: await superValidate(zod(schema)),
+        messages: await getXataClient()
+            .db.Messages.select(["id", "title", "message", "category", "status", "lon", "lat"])
+            .filter({ status: { $isNot: "Terminé" } })
+            .getAll(),
     };
 };
+
 export const actions = {
     default: async ({ locals, request }) => {
         if (!locals.user) throw error(401);
@@ -34,7 +33,7 @@ export const actions = {
             category: form.data.category,
             lon: form.data.coordinate.lon,
             lat: form.data.coordinate.lat,
-            status: "En cours",
+            status: "Nouveau",
             user: locals.user,
         });
 
