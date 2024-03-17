@@ -6,13 +6,12 @@ import type { ChartDataset } from "chart.js";
 export const load = async ({ locals, url }) => {
     if (!locals.user?.isGov) redirect(302, "/");
 
-    const searchParams = url.searchParams;
     let years = [
-        Number.parseInt(searchParams.get("y1") ?? ""),
-        Number.parseInt(searchParams.get("y2") ?? ""),
+        Number.parseInt(url.searchParams.get("y1") ?? ""),
+        Number.parseInt(url.searchParams.get("y2") ?? ""),
     ].filter((y) => !isNaN(y));
 
-    let categories = searchParams
+    let categories = url.searchParams
         .getAll("c")
         .filter((v) => (messageCategories as readonly string[]).includes(v))
         .slice(0, 5);

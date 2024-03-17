@@ -104,10 +104,10 @@
                     </MultiSelect>
                 </div>
 
-                <ul class="h-96 overflow-y-auto rounded border-2 border-dark bg-background">
+                <ul class="h-96 overflow-y-auto rounded border-2 border-dark bg-background py-1">
                     {#each filteredMessages as message}
                         <button class="contents" on:click={() => (selectedMessage = message)}>
-                            <li class="flex gap-4 border border-dark px-2 py-1 text-start">
+                            <li class="flex gap-4 border-b-2 border-pale px-2 py-1 text-start">
                                 <div class="flex flex-col items-stretch justify-between gap-1">
                                     <div class="w-52 pl-2">{message.category}</div>
 
@@ -244,17 +244,28 @@
                             Annuler
                         </button>
 
-                        <button class="btn">Envoyer <IconSend size={20} /></button>
+                        <button class="btn" disabled={!$formData.coordinate.lat}>
+                            Envoyer <IconSend size={20} />
+                        </button>
                     </div>
                 </form>
             {/if}
-
-            <!-- <a href="/dashboard/history" class="btn mt-2 self-center">Voir l'historique</a>
-            <a href="/dashboard/overview" class="btn mt-2 self-center"
-                >Voir les recommendations</a
-            > -->
         </main>
     </div>
+
+    {#if data.user.isGov}
+        <div class="card absolute right-6 z-10 items-stretch justify-center gap-2 p-4 text-center">
+            <div class="mb-2 text-center">
+                <h1 class="h1 mb-0">Messages citoyens</h1>
+                <p class="text-muted-foreground">Informez votre ville et vos concitoyens</p>
+            </div>
+
+            <a href="/history" class="btn h-14 self-center">Explorer l'historique des messages</a>
+            <a href="/overview" class="btn h-14 self-center">
+                Voir les recommendations d'aménagements
+            </a>
+        </div>
+    {/if}
 </div>
 
 <div class="absolute inset-0">

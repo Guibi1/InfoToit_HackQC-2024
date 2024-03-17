@@ -48,13 +48,11 @@
     </a>
 
     <div class="flex items-center gap-4">
-        {#if data.user?.isGov}
-            <a class="btn btn-sm" href="/dashboard"> Panneau de bord </a>
-        {/if}
-
-        <a class="btn btn-sm" href="/messages"> Signaler à ma ville </a>
+        <a class="btn btn-sm" href="/commerce"> Commerce </a>
 
         <a class="btn btn-sm" href="/"> Chercher une maison </a>
+
+        <a class="btn btn-sm" href="/messages"> Messages citoyens </a>
 
         {#if !data.user}
             <a class="btn btn-sm" href="/sign-in">Sign In</a>

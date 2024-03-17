@@ -105,6 +105,7 @@
             loadingSubmit = false;
             tab = 0;
             selectedAddress = null;
+            address = "";
         }
     }
 
