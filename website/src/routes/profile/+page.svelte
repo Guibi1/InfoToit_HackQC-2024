@@ -3,7 +3,7 @@
 
     export let data;
 
-    let showPlaints = false;
+    let showMessages = false;
 
     async function removeHouse(house: (typeof data.savedHomes)[number]) {
         await fetch("/api/house", { method: "POST", body: house.id });
@@ -30,26 +30,26 @@
             </div>
         </div>
 
-        <button class="btn mt-4" on:click={() => (showPlaints = false)}> Maisons </button>
-        <button class="btn" on:click={() => (showPlaints = true)}> Pleintes </button>
+        <button class="btn mt-4" on:click={() => (showMessages = false)}> Maisons </button>
+        <button class="btn" on:click={() => (showMessages = true)}> Messages </button>
     </div>
 
     <div class="flex flex-1 flex-col">
-        {#if showPlaints}
-            <h2 class="h1 mx-2 border-b-2 border-dark">Pleintes</h2>
+        {#if showMessages}
+            <h2 class="h1 mx-2 border-b-2 border-dark">Messages</h2>
 
             {#if data.messages.length}
                 <div class="m-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {#each data.messages as pleinte}
+                    {#each data.messages as message}
                         <div class="card p-4">
-                            <h1 class="text-lg font-semibold">{pleinte.title}</h1>
-                            <p>{pleinte.message}</p>
+                            <h1 class="text-lg font-semibold">{message.title}</h1>
+                            <p>{message.message}</p>
 
-                            <p class="my-2 italic">{pleinte.category}</p>
+                            <p class="my-2 italic">{message.category}</p>
 
                             <p>
                                 Status:
-                                <span class="font-semibold">{pleinte.status}</span>
+                                <span class="font-semibold">{message.status}</span>
                             </p>
                         </div>
                     {/each}
@@ -67,10 +67,7 @@
             {#if data.savedHomes.length}
                 <div class="m-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {#each data.savedHomes as home}
-                        <a
-                            class="card flex-row gap-2 p-2"
-                            href={`/?id=${home.address?.id}`}
-                        >
+                        <a class="card flex-row gap-2 p-2" href={`/?id=${home.address?.id}`}>
                             <div
                                 class="flex h-24 w-24 items-center justify-center overflow-hidden rounded"
                             >
