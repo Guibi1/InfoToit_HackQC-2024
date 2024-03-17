@@ -1,20 +1,21 @@
 <script lang="ts">
     import { invalidateAll } from "$app/navigation";
+    import Logo from "$lib/assets/Logo.svelte";
     import LogoSimple from "$lib/assets/LogoSimple.svelte";
     import { popup, type PopupOptions } from "$lib/popup";
-    import "../app.postcss";
-    import { IconUser, IconSettings, IconLogout } from "@tabler/icons-svelte";
+    import { IconLogout, IconSettings, IconUser } from "@tabler/icons-svelte";
     import {
         CategoryScale,
         Chart as ChartJS,
         Filler,
         Legend,
-        LineElement,
         LinearScale,
+        LineElement,
         PointElement,
         Title,
         Tooltip,
     } from "chart.js";
+    import "../app.postcss";
 
     ChartJS.register(
         Filler,
@@ -66,6 +67,27 @@
 </div>
 
 <slot />
+
+<div
+    class="absolute inset-0 z-[999999999999] flex animate-[fade_1s_4s_forwards] items-center justify-center bg-pale"
+>
+    <Logo size={120} />
+
+    <style>
+        @keyframes fade {
+            from {
+                opacity: 1;
+            }
+            99% {
+                opacity: 0;
+            }
+            to {
+                opacity: 0;
+                height: 0px;
+            }
+        }
+    </style>
+</div>
 
 <div class="popup" id={popupSettings.popupId}>
     <div class="popup-arrow" id="arrow" />
