@@ -8,13 +8,30 @@ export const load = async ({ locals, depends }) => {
     if (!locals.user) redirect(302, "/sign-in");
     depends("plaints");
 
+    const messages = await getXataClient()
+        .db.Messages.select(["id", "title", "message", "category", "status", "lon", "lat"])
+        .filter({ status: { $isNot: "Terminé" } })
+        .getAll();
+
+    const likes = await getXataClient()
+        .db.VotesMessages.select(["id", "user.id", "message.id"])
+        .getAll();
+
     return {
         user: locals.user,
         form: await superValidate(zod(schema)),
-        messages: await getXataClient()
-            .db.Messages.select(["id", "title", "message", "category", "status", "lon", "lat"])
-            .filter({ status: { $isNot: "Terminé" } })
-            .getAll(),
+        messages: messages
+            .map((m) => {
+                const l = likes.filter((l) => l.message?.id === m.id);
+                return {
+                    ...m,
+                    likes: {
+                        count: l.length,
+                        userLiked: !!l.find((l) => l.user?.id === locals.user?.id),
+                    },
+                };
+            })
+            .sort((a, b) => b.likes.count - a.likes.count),
     };
 };
 

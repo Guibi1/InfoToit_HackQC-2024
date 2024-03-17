@@ -11,6 +11,8 @@
         IconPencilPlus,
         IconPlus,
         IconSend,
+        IconThumbUp,
+        IconThumbUpFilled,
     } from "@tabler/icons-svelte";
     import { Control, Description, Field, FieldErrors, Label } from "formsnap";
     import { superForm } from "sveltekit-superforms/client";
@@ -60,6 +62,13 @@
     async function send(id: string, status: string | undefined) {
         await fetch("/api/message", { method: "POST", body: JSON.stringify({ id, status }) });
     }
+
+    async function sendLike(message: (typeof data)["messages"][number]) {
+        await fetch("/api/message", { method: "PATCH", body: message.id });
+        message.likes.count += -message.likes.userLiked * 2 + 1;
+        message.likes.userLiked = !message.likes.userLiked;
+        data.messages = data.messages;
+    }
 </script>
 
 <div class="relative p-6 px-8">
@@ -102,38 +111,52 @@
                                 <div class="flex flex-col items-stretch justify-between gap-1">
                                     <div class="w-52 pl-2">{message.category}</div>
 
-                                    {#if data.user.isGov}
-                                        <select
-                                            class="input w-52 shadow-none"
-                                            value={message.status}
-                                            on:change={(e) =>
-                                                send(message.id, e.currentTarget.value)}
-                                        >
-                                            {#each messageStatuses as status}
-                                                <option value={status}>{status}</option>
-                                            {/each}
-                                        </select>
-                                    {:else}
-                                        <div class="flex items-center justify-between">
+                                    <div class="flex items-center justify-between">
+                                        {#if data.user.isGov}
+                                            <select
+                                                class="input w-min shadow-none"
+                                                value={message.status}
+                                                on:change={(e) =>
+                                                    send(message.id, e.currentTarget.value)}
+                                            >
+                                                {#each messageStatuses as status}
+                                                    <option value={status}>{status}</option>
+                                                {/each}
+                                            </select>
+
+                                            <button
+                                                on:click={() => sendLike(message)}
+                                                class="flex items-center gap-1 rounded border-2 border-dark bg-muted px-2 py-1"
+                                            >
+                                                {message.likes.count}
+
+                                                {#if message.likes.userLiked}
+                                                    <IconThumbUpFilled size={16} />
+                                                {:else}
+                                                    <IconThumbUp size={16} />
+                                                {/if}
+                                            </button>
+                                        {:else}
                                             <div
                                                 class="rounded border-2 border-dark bg-muted px-4 py-1"
                                             >
                                                 {message.status}
                                             </div>
 
-                                            <div
+                                            <button
+                                                on:click={() => sendLike(message)}
                                                 class="flex items-center gap-1 rounded border-2 border-dark bg-muted px-2 py-1"
                                             >
-                                                <button>
-                                                    <IconMinus size={16} />
-                                                </button>
-                                                <div>23</div>
-                                                <button on:click={() => send}>
-                                                    <IconPlus size={16} />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    {/if}
+                                                {message.likes.count}
+
+                                                {#if message.likes.userLiked}
+                                                    <IconThumbUpFilled size={16} />
+                                                {:else}
+                                                    <IconThumbUp size={16} />
+                                                {/if}
+                                            </button>
+                                        {/if}
+                                    </div>
                                 </div>
 
                                 <div class="flex-1">

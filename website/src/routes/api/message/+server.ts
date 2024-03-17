@@ -21,3 +21,26 @@ export const POST = async ({ locals, request }) => {
 
     return json({ success: true });
 };
+
+export const PATCH = async ({ locals, request }) => {
+    if (!locals.user) error(401);
+
+    const messageId = await request.text();
+    try {
+        const row = await getXataClient()
+            .db.VotesMessages.select([])
+            .filter({
+                message: messageId,
+                user: locals.user,
+            })
+            .getFirstOrThrow();
+        row.delete();
+    } catch {
+        await getXataClient().db.VotesMessages.create({
+            message: messageId,
+            user: locals.user,
+        });
+    }
+
+    return json({ success: true });
+};
