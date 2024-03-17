@@ -23,7 +23,10 @@ export const actions = {
 
         const { hexes } = await fetch("https://brebeufapi.vercel.app/api/besthexes", {
             method: "POST",
-            headers: { "Content-type": "text/html" },
+            headers: {
+                "Content-type": "text/html",
+                "Content-Length": "" + JSON.stringify(form.data).length,
+            },
             body: JSON.stringify(form.data),
         }).then((res) => res.json());
 
