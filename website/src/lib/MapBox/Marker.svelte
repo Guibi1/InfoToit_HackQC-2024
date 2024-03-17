@@ -5,11 +5,14 @@
 </script>
 
 <script lang="ts">
+    import { IconX, type Icon } from "@tabler/icons-svelte";
     import mapboxgl, { type LngLatLike, type Marker } from "mapbox-gl";
     import { createEventDispatcher, getContext, onMount, setContext } from "svelte";
     import type { MapContext } from "./Map.svelte";
+    import PinElement from "./PinElement.svelte";
 
     export let coordinates: LngLatLike;
+    export let icon: Icon["new"] = IconX;
     export let color: string | undefined = undefined;
     export let easeOnAdd:
         | Partial<
@@ -25,7 +28,10 @@
     const mapContext = getContext<MapContext>("map");
     const map = mapContext.getMap();
 
-    const marker = new mapboxgl.Marker({ color }).setLngLat(coordinates);
+    const el = document.createElement("div");
+    new PinElement({ target: el, props: { icon, color } });
+
+    const marker = new mapboxgl.Marker(el, { color }).setLngLat(coordinates);
 
     $: marker.setLngLat(coordinates);
 

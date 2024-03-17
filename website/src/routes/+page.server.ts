@@ -14,7 +14,6 @@ export const load = async ({ locals, url }) => {
             "street_type",
             "street_name",
             "street_dir",
-            "mail_postal_code",
             "location.longitude",
             "location.latitude",
         ])
@@ -42,7 +41,7 @@ export const load = async ({ locals, url }) => {
     return {
         house,
         houseAnalysis: houseAnalysis.info,
-        address: `${house.civic_no_prefix}${house.civic_no_prefix ? "-" : ""}${house.civic_no}${house.civic_no_suffix} ${house.street_type.toLowerCase()} ${house.street_name}${house.street_dir ? " " : ""}${house.street_dir}, ${house.mail_postal_code}`,
+        address: `${house.civic_no_prefix}${house.civic_no_prefix ? "-" : ""}${house.civic_no}${house.civic_no_suffix} ${house.street_type.toLowerCase()} ${house.street_name}${house.street_dir ? " " : ""}${house.street_dir}`,
         houseSaved: !!savedHouse,
     };
 };

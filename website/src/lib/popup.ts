@@ -17,7 +17,6 @@ export type PopupOptions = {
 
 export function popup(node: HTMLElement, { popupId, arrowId, placement }: PopupOptions) {
     const go = () => {
-        console.log("🚀 ~ popup ~ node:", node);
         const floatingEl = document.querySelector<HTMLElement>(`#${popupId ?? "popup"}`);
         const arrowEl = floatingEl?.querySelector<HTMLElement>(`#${arrowId ?? "arrow"}`);
         if (!floatingEl) {
