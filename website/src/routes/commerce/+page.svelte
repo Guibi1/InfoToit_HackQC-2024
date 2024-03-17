@@ -46,6 +46,12 @@
             </Control>
         </Field>
 
+        {#if form?.commerces && form.commerces.length == 0}
+            <p class="text-center">
+                Pas de bons emplacements proche du point que vous avez sélectionné
+            </p>
+        {/if}
+
         <button class="btn mx-auto mt-4" disabled={$submitting || !$formData.long}>
             {#if $submitting}
                 <IconLoader2 class="animate-spin" />
