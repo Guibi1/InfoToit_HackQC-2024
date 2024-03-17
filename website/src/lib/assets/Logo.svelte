@@ -8,6 +8,7 @@
     data-name="Layer 1"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 435.3 389.39"
+    class="will-change-contents"
 >
     <defs>
         <style>
@@ -42,7 +43,7 @@
     <g id="Layer_1" data-name="Layer 1">
         <polygon
             id="Red"
-            class="cls-2"
+            class="cls-2 will-change-[points]"
             points="286.23 82.37 286.23 82.37 286.23 82.37 280.84 82.37 280.84 46.37 286.23 46.37 286.23 82.37"
         >
             <animate
@@ -56,7 +57,7 @@
 
         <polygon
             id="Orange"
-            class="cls-3"
+            class="cls-3 will-change-[points]"
             points="286.23 127.37 286.23 127.37 286.23 127.37 280.84 127.37 280.84 91.37 286.23 91.37 286.23 127.37"
         >
             <animate
@@ -70,7 +71,7 @@
 
         <polygon
             id="Green"
-            class="cls-5"
+            class="cls-5 will-change-[points]"
             points="286.23 172.37 286.23 172.37 286.23 172.37 280.84 172.37 280.84 136.37 286.23 136.37 286.23 172.37"
         >
             <animate
@@ -82,7 +83,11 @@
             />
         </polygon>
 
-        <polygon id="Blue" class="cls-4">
+        <polygon
+            id="Blue"
+            class="cls-4 will-change-[points]"
+            points="286.23 217.37 286.23 217.37 286.23 217.37 280.84 217.37 280.84 181.37 286.23 181.37 286.23 217.37"
+        >
             <animate
                 attributeName="points"
                 dur="3s"
