@@ -371,9 +371,13 @@
                         <Layer
                             layer={{
                                 type: "line",
+                                layout: {
+                                    "line-join": "round",
+                                    "line-cap": "round",
+                                },
                                 paint: {
-                                    "line-color": "#0000ff",
-                                    "line-width": 6,
+                                    "line-color": "#44403c",
+                                    "line-width": 12,
                                     "line-blur": 1,
                                 },
                             }}
