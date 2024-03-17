@@ -16,34 +16,28 @@
 
     const hexScore = [
         {
-            color: "rgba(45, 250, 45, 0.4)",
-            filter: (h: (typeof data.hex)[number]) => {
-                return h.score && h.score > 80;
-            },
+            color: "#db2777",
+            filter: (h: (typeof data.hex)[number]) => h.score === 5,
         },
         {
-            color: "rgba(88, 170, 88, 0.4)",
-            filter: (h: (typeof data.hex)[number]) => {
-                return h.score && h.score <= 80 && h.score > 60;
-            },
+            color: "#ef4444",
+            filter: (h: (typeof data.hex)[number]) => h.score === 4,
         },
         {
-            color: "rgba(255, 255, 0, 0.4)",
-            filter: (h: (typeof data.hex)[number]) => {
-                return h.score && h.score <= 60 && h.score > 40;
-            },
+            color: "#f97316",
+            filter: (h: (typeof data.hex)[number]) => h.score === 3,
         },
         {
-            color: "rgba(255, 165, 0, 0.4)",
-            filter: (h: (typeof data.hex)[number]) => {
-                return h.score && h.score <= 40 && h.score > 20;
-            },
+            color: "#facc15",
+            filter: (h: (typeof data.hex)[number]) => h.score === 2,
         },
         {
-            color: "rgba(255, 0, 0, 0.4)",
-            filter: (h: (typeof data.hex)[number]) => {
-                return h.score && h.score <= 20 && h.score >= 0;
-            },
+            color: "#65a30d",
+            filter: (h: (typeof data.hex)[number]) => h.score === 1,
+        },
+        {
+            color: "#a8a29e",
+            filter: (h: (typeof data.hex)[number]) => h.score === 0,
         },
     ];
 </script>
@@ -95,6 +89,7 @@
                         type: "fill",
                         paint: {
                             "fill-color": color,
+                            "fill-opacity": 0.4,
                             "fill-outline-color": "rgba(0,0,0,0.4)",
                         },
                     }}
